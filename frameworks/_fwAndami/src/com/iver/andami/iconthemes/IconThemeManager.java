@@ -29,7 +29,7 @@ import com.iver.andami.PluginServices;
  * 
  * @author eustaquio
  */
-public class IconThemeManager implements Collection {
+public class IconThemeManager implements Collection<IIconTheme> {
 
 	private IIconTheme def;
 	private IIconTheme current;
@@ -144,46 +144,6 @@ public class IconThemeManager implements Collection {
 	}
 
 	/**
-	 * 
-	 * Save the provided theme as default in the configuration file. This will
-	 * not change the default theme for this session, it will just write the new
-	 * selection in the configuration file (for the next session).
-	 * 
-	 * @param info
-	 *            The theme to be set as default for next session.
-	 */
-	private void saveConfig(IIconTheme info) {
-		if (getThemesDir() == null || info == null
-				|| info.getResource() == null)
-			return;
-		com.iver.andami.config.generate.AndamiOptions options = Launcher
-				.getAndamiConfig().getAndamiOptions();
-		if (options == null) {
-			options = new com.iver.andami.config.generate.AndamiOptions();
-			Launcher.getAndamiConfig().setAndamiOptions(options);
-		}
-		com.iver.andami.config.generate.IconTheme themeConfig = options
-				.getIconTheme();
-		if (themeConfig == null) {
-			themeConfig = new com.iver.andami.config.generate.IconTheme();
-			options.setIconTheme(themeConfig);
-		}
-		themeConfig.setBasedir(getThemesDir().getPath());
-		themeConfig.setName(info.getName());
-		themeConfig.setDescription(info.getDescription());
-		themeConfig.setVersion(info.getVersion());
-		if (info.getResource() != null) {
-			if (info.getResource() instanceof File) {
-				File resource = (File) info.getResource();
-				themeConfig.setResource(resource.getName());
-			} else if (info.getResource() instanceof ZipFile) {
-				ZipFile resource = (ZipFile) info.getResource();
-				themeConfig.setResource(resource.getName());
-			}
-		}
-	}
-
-	/**
 	 * Gets the Icon theme stored in the configuration
 	 * 
 	 * @return IIconTheme
@@ -236,19 +196,6 @@ public class IconThemeManager implements Collection {
 	}
 
 	/**
-	 * Returns an icon theme from a file that receives like a parameter
-	 * 
-	 * @param zipFile
-	 * @return
-	 * @throws ZipException
-	 * @throws IOException
-	 */
-	private IconThemeZip readInfoFromZip(File zipFile) throws ZipException,
-			IOException {
-		return readInfoFromZip(new ZipFile(zipFile));
-	}
-
-	/**
 	 * Returns an icon theme from a zip file that receives like a parameter
 	 * 
 	 * @param zipFile
@@ -257,12 +204,12 @@ public class IconThemeManager implements Collection {
 	 */
 	private IconThemeZip readInfoFromZip(ZipFile zipFile) throws IOException {
 		IconThemeZip themeInfo;
-		Enumeration entries = zipFile.entries();
+		Enumeration<? extends ZipEntry> entries = zipFile.entries();
 		ZipEntry xmlEntry = null, dirEntry = null;
 		// search for theme.xml and the directory names
 		while (entries.hasMoreElements()
 				&& (xmlEntry == null || dirEntry == null)) {
-			ZipEntry entry = (ZipEntry) entries.nextElement();
+			ZipEntry entry = entries.nextElement();
 			if (entry.isDirectory()) {
 				dirEntry = entry;
 			}
@@ -426,94 +373,53 @@ public class IconThemeManager implements Collection {
 		return themes.contains(o);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Iterable#iterator()
-	 */
-	public Iterator iterator() {
+	@Override
+	public Iterator<IIconTheme> iterator() {
 		return themes.iterator();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.util.Collection#toArray()
-	 */
+	@Override
 	public Object[] toArray() {
 		return themes.toArray();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.util.Collection#toArray(Object[] a)
-	 */
-	public Object[] toArray(Object[] a) {
+	@Override
+	public <T> T[] toArray(T[] a) {
 		return themes.toArray(a);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.util.Collection#remove(java.lang.Object)
-	 */
-	public boolean add(Object o) {
-		return themes.add((IIconTheme) o);
+	@Override
+	public boolean add(IIconTheme o) {
+		return themes.add(o);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.util.Collection#remove(java.lang.Object)
-	 */
+	@Override
 	public boolean remove(Object o) {
 		return themes.remove(o);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.util.Collection#containsAll(Collection)
-	 */
-	public boolean containsAll(Collection c) {
+	@Override
+	public boolean containsAll(Collection<?> c) {
 		return themes.containsAll(c);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.util.Collection#addAll(Collection)
-	 */
-	public boolean addAll(Collection c) {
+	@Override
+	public boolean addAll(Collection<? extends IIconTheme> c) {
 		return themes.addAll(c);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.util.Collection#removeAll(Collection)
-	 */
-	public boolean removeAll(Collection c) {
+	@Override
+	public boolean removeAll(Collection<?> c) {
 		return themes.removeAll(c);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.util.Collection#retainAll(Collection)
-	 */
-	public boolean retainAll(Collection c) {
+	@Override
+	public boolean retainAll(Collection<?> c) {
 		return themes.retainAll(c);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.util.Collection#clear()
-	 */
+	@Override
 	public void clear() {
 		themes.clear();
 	}
-
 }

@@ -63,7 +63,7 @@ public class IconThemeDir extends AbstractIconTheme {
 				for (int i = imageList.length - 1; i >= 0; i--) {
 					name = computeKey(imageList[i].getName());
 					try {
-						register(name, imageList[i].toURL());
+						register(name, imageList[i].toURI().toURL());
 					} catch (MalformedURLException e) {
 					}
 				}

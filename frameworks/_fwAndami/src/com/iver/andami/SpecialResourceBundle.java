@@ -56,12 +56,10 @@ import java.util.ResourceBundle;
  *         "va".
  */
 public class SpecialResourceBundle extends ResourceBundle {
-	private static final String BUNDLE_NAME = "com.iver.andami.text";
-
 	SpecialResourceBundle(String strLocale) {
 	}
 
-	public Enumeration getKeys() {
+	public Enumeration<String> getKeys() {
 		// TODO Auto-generated method stub
 		return null;
 	}

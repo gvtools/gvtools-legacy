@@ -43,8 +43,6 @@ package com.iver.andami.preferences;
 import com.iver.andami.ui.mdiManager.IWindow;
 
 public class DlgPreferences extends GenericDlgPreferences implements IWindow {
-	private static DlgPreferences singletonInstance = null;
-
 	public static DlgPreferences getInstance() {
 		/*
 		 * if (singletonInstance == null) singletonInstance = new

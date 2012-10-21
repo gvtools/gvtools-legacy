@@ -54,5 +54,5 @@ public interface IExtensionBuilder {
 	 */
 	public Object create(Object[] args);
 
-	public Object create(Map args);
+	public Object create(Map<Object, Object> args);
 }

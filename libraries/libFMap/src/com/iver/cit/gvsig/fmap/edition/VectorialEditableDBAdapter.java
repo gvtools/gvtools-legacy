@@ -79,15 +79,6 @@ public class VectorialEditableDBAdapter extends VectorialEditableAdapter
 			getFeaturesFromExpansionFile();
 		}
 
-		public MyIterator(String sql, CoordinateReferenceSystem newCrs)
-				throws ReadDriverException {
-			epsg = ProjectionUtils.getAbrev(newCrs);
-			orig = (VectorialDBAdapter) ova;
-			featIt = orig.getFeatureIterator(sql, newCrs);
-			dbDriver = (IVectorialDatabaseDriver) getOriginalDriver();
-			getFeaturesFromExpansionFile();
-		}
-
 		public MyIterator(Rectangle2D rect, String[] fields,
 				CoordinateReferenceSystem newCrs) throws ReadDriverException {
 			extent = rect;

@@ -132,11 +132,4 @@ public class GeometryAsserts {
 			}
 		}
 	}
-
-	private static void assertArray(double[] x, double[] y) {
-		TestCase.assertEquals(x.length, y.length);
-		for (int i = 0; i < x.length; i++) {
-			TestCase.assertEquals(new Double(x[i]), new Double(y[i]));
-		}
-	}
 }

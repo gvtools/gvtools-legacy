@@ -173,16 +173,16 @@ public class Launcher {
 	private static MultiSplashWindow splashWindow;
 	private static String appName;
 	private static Locale locale;
-	private static HashMap pluginsConfig = new HashMap();
-	private static HashMap pluginsServices = new HashMap();
+	private static HashMap<String, PluginConfig> pluginsConfig = new HashMap<String, PluginConfig>();
+	private static HashMap<String, PluginServices> pluginsServices = new HashMap<String, PluginServices>();
 	private static MDIFrame frame;
-	private static HashMap classesExtensions = new HashMap();
+	private static HashMap<Class<?>, ExtensionDecorator> classesExtensions = new HashMap<Class<?>, ExtensionDecorator>();
 	private static String andamiConfigPath;
 	private static String pluginsPersistencePath;
 	private static final String nonWinDefaultLookAndFeel = "com.jgoodies.looks.plastic.PlasticXPLookAndFeel";
 
-	private static ArrayList pluginsOrdered = new ArrayList();
-	private static ArrayList extensions = new ArrayList();
+	private static ArrayList<String> pluginsOrdered = new ArrayList<String>();
+	private static ArrayList<IExtension> extensions = new ArrayList<IExtension>();
 	private static String appHomeDir = null;
 	// it seems castor uses this encoding
 	private static final String CASTORENCODING = "UTF8";
@@ -613,8 +613,7 @@ public class Launcher {
 			String pName = plugin
 					.getStringProperty("com.iver.andami.pluginName");
 			if (pluginsServices.get(pName) != null) {
-				((PluginServices) pluginsServices.get(pName))
-						.setPersistentXML(plugin);
+				pluginsServices.get(pName).setPersistentXML(plugin);
 			} else {
 				if (pName.startsWith("Andami.Launcher"))
 					restoreMDIStatus(plugin);
@@ -628,13 +627,13 @@ public class Launcher {
 	 * @author LWS
 	 */
 	private static void savePluginPersistence() {
-		Iterator i = pluginsConfig.keySet().iterator();
+		Iterator<String> i = pluginsConfig.keySet().iterator();
 
 		XMLEntity entity = new XMLEntity();
 
 		while (i.hasNext()) {
-			String pName = (String) i.next();
-			PluginServices ps = (PluginServices) pluginsServices.get(pName);
+			String pName = i.next();
+			PluginServices ps = pluginsServices.get(pName);
 			XMLEntity ent = ps.getPersistentXML();
 
 			if (ent != null) {
@@ -657,12 +656,12 @@ public class Launcher {
 	}
 
 	private static void installPluginsLabels() {
-		Iterator i = pluginsConfig.keySet().iterator();
+		Iterator<String> i = pluginsConfig.keySet().iterator();
 
 		while (i.hasNext()) {
-			String name = (String) i.next();
-			PluginConfig pc = (PluginConfig) pluginsConfig.get(name);
-			PluginServices ps = (PluginServices) pluginsServices.get(name);
+			String name = i.next();
+			PluginConfig pc = pluginsConfig.get(name);
+			PluginServices ps = pluginsServices.get(name);
 
 			LabelSet[] ls = pc.getLabelSet();
 
@@ -670,7 +669,7 @@ public class Launcher {
 				PluginClassLoader loader = ps.getClassLoader();
 
 				try {
-					Class clase = loader.loadClass(ls[j].getClassName());
+					Class<?> clase = loader.loadClass(ls[j].getClassName());
 					frame.setStatusBarLabels(clase, ls[j].getLabel());
 				} catch (ClassNotFoundException e) {
 					logger.error(Messages.getString("Launcher.labelset_class"),
@@ -701,7 +700,7 @@ public class Launcher {
 		// MDIManagerFactory.setSkinExtension(se,
 		// ps.getClassLoader());
 
-		Class skinClass;
+		Class<?> skinClass;
 
 		try {
 			skinClass = pluginClassLoader.loadClass(skinExtension
@@ -747,15 +746,15 @@ public class Launcher {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		Iterator i = pluginsConfig.keySet().iterator();
+		Iterator<String> i = pluginsConfig.keySet().iterator();
 
 		SkinExtension skinExtension = null;
 		PluginClassLoader pluginClassLoader = null;
-		ArrayList skinExtensions = new ArrayList();
+		ArrayList<SkinExtension> skinExtensions = new ArrayList<SkinExtension>();
 		while (i.hasNext()) {
-			String name = (String) i.next();
-			PluginConfig pc = (PluginConfig) pluginsConfig.get(name);
-			PluginServices ps = (PluginServices) pluginsServices.get(name);
+			String name = i.next();
+			PluginConfig pc = pluginsConfig.get(name);
+			PluginServices ps = pluginsServices.get(name);
 
 			if (pc.getExtensions().getSkinExtension() != null) {
 				// if (MDIManagerFactory.getSkinExtension() != null) {
@@ -788,8 +787,7 @@ public class Launcher {
 				skinPlugin("com.iver.core.mdiManager.NewSkin");
 			} else if (skinExtensions.size() > 0) {
 				// try to load the first skin found
-				SkinExtension se = (SkinExtension) skinExtensions.get(0);
-				skinPlugin((String) se.getClassName());
+				skinPlugin(skinExtensions.get(0).getClassName());
 			} else {
 				throw new MDIManagerLoadException("No Skin-Extension installed");
 			}
@@ -798,12 +796,11 @@ public class Launcher {
 	}
 
 	private static void frameIcon(Theme theme) {
-		Iterator i = pluginsConfig.keySet().iterator();
+		Iterator<String> i = pluginsConfig.keySet().iterator();
 
 		while (i.hasNext()) {
-			String pName = (String) i.next();
-			PluginConfig pc = (PluginConfig) pluginsConfig.get(pName);
-			PluginServices ps = (PluginServices) pluginsServices.get(pName);
+			String pName = i.next();
+			PluginConfig pc = pluginsConfig.get(pName);
 			if (pc.getIcon() != null) {
 				if (theme.getIcon() != null) {
 					frame.setIconImage(theme.getIcon().getImage());
@@ -829,17 +826,18 @@ public class Launcher {
 	}
 
 	private static void initializeExtensions() {
-		Iterator i = pluginsOrdered.iterator();
+		Iterator<String> i = pluginsOrdered.iterator();
 
 		while (i.hasNext()) {
-			String pName = (String) i.next();
+			String pName = i.next();
 			logger.debug("Initializing extensions from " + pName);
-			PluginConfig pc = (PluginConfig) pluginsConfig.get(pName);
-			PluginServices ps = (PluginServices) pluginsServices.get(pName);
+			PluginConfig pc = pluginsConfig.get(pName);
+			PluginServices ps = pluginsServices.get(pName);
 
 			Extension[] exts = pc.getExtensions().getExtension();
 
-			TreeMap orderedExtensions = new TreeMap(new ExtensionComparator());
+			TreeMap<Extension, Object> orderedExtensions = new TreeMap<Extension, Object>(
+					new ExtensionComparator());
 
 			for (int j = 0; j < exts.length; j++) {
 				if (!exts[j].getActive()) {
@@ -855,16 +853,16 @@ public class Launcher {
 				orderedExtensions.put(exts[j], null);
 			}
 
-			Iterator e = orderedExtensions.keySet().iterator();
+			Iterator<Extension> e = orderedExtensions.keySet().iterator();
 
 			while (e.hasNext()) {
-				Extension extension = (Extension) e.next();
-				com.iver.andami.plugins.IExtension extensionInstance;
+				Extension extension = e.next();
+				IExtension extensionInstance;
 
 				try {
-					Class extensionClass = ps.getClassLoader().loadClass(
+					Class<?> extensionClass = ps.getClassLoader().loadClass(
 							extension.getClassName());
-					extensionInstance = (com.iver.andami.plugins.IExtension) extensionClass
+					extensionInstance = (IExtension) extensionClass
 							.newInstance();
 
 					// CON DECORATOR
@@ -914,21 +912,20 @@ public class Launcher {
 
 	private static void postInitializeExtensions() {
 		for (int i = 0; i < extensions.size(); i++) {
-			com.iver.andami.plugins.IExtension extensionInstance = (com.iver.andami.plugins.IExtension) extensions
-					.get(i);
-			extensionInstance.postInitialize();
+			extensions.get(i).postInitialize();
 		}
 	}
 
 	private static void installPluginsMenus() {
-		TreeMap orderedMenus = new TreeMap(new MenuComparator());
+		TreeMap<SortableMenu, Object> orderedMenus = new TreeMap<SortableMenu, Object>(
+				new MenuComparator());
 
-		Iterator i = pluginsConfig.keySet().iterator();
+		Iterator<String> i = pluginsConfig.keySet().iterator();
 
 		while (i.hasNext()) {
-			String pName = (String) i.next();
-			PluginServices ps = (PluginServices) pluginsServices.get(pName);
-			PluginConfig pc = (PluginConfig) pluginsConfig.get(pName);
+			String pName = i.next();
+			PluginServices ps = pluginsServices.get(pName);
+			PluginConfig pc = pluginsConfig.get(pName);
 
 			Extension[] exts = pc.getExtensions().getExtension();
 
@@ -980,13 +977,12 @@ public class Launcher {
 		}
 
 		// Se itera por los menus ordenados
-		Iterator e = orderedMenus.keySet().iterator();
+		Iterator<SortableMenu> e = orderedMenus.keySet().iterator();
 
 		// Se ordenan los menues
 		while (e.hasNext()) {
 			try {
-				SortableMenu sm = (SortableMenu) e.next();
-
+				SortableMenu sm = e.next();
 				frame.addMenu(sm.loader, sm.extension, sm.menu);
 			} catch (ClassNotFoundException ex) {
 				logger.error(
@@ -1001,20 +997,21 @@ public class Launcher {
 	 * combos. The order in which they are shown is determined here.
 	 */
 	private static void installPluginsControls() {
-		Iterator i = pluginsConfig.keySet().iterator();
+		Iterator<String> i = pluginsConfig.keySet().iterator();
 
-		HashMap extensionPluginServices = new HashMap();
-		HashMap extensionPluginConfig = new HashMap();
-		TreeMap orderedExtensions = new TreeMap(new ExtensionComparator());
+		HashMap<Extension, PluginServices> extensionPluginServices = new HashMap<Extension, PluginServices>();
+		HashMap<Extension, PluginConfig> extensionPluginConfig = new HashMap<Extension, PluginConfig>();
+		TreeMap<Extension, Object> orderedExtensions = new TreeMap<Extension, Object>(
+				new ExtensionComparator());
 
 		// First of all, sort the extensions.
 		// We need to iterate on the plugins, and iterate on each plugin's
 		// extensions
 		// (each plugin may contain one or more extensions)
 		while (i.hasNext()) { // iterate on the plugins
-			String pName = (String) i.next();
-			PluginConfig pc = (PluginConfig) pluginsConfig.get(pName);
-			PluginServices ps = (PluginServices) pluginsServices.get(pName);
+			String pName = i.next();
+			PluginConfig pc = pluginsConfig.get(pName);
+			PluginServices ps = pluginsServices.get(pName);
 
 			Extension[] exts = pc.getExtensions().getExtension();
 
@@ -1033,14 +1030,15 @@ public class Launcher {
 			}
 		}
 
-		TreeMap orderedTools = new TreeMap(new ToolComparator());
-		Iterator e = orderedExtensions.keySet().iterator();
+		TreeMap<SortableTool, Object> orderedTools = new TreeMap<SortableTool, Object>(
+				new ToolComparator());
+		Iterator<Extension> e = orderedExtensions.keySet().iterator();
 
 		// sort the toolbars and tools from 'normal' extensions (actiontools,
 		// selectabletools)
 		// and load the combo-scales and combo-buttons for the status bar
 		while (e.hasNext()) {
-			Extension ext = (Extension) e.next();
+			Extension ext = e.next();
 
 			ToolBar[] toolbars = ext.getToolBar();
 
@@ -1049,27 +1047,24 @@ public class Launcher {
 				ActionTool[] tools = toolbars[k].getActionTool();
 
 				for (int t = 0; t < tools.length; t++) {
-					SortableTool sm = new SortableTool(
-							((PluginServices) extensionPluginServices.get(ext))
-									.getClassLoader(),
-							ext, toolbars[k], tools[t]);
+					SortableTool sm = new SortableTool(extensionPluginServices
+							.get(ext).getClassLoader(), ext, toolbars[k],
+							tools[t]);
 					orderedTools.put(sm, null);
 				}
 
 				SelectableTool[] sTools = toolbars[k].getSelectableTool();
 
 				for (int t = 0; t < sTools.length; t++) {
-					SortableTool sm = new SortableTool(
-							((PluginServices) extensionPluginServices.get(ext))
-									.getClassLoader(),
-							ext, toolbars[k], sTools[t]);
+					SortableTool sm = new SortableTool(extensionPluginServices
+							.get(ext).getClassLoader(), ext, toolbars[k],
+							sTools[t]);
 					orderedTools.put(sm, null);
 				}
 			}
 
 			// get controls for statusBar
-			PluginServices ps = (PluginServices) extensionPluginServices
-					.get(ext);
+			PluginServices ps = extensionPluginServices.get(ext);
 			PluginClassLoader loader = ps.getClassLoader();
 
 			// ArrayList componentList = new ArrayList();
@@ -1155,9 +1150,9 @@ public class Launcher {
 		// we get a sorted list containing all the tools
 		i = pluginsConfig.keySet().iterator();
 		while (i.hasNext()) {
-			String pName = (String) i.next();
-			PluginConfig pc = (PluginConfig) pluginsConfig.get(pName);
-			PluginServices ps = (PluginServices) pluginsServices.get(pName);
+			String pName = i.next();
+			PluginConfig pc = pluginsConfig.get(pName);
+			PluginServices ps = pluginsServices.get(pName);
 
 			SkinExtension[] skinExts = pc.getExtensions().getSkinExtension();
 			for (int j = 0; j < skinExts.length; j++) {
@@ -1201,10 +1196,10 @@ public class Launcher {
 
 		// loop on the ordered extension list, to add them to the interface in
 		// an ordered way
-		Iterator t = orderedTools.keySet().iterator();
+		Iterator<SortableTool> t = orderedTools.keySet().iterator();
 		while (t.hasNext()) {
 			try {
-				SortableTool stb = (SortableTool) t.next();
+				SortableTool stb = t.next();
 				if (stb.actiontool != null)
 					frame.addTool(stb.loader, stb.extension, stb.toolbar,
 							stb.actiontool);
@@ -1223,7 +1218,7 @@ public class Launcher {
 	 * Adds new plugins to the the andami-config file.
 	 */
 	private static void updateAndamiConfig() {
-		HashSet olds = new HashSet();
+		HashSet<String> olds = new HashSet<String>();
 
 		Plugin[] plugins = andamiConfig.getPlugin();
 
@@ -1231,10 +1226,10 @@ public class Launcher {
 			olds.add(plugins[i].getName());
 		}
 
-		Iterator i = pluginsServices.values().iterator();
+		Iterator<PluginServices> i = pluginsServices.values().iterator();
 
 		while (i.hasNext()) {
-			PluginServices ps = (PluginServices) i.next();
+			PluginServices ps = i.next();
 
 			if (!olds.contains(ps.getPluginName())) {
 				Plugin p = new Plugin();
@@ -1247,19 +1242,18 @@ public class Launcher {
 	}
 
 	private static void pluginsClassLoaders() {
-		HashSet instalados = new HashSet();
+		HashSet<String> instalados = new HashSet<String>();
 
 		// Se itera hasta que están todos instalados
 		while (instalados.size() != pluginsConfig.size()) {
 			boolean circle = true;
 
 			// Hacemos una pasada por todos los plugins
-			Iterator i = pluginsConfig.keySet().iterator();
+			Iterator<String> i = pluginsConfig.keySet().iterator();
 
 			while (i.hasNext()) {
-				String pluginName = (String) i.next();
-				PluginConfig config = (PluginConfig) pluginsConfig
-						.get(pluginName);
+				String pluginName = i.next();
+				PluginConfig config = pluginsConfig.get(pluginName);
 
 				if (instalados.contains(pluginName)) {
 					continue;
@@ -1284,8 +1278,8 @@ public class Launcher {
 					if (!instalados.contains(dependencies[j].getPluginName())) {
 						ready = false;
 					} else {
-						loaders[j] = ((PluginServices) pluginsServices
-								.get(dependencies[j].getPluginName()))
+						loaders[j] = pluginsServices.get(
+								dependencies[j].getPluginName())
 								.getClassLoader();
 					}
 				}
@@ -1358,13 +1352,11 @@ public class Launcher {
 		}
 
 		// Se eliminan los plugins que no fueron instalados
-		Iterator i = pluginsConfig.keySet().iterator();
+		Iterator<String> i = pluginsConfig.keySet().iterator();
 
 		while (i.hasNext()) {
-			String pluginName = (String) i.next();
-			PluginConfig config = (PluginConfig) pluginsConfig.get(pluginName);
-			PluginServices ps = (PluginServices) pluginsServices
-					.get(pluginName);
+			String pluginName = i.next();
+			PluginServices ps = pluginsServices.get(pluginName);
 
 			if (ps == null) {
 				pluginsConfig.remove(pluginName);
@@ -1374,14 +1366,14 @@ public class Launcher {
 	}
 
 	private static void pluginsMessages() {
-		Iterator iterator = pluginsOrdered.iterator();
+		Iterator<String> iterator = pluginsOrdered.iterator();
 		PluginConfig config;
 		PluginServices ps;
 
 		while (iterator.hasNext()) {
-			String pluginName = (String) iterator.next();
-			config = (PluginConfig) pluginsConfig.get(pluginName);
-			ps = (PluginServices) pluginsServices.get(pluginName);
+			String pluginName = iterator.next();
+			config = pluginsConfig.get(pluginName);
+			ps = pluginsServices.get(pluginName);
 
 			if (config.getResourceBundle() != null
 					&& !config.getResourceBundle().getName().equals("")) {
@@ -1394,7 +1386,7 @@ public class Launcher {
 	}
 
 	static PluginServices getPluginServices(String name) {
-		return (PluginServices) pluginsServices.get(name);
+		return pluginsServices.get(name);
 	}
 
 	static String getPluginsDir() {
@@ -1701,7 +1693,7 @@ public class Launcher {
 		terminationProcess.run();
 	}
 
-	static HashMap getClassesExtensions() {
+	static HashMap<Class<?>, ExtensionDecorator> getClassesExtensions() {
 		return classesExtensions;
 	}
 
@@ -1766,7 +1758,7 @@ public class Launcher {
 				inAux.close();
 
 				if (prop.getProperty("timestamp") != null) {
-					Long lastMiliSeconds = (Long) new Long(
+					Long lastMiliSeconds = new Long(
 							prop.getProperty("timestamp"));
 
 					if (lastMiliSeconds.longValue() == miliSecondsInWeb
@@ -1847,21 +1839,21 @@ public class Launcher {
 	}
 
 	private static Extensions[] getExtensions() {
-		ArrayList array = new ArrayList();
-		Iterator iter = pluginsConfig.values().iterator();
+		ArrayList<Extensions> array = new ArrayList<Extensions>();
+		Iterator<PluginConfig> iter = pluginsConfig.values().iterator();
 
 		while (iter.hasNext()) {
-			array.add(((PluginConfig) iter.next()).getExtensions());
+			array.add(iter.next().getExtensions());
 		}
 
-		return (Extensions[]) array.toArray(new Extensions[0]);
+		return array.toArray(new Extensions[0]);
 	}
 
-	public static Iterator getExtensionIterator() {
+	public static Iterator<IExtension> getExtensionIterator() {
 		return extensions.iterator();
 	}
 
-	public static HashMap getPluginConfig() {
+	public static HashMap<String, PluginConfig> getPluginConfig() {
 		return pluginsConfig;
 	}
 
@@ -1883,11 +1875,8 @@ public class Launcher {
 		return andamiConfig;
 	}
 
-	private static class ExtensionComparator implements Comparator {
-		public int compare(Object o1, Object o2) {
-			Extension e1 = (Extension) o1;
-			Extension e2 = (Extension) o2;
-
+	private static class ExtensionComparator implements Comparator<Extension> {
+		public int compare(Extension e1, Extension e2) {
 			if (!e1.hasPriority() && !e2.hasPriority()) {
 				return -1;
 			}
@@ -1908,36 +1897,25 @@ public class Launcher {
 		}
 	}
 
-	private static class MenuComparator implements Comparator {
-		private static ExtensionComparator extComp = new ExtensionComparator();
-
-		public int compare(Object o1, Object o2) {
-			SortableMenu e1 = (SortableMenu) o1;
-			SortableMenu e2 = (SortableMenu) o2;
-
-			if (!e1.menu.hasPosition() && !e2.menu.hasPosition()) {
-				if (e1.extension instanceof SkinExtensionType) {
-					return 1;
-				} else if (e2.extension instanceof SkinExtensionType) {
-					return -1;
-				} else {
-					return extComp.compare(e1.extension, e2.extension);
-				}
+	private static class MenuComparator implements Comparator<SortableMenu> {
+		public int compare(SortableMenu sm1, SortableMenu sm2) {
+			if (!sm1.menu.hasPosition() && !sm2.menu.hasPosition()) {
+				return 1;
 			}
 
-			if (e1.menu.hasPosition() && !e2.menu.hasPosition()) {
+			if (sm1.menu.hasPosition() && !sm2.menu.hasPosition()) {
 				return Integer.MIN_VALUE;
 			}
 
-			if (e2.menu.hasPosition() && !e1.menu.hasPosition()) {
+			if (sm2.menu.hasPosition() && !sm1.menu.hasPosition()) {
 				return Integer.MAX_VALUE;
 			}
-			if (e1.menu.getPosition() != e2.menu.getPosition()) {
+			if (sm1.menu.getPosition() != sm2.menu.getPosition()) {
 				// we don't return 0 unless both objects are the same, otherwise
 				// the objects get overwritten in the treemap
-				return e1.menu.getPosition() - e2.menu.getPosition();
+				return sm1.menu.getPosition() - sm2.menu.getPosition();
 			} else {
-				return (e1.toString().compareTo(e2.toString()));
+				return (sm1.toString().compareTo(sm2.toString()));
 			}
 		}
 	}
@@ -1981,26 +1959,15 @@ public class Launcher {
 		}
 	}
 
-	private static class ToolBarComparator implements Comparator {
-		private static ExtensionComparator extComp = new ExtensionComparator();
-
-		public int compare(Object o1, Object o2) {
-			SortableTool e1 = (SortableTool) o1;
-			SortableTool e2 = (SortableTool) o2;
-
+	private static class ToolBarComparator implements Comparator<SortableTool> {
+		public int compare(SortableTool e1, SortableTool e2) {
 			// if the toolbars have the same name, they are considered to be
 			// the same toolbar, so we don't need to do further comparing
 			if (e1.toolbar.getName().equals(e2.toolbar.getName()))
 				return 0;
 
 			if (!e1.toolbar.hasPosition() && !e2.toolbar.hasPosition()) {
-				if (e1.extension instanceof SkinExtensionType) {
-					return 1;
-				} else if (e2.extension instanceof SkinExtensionType) {
-					return -1;
-				} else {
-					return extComp.compare(e1.extension, e2.extension);
-				}
+				return 1;
 			}
 
 			if (e1.toolbar.hasPosition() && !e2.toolbar.hasPosition()) {
@@ -2043,34 +2010,32 @@ public class Launcher {
 	 * @author cesar
 	 * @version $Revision: 33300 $
 	 */
-	private static class ToolComparator implements Comparator {
+	private static class ToolComparator implements Comparator<SortableTool> {
 		private static ToolBarComparator toolBarComp = new ToolBarComparator();
 
-		public int compare(Object o1, Object o2) {
+		public int compare(SortableTool st1, SortableTool st2) {
 			// compare the toolbars which contain the tools
-			int result = toolBarComp.compare(o1, o2);
+			int result = toolBarComp.compare(st1, st2);
 			if (result != 0) { // if the toolbars are different, use their order
 				return result;
 			}
 			// otherwise, compare the tools
-			SortableTool e1 = (SortableTool) o1;
-			SortableTool e2 = (SortableTool) o2;
 			int e1Position = -1, e2Position = -1;
 
-			if (e1.actiontool != null) {
-				if (e1.actiontool.hasPosition())
-					e1Position = e1.actiontool.getPosition();
-			} else if (e1.selectabletool != null) {
-				if (e1.selectabletool.hasPosition())
-					e1Position = e1.selectabletool.getPosition();
+			if (st1.actiontool != null) {
+				if (st1.actiontool.hasPosition())
+					e1Position = st1.actiontool.getPosition();
+			} else if (st1.selectabletool != null) {
+				if (st1.selectabletool.hasPosition())
+					e1Position = st1.selectabletool.getPosition();
 			}
 
-			if (e2.actiontool != null) {
-				if (e2.actiontool.hasPosition())
-					e2Position = e2.actiontool.getPosition();
-			} else if (e2.selectabletool != null) {
-				if (e2.selectabletool.hasPosition())
-					e2Position = e2.selectabletool.getPosition();
+			if (st2.actiontool != null) {
+				if (st2.actiontool.hasPosition())
+					e2Position = st2.actiontool.getPosition();
+			} else if (st2.selectabletool != null) {
+				if (st2.selectabletool.hasPosition())
+					e2Position = st2.selectabletool.getPosition();
 			}
 
 			if (e1Position == -1 && e2Position != -1) {
@@ -2086,7 +2051,7 @@ public class Launcher {
 				if (result != 0)
 					return result;
 			}
-			return e1.toString().compareTo(e2.toString());
+			return st1.toString().compareTo(st2.toString());
 		}
 	}
 
@@ -2124,7 +2089,7 @@ public class Launcher {
 	}
 
 	public static String getDefaultLookAndFeel() {
-		String osName = (String) System.getProperty("os.name");
+		String osName = System.getProperty("os.name");
 
 		if (osName.length() > 4
 				&& osName.substring(0, 5).toLowerCase().equals("linux"))
@@ -2278,15 +2243,15 @@ public class Launcher {
 		if (name == null)
 			return;
 
-		Iterator iter = classesExtensions.keySet().iterator();
+		Iterator<Class<?>> iter = classesExtensions.keySet().iterator();
 		int charIndex;
-		Class key;
+		Class<?> key;
 		while (iter.hasNext()) {
-			key = (Class) iter.next();
+			key = iter.next();
 			charIndex = key.getName().indexOf(name);
 			// System.out.println("key='"+key.getName()+"' name='"+name+"' charIndex="+charIndex);
 			if (charIndex == 0) {
-				IExtension ext = (IExtension) classesExtensions.get(key);
+				IExtension ext = classesExtensions.get(key);
 				if (ext instanceof ExtensionDecorator)
 					ext = ((ExtensionDecorator) ext).getExtension();
 				if (ext instanceof ExclusiveUIExtension)
@@ -2411,20 +2376,17 @@ public class Launcher {
 		 */
 		private void finalizeExtensions() {
 			for (int i = extensions.size() - 1; i >= 0; i--) {
-				com.iver.andami.plugins.IExtension extensionInstance = (com.iver.andami.plugins.IExtension) extensions
-						.get(i);
-				extensionInstance.terminate();
+				extensions.get(i).terminate();
 			}
 		}
 
-		private ArrayList getUnsavedData() {
-			ArrayList unsavedDataList = new ArrayList();
+		private ArrayList<IUnsavedData> getUnsavedData() {
+			ArrayList<IUnsavedData> unsavedDataList = new ArrayList<IUnsavedData>();
 			IExtension exclusiveExtension = PluginServices
 					.getExclusiveUIExtension();
 
 			for (int i = extensions.size() - 1; i >= 0; i--) {
-				com.iver.andami.plugins.IExtension extensionInstance = (com.iver.andami.plugins.IExtension) extensions
-						.get(i);
+				IExtension extensionInstance = extensions.get(i);
 				IExtensionStatus status = null;
 				if (exclusiveExtension != null) {
 					status = exclusiveExtension.getStatus(extensionInstance);
@@ -2457,7 +2419,7 @@ public class Launcher {
 		 * @return true if the user confirmed he wishes to exit, false otherwise
 		 */
 		public int manageUnsavedData() {
-			ArrayList unsavedDataList = getUnsavedData();
+			ArrayList<IUnsavedData> unsavedDataList = getUnsavedData();
 
 			// there was no unsaved data
 			if (unsavedDataList.size() == 0) {
@@ -2520,7 +2482,7 @@ public class Launcher {
 											"Resource_was_not_saved"),
 									JOptionPane.ERROR_MESSAGE);
 
-							ArrayList unsavedDataList = getUnsavedData();
+							ArrayList<IUnsavedData> unsavedDataList = getUnsavedData();
 							// it does not work if we directly cast the array
 							unsavedDataArray = new IUnsavedData[unsavedDataList
 									.size()];

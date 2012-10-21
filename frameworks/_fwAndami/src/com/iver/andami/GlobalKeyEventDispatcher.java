@@ -48,7 +48,7 @@ import javax.swing.KeyStroke;
 
 public class GlobalKeyEventDispatcher implements KeyEventDispatcher {
 	private static GlobalKeyEventDispatcher globalKeyDispatcher = null;
-	private static Hashtable registeredKeys = new Hashtable();
+	private static Hashtable<KeyStroke, KeyEventDispatcher> registeredKeys = new Hashtable<KeyStroke, KeyEventDispatcher>();
 
 	static GlobalKeyEventDispatcher getInstance() {
 		if (globalKeyDispatcher == null)
@@ -59,7 +59,7 @@ public class GlobalKeyEventDispatcher implements KeyEventDispatcher {
 	public void registerKeyStroke(KeyStroke key, KeyEventDispatcher disp)
 			throws RuntimeException {
 		if (registeredKeys.containsKey(key)) {
-			KeyEventDispatcher a = (KeyEventDispatcher) registeredKeys.get(key);
+			KeyEventDispatcher a = registeredKeys.get(key);
 			throw new RuntimeException("Error: La tecla " + key
 					+ " ya está asignada al action" + a);
 		}
@@ -75,11 +75,10 @@ public class GlobalKeyEventDispatcher implements KeyEventDispatcher {
 	}
 
 	public KeyEventDispatcher getListenerAssignedTo(KeyStroke key) {
-		return (KeyEventDispatcher) registeredKeys.get(key);
+		return registeredKeys.get(key);
 	}
 
 	private GlobalKeyEventDispatcher() {
-
 	}
 
 	public boolean dispatchKeyEvent(KeyEvent e) {

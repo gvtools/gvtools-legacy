@@ -528,16 +528,8 @@ public class LayerScaleDrawPanel extends JPanel {
 			return intToAbbrev(scale);
 		}
 
-		public int getScale() {
-			return scale;
-		}
-
 		public int getScaleInXDomain() {
 			return scaleDomainToXDomain(1.0 * scale);
-		}
-
-		public int xAxisOffset() {
-			return (getTag().length() * 4) + 3;
 		}
 
 		private String intToAbbrev(int n) {

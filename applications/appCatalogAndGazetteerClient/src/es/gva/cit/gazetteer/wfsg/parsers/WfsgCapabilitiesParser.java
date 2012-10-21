@@ -40,8 +40,6 @@
  */
 package es.gva.cit.gazetteer.wfsg.parsers;
 
-import java.util.Vector;
-
 import org.gvsig.i18n.Messages;
 
 import es.gva.cit.catalog.metadataxml.XMLNode;
@@ -135,36 +133,6 @@ public class WfsgCapabilitiesParser extends GazetteerCapabilitiesParser {
 						"LatLongBoundingBox", "maxy")));
 
 		return f;
-	}
-
-	/**
-	 * This function parses the protocols of an operation
-	 * 
-	 * @return
-	 * @param operation
-	 *            Operation to find the supported protocols
-	 */
-	private String[] getOperations(String operation) {
-		XMLNode[] protocols = XMLTree.searchMultipleNode(getRootNode(),
-				"Capability->Request->" + operation + "->DCPType");
-		Vector vProtocols = new Vector();
-
-		for (int i = 0; i < protocols.length; i++) {
-			if (XMLTree.searchNode(protocols[i], "HTTP->Get") != null) {
-				vProtocols.add("GET");
-			}
-			if (XMLTree.searchNode(protocols[i], "HTTP->Post") != null) {
-				vProtocols.add("POST");
-			}
-
-		}
-
-		String[] sProtocols = new String[vProtocols.size()];
-		for (int i = 0; i < vProtocols.size(); i++) {
-			sProtocols[i] = (String) vProtocols.get(i);
-		}
-
-		return sProtocols;
 	}
 
 	/**

@@ -201,7 +201,7 @@ public interface MDIManager {
 	 * @return true if there is an open window whose class and model match the
 	 *         provided parameteres, false otherwise.
 	 */
-	public boolean closeSingletonWindow(Class viewClass, Object model);
+	public boolean closeSingletonWindow(Class<?> viewClass, Object model);
 
 	/**
 	 * Close the SingletonWindow whose model is provided as parameter.

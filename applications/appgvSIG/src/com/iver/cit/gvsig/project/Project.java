@@ -52,19 +52,14 @@ import java.util.Date;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.TreeMap;
 
 import org.cresques.cts.ProjectionUtils;
 import org.gvsig.tools.file.PathGenerator;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
-import com.hardcode.driverManager.DriverLoadException;
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
-import com.hardcode.gdbms.driver.exceptions.WriteDriverException;
-import com.hardcode.gdbms.engine.data.DataSource;
 import com.hardcode.gdbms.engine.data.DataSourceFactory;
-import com.hardcode.gdbms.engine.data.NoSuchTableException;
 import com.hardcode.gdbms.engine.data.SourceInfo;
 import com.hardcode.gdbms.engine.data.db.DBSourceInfo;
 import com.hardcode.gdbms.engine.data.db.DBTableSourceInfo;
@@ -82,9 +77,7 @@ import com.iver.cit.gvsig.fmap.MapContext;
 import com.iver.cit.gvsig.fmap.drivers.DriverIOException;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.fmap.layers.FLayers;
-import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.fmap.layers.LayerFactory;
-import com.iver.cit.gvsig.fmap.layers.LayersIterator;
 import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
 import com.iver.cit.gvsig.fmap.layers.XMLException;
 import com.iver.cit.gvsig.fmap.layers.layerOperations.AlphanumericData;
@@ -96,11 +89,8 @@ import com.iver.cit.gvsig.project.documents.exceptions.SaveException;
 import com.iver.cit.gvsig.project.documents.gui.IDocumentWindow;
 import com.iver.cit.gvsig.project.documents.gui.ProjectWindow;
 import com.iver.cit.gvsig.project.documents.gui.WindowData;
-import com.iver.cit.gvsig.project.documents.layout.LayoutContext;
 import com.iver.cit.gvsig.project.documents.layout.ProjectMap;
 import com.iver.cit.gvsig.project.documents.layout.ProjectMapFactory;
-import com.iver.cit.gvsig.project.documents.layout.fframes.FFrameView;
-import com.iver.cit.gvsig.project.documents.layout.fframes.IFFrame;
 import com.iver.cit.gvsig.project.documents.layout.gui.Layout;
 import com.iver.cit.gvsig.project.documents.table.ProjectTable;
 import com.iver.cit.gvsig.project.documents.table.ProjectTableFactory;
@@ -319,17 +309,6 @@ public class Project implements Serializable, PropertyChangeListener {
 		}
 
 		return null;
-	}
-
-	private boolean isModifiedDocuments() {
-		ProjectDocument[] documents = (ProjectDocument[]) getDocuments()
-				.toArray(new ProjectDocument[0]);
-		for (int i = 0; i < documents.length; i++) {
-			if (documents[i].isModified()) {
-				return true;
-			}
-		}
-		return false;
 	}
 
 	// /**
@@ -1508,159 +1487,6 @@ public class Project implements Serializable, PropertyChangeListener {
 
 		return dataSource;
 
-	}
-
-	/**
-	 * Recorremos las capas y las tablas del proyecto, y creamos una lista con
-	 * todos los datasources de GDBMS que estamos usando. Luego recorremos los
-	 * que est�n registrados, y borramos aquellos que no est�n siendo
-	 * usados, es decir, aquellos que no est�n en nuestra lista (un Hash con
-	 * clave el nombre del GDBMS)
-	 * 
-	 */
-	private void cleanBadReferences() {
-		ArrayList tables = getDocumentsByType(ProjectTableFactory.registerName);
-		Hashtable usedDataSources = new Hashtable();
-		// Primero las tablas
-		int i, j;
-		try {
-			for (i = 0; i < tables.size(); i++) {
-				ProjectTable t = (ProjectTable) tables.get(i);
-				SelectableDataSource ds;
-				if (t.getModelo() == null) {
-					/*
-					 * if a broken table was found we don't clean any source
-					 */
-					return;
-				}
-
-				ds = t.getModelo().getRecordset();
-
-				if (t.getOriginal() != null)
-					usedDataSources.put(t.getOriginal().getRecordset()
-							.getName(), t.getOriginal());
-				usedDataSources.put(ds.getName(), ds);
-			}
-		} catch (ReadDriverException e) {
-			e.printStackTrace();
-		}
-		// Ahora las vistas
-		ProjectView pv;
-		ArrayList views = getDocumentsByType(ProjectViewFactory.registerName);
-		try {
-			for (i = 0; i < views.size(); i++) {
-				pv = (ProjectView) views.get(i);
-				this.findLayersVectDataSorces(pv.getMapContext(),
-						usedDataSources);
-
-				MapContext aux = pv.getMapOverViewContext();
-				if (aux != null) {
-					if (!this.findLayersVectDataSorces(aux, usedDataSources)) {
-						/*
-						 * if a broken layer was found we don't clean any source
-						 */
-						return;
-					}
-
-				}
-
-			} // for i
-
-		} catch (ReadDriverException e) {
-			e.printStackTrace();
-		}
-
-		// Ahora los mapas
-		ArrayList maps = getDocumentsByType(ProjectMapFactory.registerName);
-		ProjectMap pm;
-		LayoutContext lContext;
-		IFFrame[] fframes;
-		try {
-			for (i = 0; i < maps.size(); i++) {
-				pm = (ProjectMap) maps.get(i);
-				fframes = pm.getModel().getLayoutContext().getFFrames();
-				for (j = 0; j < fframes.length; j++) {
-					if (!(fframes[j] instanceof FFrameView)) {
-						continue;
-					}
-					if (!this.findLayersVectDataSorces(
-							((FFrameView) fframes[i]).getMapContext(),
-							usedDataSources)) {
-						/*
-						 * if a broken layer was found we don't clean any source
-						 */
-						return;
-
-					}
-				} // for j
-
-			} // for i
-
-		} catch (ReadDriverException e) {
-			e.printStackTrace();
-		}
-
-		// Recorremos los dataSources y los borramos si no
-		// los estamos usando.
-		SourceInfo[] infos = LayerFactory.getDataSourceFactory()
-				.getDriverInfos();
-		try {
-			for (i = 0; i < infos.length; i++) {
-				if (!usedDataSources.containsKey(infos[i].name)) {
-					DataSource ds;
-					ds = LayerFactory.getDataSourceFactory()
-							.createRandomDataSource(infos[i].name);
-					ds.remove();
-				}
-			}
-		} catch (DriverLoadException e) {
-			e.printStackTrace();
-		} catch (NoSuchTableException e) {
-			e.printStackTrace();
-		} catch (ReadDriverException e) {
-			e.printStackTrace();
-		} catch (WriteDriverException e) {
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * Find DataSorces of the layers in the mapContext and store them in
-	 * dataSourcesMap
-	 * 
-	 * @param mapContext
-	 * @param dataSourcesMap
-	 * @return false if find a no Available layer
-	 * @throws ReadDriverException
-	 */
-	private boolean findLayersVectDataSorces(MapContext mapContext,
-			Map dataSourcesMap) throws ReadDriverException {
-		LayersIterator iter = new LayersIterator(mapContext.getLayers()) {
-
-			// @Override
-			public boolean evaluate(FLayer layer) {
-				if (!(layer instanceof FLyrVect))
-					return false;
-				return super.evaluate(layer);
-			}
-
-		};
-		FLyrVect layer;
-		while (iter.hasNext()) {
-			layer = (FLyrVect) iter.nextLayer();
-			if (!layer.isAvailable()) {
-				return false;
-			}
-
-			dataSourcesMap.put(layer.getRecordset().getName(),
-					layer.getRecordset());
-			if (layer.isJoined()) {
-				dataSourcesMap.put(layer.getSource().getRecordset().getName(),
-						layer.getSource().getRecordset());
-			}
-
-		}
-		return true;
 	}
 
 	/**

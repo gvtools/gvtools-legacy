@@ -87,7 +87,7 @@ public abstract class AbstractPreferencePage extends GridBagLayoutPanel
 		return this;
 	}
 
-	public Object create(Map args) {
+	public Object create(Map<Object, Object> args) {
 		return this;
 	}
 

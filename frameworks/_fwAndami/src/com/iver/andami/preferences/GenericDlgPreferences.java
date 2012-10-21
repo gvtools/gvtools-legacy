@@ -82,7 +82,7 @@ public class GenericDlgPreferences extends JPanel implements IWindow {
 	private WindowInfo viewInfo = null;
 	private IPreference activePreference;
 
-	private Hashtable preferences = new Hashtable();
+	private Hashtable<String, IPreference> preferences = new Hashtable<String, IPreference>();
 	DefaultTreeModel treeModel = null;
 
 	private JTree jTreePlugins = null;
@@ -158,13 +158,12 @@ public class GenericDlgPreferences extends JPanel implements IWindow {
 						// }
 					}
 				} else {
-					Iterator it = preferences.keySet().iterator();
+					Iterator<String> it = preferences.keySet().iterator();
 
 					if ("CANCEL".equals(actionCommand)) {
 						// Restore previous values in all pages
 						while (it.hasNext()) {
-							IPreference pref = (IPreference) preferences.get(it
-									.next());
+							IPreference pref = preferences.get(it.next());
 							if (pref.isValueChanged())
 								pref.initializeValues(); //
 						}
@@ -173,8 +172,7 @@ public class GenericDlgPreferences extends JPanel implements IWindow {
 						// Apply values in all pages
 						boolean shouldClose = true;
 						while (it.hasNext()) {
-							IPreference preference = (IPreference) preferences
-									.get(it.next());
+							IPreference preference = preferences.get(it.next());
 							try {
 								if (preference.isValueChanged()) {
 									preference.saveValues();
@@ -221,14 +219,14 @@ public class GenericDlgPreferences extends JPanel implements IWindow {
 		ExtensionPoints extensionPoints = ExtensionPointsSingleton
 				.getInstance();
 
-		ExtensionPoint extensionPoint = (ExtensionPoint) extensionPoints
+		ExtensionPoint extensionPoint = extensionPoints
 				.get("AplicationPreferences");
 
-		Iterator iterator = extensionPoint.keySet().iterator();
+		Iterator<String> iterator = extensionPoint.keySet().iterator();
 		while (iterator.hasNext()) {
 			try {
-				IPreference obj = (IPreference) extensionPoint
-						.create((String) iterator.next());
+				IPreference obj = (IPreference) extensionPoint.create(iterator
+						.next());
 				this.addPreferencePage(obj);
 			} catch (InstantiationException e) {
 				e.printStackTrace();
@@ -252,14 +250,14 @@ public class GenericDlgPreferences extends JPanel implements IWindow {
 		ExtensionPoints extensionPoints = ExtensionPointsSingleton
 				.getInstance();
 
-		ExtensionPoint extensionPoint = (ExtensionPoint) extensionPoints
+		ExtensionPoint extensionPoint = extensionPoints
 				.get("AplicationPreferences");
 
-		Iterator iterator = extensionPoint.keySet().iterator();
+		Iterator<String> iterator = extensionPoint.keySet().iterator();
 		while (iterator.hasNext()) {
 			try {
-				IPreference obj = (IPreference) extensionPoint
-						.create((String) iterator.next());
+				IPreference obj = (IPreference) extensionPoint.create(iterator
+						.next());
 				this.addPreferencePage(obj);
 
 				{
@@ -408,7 +406,7 @@ public class GenericDlgPreferences extends JPanel implements IWindow {
 	}
 
 	private DefaultMutableTreeNode findNode(String searchID) {
-		Enumeration e = root.breadthFirstEnumeration();
+		Enumeration<?> e = root.breadthFirstEnumeration();
 		while (e.hasMoreElements()) {
 			DefaultMutableTreeNode nodeAux = (DefaultMutableTreeNode) e
 					.nextElement();
@@ -433,8 +431,7 @@ public class GenericDlgPreferences extends JPanel implements IWindow {
 			return;
 		if (page.getParentID() != null) {
 			if (preferences.containsKey(page.getParentID())) {
-				IPreference parent = (IPreference) preferences.get(page
-						.getParentID());
+				IPreference parent = preferences.get(page.getParentID());
 				DefaultMutableTreeNode nodeParent = findNode(parent.getID());
 				if (nodeParent == null) // the parent is empty
 				{

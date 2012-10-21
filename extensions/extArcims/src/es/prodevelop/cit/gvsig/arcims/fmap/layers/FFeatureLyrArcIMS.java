@@ -42,7 +42,6 @@
  */
 package es.prodevelop.cit.gvsig.arcims.fmap.layers;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.geom.AffineTransform;
@@ -86,7 +85,6 @@ import com.iver.cit.gvsig.fmap.core.CartographicSupport;
 import com.iver.cit.gvsig.fmap.core.FShape;
 import com.iver.cit.gvsig.fmap.core.IFeature;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
-import com.iver.cit.gvsig.fmap.core.SymbologyFactory;
 import com.iver.cit.gvsig.fmap.core.symbols.IMultiLayerSymbol;
 import com.iver.cit.gvsig.fmap.core.symbols.ISymbol;
 import com.iver.cit.gvsig.fmap.core.v02.FSymbol;
@@ -528,24 +526,6 @@ public class FFeatureLyrArcIMS extends FLyrVect implements InfoByPoint,
 		return imsdrv.gvSigNamesToServerNames(flds);
 	}
 
-	private String[] replaceSpecialChars(String[] _legflds) {
-
-		int len = _legflds.length;
-		String[] resp = new String[len];
-		for (int i = 0; i < len; i++) {
-			resp[i] = replaceSpecialChars(_legflds[i]);
-		}
-		return resp;
-	}
-
-	private String replaceSpecialChars(String str) {
-		if (str.compareToIgnoreCase("zIDz") == 0)
-			return "#ID#";
-		if (str.compareToIgnoreCase("zSHAPEz") == 0)
-			return "#SHAPE#";
-		return str;
-	}
-
 	private String[] appendAtringArrays(String[] arr1, String[] arr2) {
 
 		int len = arr1.length + arr2.length;
@@ -565,23 +545,6 @@ public class FFeatureLyrArcIMS extends FLyrVect implements InfoByPoint,
 			Cancellable cancel, double scale) throws ReadDriverException {
 
 		_draw(image, g, viewPort, cancel, scale);
-	}
-
-	private ISymbol getSymbolOrSelected(int i, ISymbol symbol) {
-		boolean sel = false;
-
-		try {
-			sel = getRecordset().getSelectionSupport().isSelected(i);
-		} catch (ReadDriverException e) {
-			logger.error("While getting selection", e);
-		}
-
-		if (sel) {
-			return SymbologyFactory.createDefaultSymbolByShapeType(shapeType,
-					Color.YELLOW);
-		} else {
-			return symbol;
-		}
 	}
 
 	/**

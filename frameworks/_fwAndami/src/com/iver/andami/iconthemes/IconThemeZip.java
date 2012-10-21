@@ -66,9 +66,9 @@ public class IconThemeZip extends AbstractIconTheme {
 		if (getResource() instanceof ZipFile) {
 			ZipFile zipFile = (ZipFile) getResource();
 			ImageFileFilter filter = new ImageFileFilter();
-			Enumeration entries = zipFile.entries();
+			Enumeration<? extends ZipEntry> entries = zipFile.entries();
 			while (entries.hasMoreElements()) {
-				ZipEntry entry = (ZipEntry) entries.nextElement();
+				ZipEntry entry = entries.nextElement();
 				if (!entry.isDirectory()) {
 					if (filter.accept(new File(zipFile.getName()),
 							entry.getName())) {

@@ -8,24 +8,9 @@ import java.util.TreeMap;
  * 
  * @author jjdelcerro
  */
-public class ExtensionPoints extends TreeMap {
+public class ExtensionPoints extends TreeMap<String, ExtensionPoint> {
 
 	private static final long serialVersionUID = -798417910971607414L;
-
-	/**
-	 * Evita que se añadan elementos que no son puntos de extension. <br>
-	 * <br>
-	 * Aunque la clase se comporta como un <i>Map</i>, no esta permitido añadir
-	 * a esta objetos que no sean de la clase <i>ExtensionPoint</i>. Si
-	 * intentamos añadir un elemento que no sea de esta clase, se disparara una
-	 * excepcion ClassCastException. <br>
-	 * <br>
-	 * 
-	 * @see java.util.Map#put(java.lang.Object, java.lang.Object)
-	 */
-	public Object put(Object key, Object value) throws ClassCastException {
-		throw new ClassCastException();
-	}
 
 	/**
 	 * Añade un punto de extension al registro de puntos de extension. <br>
@@ -68,11 +53,11 @@ public class ExtensionPoints extends TreeMap {
 	 * @return
 	 * 
 	 */
-	public Object put(String key, ExtensionPoint value) {
+	public ExtensionPoint put(String key, ExtensionPoint value) {
 		if (!value.getName().equals(key)) {
 			throw new IllegalArgumentException();
 		}
-		ExtensionPoint n = (ExtensionPoint) super.get(key);
+		ExtensionPoint n = super.get(key);
 		if (n == null) {
 			return super.put(key, value);
 		}
@@ -104,8 +89,7 @@ public class ExtensionPoints extends TreeMap {
 	 * 
 	 */
 	public void add(String extensionPointName, String name, Object data) {
-		ExtensionPoint extensionPoint = (ExtensionPoint) super
-				.get(extensionPointName);
+		ExtensionPoint extensionPoint = super.get(extensionPointName);
 		if (extensionPoint == null) {
 			extensionPoint = new ExtensionPoint(extensionPointName);
 			super.put(extensionPoint.getName(), extensionPoint);
@@ -139,8 +123,7 @@ public class ExtensionPoints extends TreeMap {
 	 */
 	public void add(String extensionPointName, String name, String description,
 			Object data) {
-		ExtensionPoint extensionPoint = (ExtensionPoint) super
-				.get(extensionPointName);
+		ExtensionPoint extensionPoint = super.get(extensionPointName);
 		if (extensionPoint == null) {
 			extensionPoint = new ExtensionPoint(extensionPointName);
 			super.put(extensionPoint.getName(), extensionPoint);

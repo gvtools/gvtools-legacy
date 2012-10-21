@@ -63,8 +63,6 @@ import java.util.zip.ZipFile;
 import javax.swing.ImageIcon;
 import javax.swing.RootPaneContainer;
 
-import org.apache.log4j.Logger;
-
 import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.andami.ui.splash.MultiSplashWindow;
 
@@ -78,9 +76,8 @@ public class Utilities {
 	/**
 	 * <b>key</b>: URL, <b>value</b>: path to the downloaded file.
 	 */
-	private static Hashtable downloadedFiles;
+	private static Hashtable<URL, String> downloadedFiles;
 	/** DOCUMENT ME! */
-	private static Logger logger = Logger.getLogger(Utilities.class.getName());
 	public static final String TEMPDIRECTORYPATH = System
 			.getProperty("java.io.tmpdir") + "/tmp-andami";
 
@@ -122,7 +119,7 @@ public class Utilities {
 	}
 
 	/*
-	 *  * The "depth" parameter was being used for text output debugging. * But
+	 * * The "depth" parameter was being used for text output debugging. * But
 	 * isn't essential now. I'll keep it anyways, as it avoids * calling the
 	 * garbage collector every recursion.
 	 */
@@ -200,11 +197,11 @@ public class Utilities {
 	public static void extractTo(File file, File dir, MultiSplashWindow splash)
 			throws ZipException, IOException {
 		ZipFile zip = new ZipFile(file);
-		Enumeration e = zip.entries();
+		Enumeration<? extends ZipEntry> e = zip.entries();
 
 		// Pasada para crear las carpetas
 		while (e.hasMoreElements()) {
-			ZipEntry entry = (ZipEntry) e.nextElement();
+			ZipEntry entry = e.nextElement();
 
 			if (entry.isDirectory()) {
 				File directorio = new File(dir.getAbsolutePath()
@@ -218,7 +215,7 @@ public class Utilities {
 		// Pasada para crear los ficheros
 		e = zip.entries();
 		while (e.hasMoreElements()) {
-			ZipEntry entry = (ZipEntry) e.nextElement();
+			ZipEntry entry = e.nextElement();
 			splash.process(30, "Procesando " + entry.getName() + "...");
 			if (!entry.isDirectory()) {
 				InputStream in = zip.getInputStream(entry);
@@ -262,7 +259,7 @@ public class Utilities {
 	private static File getPreviousDownloadedURL(URL url) {
 		File f = null;
 		if (downloadedFiles != null && downloadedFiles.containsKey(url)) {
-			String filePath = (String) downloadedFiles.get(url);
+			String filePath = downloadedFiles.get(url);
 			f = new File(filePath);
 		}
 		return f;
@@ -278,8 +275,7 @@ public class Utilities {
 	 */
 	private static void addDownloadedURL(URL url, String filePath) {
 		if (downloadedFiles == null)
-			downloadedFiles = new Hashtable();
-		String fileName = (String) downloadedFiles.put(url, filePath);
+			downloadedFiles = new Hashtable<URL, String>();
 		// JMV: No se puede eliminar el anterior porque puede que alguien lo
 		// este usando
 		/*
@@ -322,10 +318,8 @@ public class Utilities {
 						new BufferedOutputStream(new FileOutputStream(f)));
 				byte[] buffer = new byte[1024 * 256];
 				InputStream is = url.openStream();
-				long readed = 0;
 				for (int i = is.read(buffer); i > 0; i = is.read(buffer)) {
 					dos.write(buffer, 0, i);
-					readed += i;
 				}
 				dos.close();
 				addDownloadedURL(url, f.getAbsolutePath());

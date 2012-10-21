@@ -41,18 +41,11 @@
 package com.iver.andami.messages;
 
 import java.util.Locale;
-import java.util.ResourceBundle;
 
 /**
  * Clase que accede a los recursos para la i18n
  */
 public class Messages {
-	/** DOCUMENT ME! */
-	private static final String BUNDLE_NAME = "com.iver.andami.text";
-
-	/** DOCUMENT ME! */
-	private static ResourceBundle RESOURCE_BUNDLE = null;
-
 	/**
 	 * Inicializa la clase con el locale adecuado
 	 * 

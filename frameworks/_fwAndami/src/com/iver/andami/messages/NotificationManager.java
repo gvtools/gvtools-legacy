@@ -72,19 +72,19 @@ public class NotificationManager {
 	private static boolean addedMessage = false;
 
 	/** DOCUMENT ME! */
-	private static ArrayList info = new ArrayList();
-	private static ArrayList infoExceptions = new ArrayList();
+	private static ArrayList<String> info = new ArrayList<String>();
+	private static ArrayList<Throwable> infoExceptions = new ArrayList<Throwable>();
 
 	/** DOCUMENT ME! */
-	private static ArrayList warnings = new ArrayList();
-	private static ArrayList warningsExceptions = new ArrayList();
+	private static ArrayList<String> warnings = new ArrayList<String>();
+	private static ArrayList<Throwable> warningsExceptions = new ArrayList<Throwable>();
 
 	/** DOCUMENT ME! */
-	private static ArrayList errors = new ArrayList();
-	private static ArrayList errorsExceptions = new ArrayList();
+	private static ArrayList<String> errors = new ArrayList<String>();
+	private static ArrayList<Throwable> errorsExceptions = new ArrayList<Throwable>();
 
 	/** DOCUMENT ME! */
-	private static Vector listeners = new Vector();
+	private static Vector<NotificationListener> listeners = new Vector<NotificationListener>();
 	private static boolean isFirst = true;
 
 	/**
@@ -108,8 +108,8 @@ public class NotificationManager {
 		errorsExceptions.add(e);
 
 		if (isFirst) {
-			AddError((String[]) errors.toArray(new String[0]),
-					(Throwable[]) errorsExceptions.toArray(new Throwable[0]));
+			AddError(errors.toArray(new String[0]),
+					errorsExceptions.toArray(new Throwable[0]));
 			errors.clear();
 			errorsExceptions.clear();
 			isFirst = false;
@@ -128,8 +128,8 @@ public class NotificationManager {
 		warningsExceptions.add(e);
 
 		if (isFirst) {
-			AddWarning((String[]) warnings.toArray(new String[0]),
-					(Throwable[]) warningsExceptions.toArray(new Throwable[0]));
+			AddWarning(warnings.toArray(new String[0]),
+					warningsExceptions.toArray(new Throwable[0]));
 			warnings.clear();
 			warningsExceptions.clear();
 			isFirst = false;
@@ -154,8 +154,8 @@ public class NotificationManager {
 		infoExceptions.add(e);
 
 		if (isFirst) {
-			AddInfo((String[]) info.toArray(new String[0]),
-					(Throwable[]) infoExceptions.toArray(new Throwable[0]));
+			AddInfo(info.toArray(new String[0]),
+					infoExceptions.toArray(new Throwable[0]));
 			info.clear();
 			infoExceptions.clear();
 			isFirst = false;
@@ -182,8 +182,7 @@ public class NotificationManager {
 	 */
 	private static void AddError(String[] error, Throwable[] e) {
 		for (int i = 0; i < listeners.size(); i++) {
-			((NotificationListener) listeners.get(i))
-					.errorEvent(new MessageEvent(error, e));
+			listeners.get(i).errorEvent(new MessageEvent(error, e));
 		}
 	}
 
@@ -198,8 +197,7 @@ public class NotificationManager {
 	 */
 	private static void AddWarning(String[] warn, Throwable[] e) {
 		for (int i = 0; i < listeners.size(); i++) {
-			((NotificationListener) listeners.get(i))
-					.warningEvent(new MessageEvent(warn, e));
+			listeners.get(i).warningEvent(new MessageEvent(warn, e));
 		}
 	}
 
@@ -214,8 +212,7 @@ public class NotificationManager {
 	 */
 	private static void AddInfo(String[] info, Throwable[] e) {
 		for (int i = 0; i < listeners.size(); i++) {
-			((NotificationListener) listeners.get(i))
-					.infoEvent(new MessageEvent(info, e));
+			listeners.get(i).infoEvent(new MessageEvent(info, e));
 		}
 	}
 
@@ -231,25 +228,22 @@ public class NotificationManager {
 				public void actionPerformed(ActionEvent e) {
 
 					if (errors.size() > 0) {
-						AddError((String[]) errors.toArray(new String[0]),
-								(Throwable[]) errorsExceptions
-										.toArray(new Throwable[0]));
+						AddError(errors.toArray(new String[0]),
+								errorsExceptions.toArray(new Throwable[0]));
 						errors.clear();
 						errorsExceptions.clear();
 					}
 
 					if (warnings.size() > 0) {
-						AddWarning((String[]) warnings.toArray(new String[0]),
-								(Throwable[]) warningsExceptions
-										.toArray(new Throwable[0]));
+						AddWarning(warnings.toArray(new String[0]),
+								warningsExceptions.toArray(new Throwable[0]));
 						warnings.clear();
 						warningsExceptions.clear();
 					}
 
 					if (info.size() > 0) {
-						AddInfo((String[]) info.toArray(new String[0]),
-								(Throwable[]) infoExceptions
-										.toArray(new Throwable[0]));
+						AddInfo(info.toArray(new String[0]),
+								infoExceptions.toArray(new Throwable[0]));
 						info.clear();
 						infoExceptions.clear();
 					}

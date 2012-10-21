@@ -7,7 +7,7 @@ import java.util.Map;
  * 
  * @author laura
  */
-public interface IAuthentication extends Map {
+public interface IAuthentication extends Map<String, String> {
 
 	public boolean Login();
 

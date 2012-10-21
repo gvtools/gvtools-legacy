@@ -743,10 +743,6 @@ public class ServiceNamesPanel extends JPanel implements ActionListener,
 				JOptionPane.ERROR_MESSAGE);
 	}
 
-	private boolean servicesTableHasSelection() {
-		return (servicesTable.getSelectedRow() != -1);
-	}
-
 	/**
 	 * Utility method to manage the services names table.
 	 * 

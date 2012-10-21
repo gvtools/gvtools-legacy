@@ -239,9 +239,9 @@ public class PluginServices {
 	 * @return The instance of the extension, or null if the instance does not
 	 *         exist.Instancia de la extensión o null en caso de que no haya una
 	 */
-	public static IExtension getExtension(Class extensionClass) {
-		ExtensionDecorator extAux = (ExtensionDecorator) Launcher
-				.getClassesExtensions().get(extensionClass);
+	public static IExtension getExtension(Class<?> extensionClass) {
+		ExtensionDecorator extAux = Launcher.getClassesExtensions().get(
+				extensionClass);
 		try {
 			return extAux.getExtension();
 		} catch (NullPointerException ex) {
@@ -258,9 +258,9 @@ public class PluginServices {
 	 * @return The ExtensionDecorator associated with the provided extension, or
 	 *         null if the extension does not exist.
 	 */
-	public static ExtensionDecorator getDecoratedExtension(Class extensionClass) {
-		return (ExtensionDecorator) Launcher.getClassesExtensions().get(
-				extensionClass);
+	public static ExtensionDecorator getDecoratedExtension(
+			Class<?> extensionClass) {
+		return Launcher.getClassesExtensions().get(extensionClass);
 	}
 
 	/**
@@ -270,9 +270,10 @@ public class PluginServices {
 	 *         Decorator contains one extension).
 	 */
 	public static ExtensionDecorator[] getDecoratedExtensions() {
-		HashMap map = Launcher.getClassesExtensions();
-		ExtensionDecorator[] extensions = (ExtensionDecorator[]) map.values()
-				.toArray(new ExtensionDecorator[0]);
+		HashMap<Class<?>, ExtensionDecorator> map = Launcher
+				.getClassesExtensions();
+		ExtensionDecorator[] extensions = map.values().toArray(
+				new ExtensionDecorator[0]);
 		return extensions;
 	}
 
@@ -283,7 +284,7 @@ public class PluginServices {
 	 *         iterator is an ExtensionDecorator, which in turn contains one
 	 *         IExtension object).
 	 */
-	public static Iterator getExtensions() {
+	public static Iterator<ExtensionDecorator> getExtensions() {
 		return Launcher.getClassesExtensions().values().iterator();
 	}
 
@@ -640,7 +641,7 @@ public class PluginServices {
 		PluginServices.exclusiveUIExtension = extension;
 	}
 
-	public static void addLoaders(ArrayList classLoaders) {
+	public static void addLoaders(ArrayList<ClassLoader> classLoaders) {
 		PluginClassLoader.addLoaders(classLoaders);
 	}
 

@@ -202,7 +202,7 @@ public interface MainFrame {
 	 * @param control
 	 *            The control to add.
 	 */
-	public void addStatusBarControl(Class extensionClass, IControl control);
+	public void addStatusBarControl(Class<?> extensionClass, IControl control);
 
 	/**
 	 * Removes the providedcontrol from the status bar.
@@ -226,7 +226,7 @@ public interface MainFrame {
 	 *            An array of Labels. Each label has an ID which will be used to
 	 *            write text on them.
 	 */
-	public void setStatusBarLabels(Class clase, Label[] label);
+	public void setStatusBarLabels(Class<?> clase, Label[] label);
 
 	/**
 	 * Removes the labels associated with the provided class.
@@ -234,6 +234,6 @@ public interface MainFrame {
 	 * @param clase
 	 *            The class whose associated labels are to be removed.
 	 */
-	public void removeStatusBarLabels(Class clase);
+	public void removeStatusBarLabels(Class<?> clase);
 
 }

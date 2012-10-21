@@ -254,18 +254,6 @@ public class ShowResultsPanel extends JPanel {
 	}
 
 	/**
-	 * This method initializes jLabel
-	 * 
-	 * @return javax.swing.JLabel
-	 */
-	private JLabel getJLabel() {
-		if (jLabel == null) {
-			jLabel = new JLabel();
-		}
-		return jLabel;
-	}
-
-	/**
 	 * This method initializes mapButton
 	 * 
 	 * @return javax.swing.JButton
@@ -570,10 +558,6 @@ public class ShowResultsPanel extends JPanel {
 		public ImageThread() {
 			myThread = new Thread(this);
 			myThread.start();
-		}
-
-		public void stop() {
-			myThread.stop();
 		}
 
 		/*

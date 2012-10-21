@@ -79,7 +79,6 @@ import javax.swing.tree.DefaultTreeModel;
 
 import org.apache.log4j.Logger;
 import org.gvsig.remoteClient.arcims.utils.ServiceInformation;
-import org.gvsig.remoteClient.arcims.utils.ServiceInformationLayer;
 
 import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.addlayer.AddLayerDialog;
@@ -1345,28 +1344,5 @@ public class FeatureServicePanel extends JPanel implements ActionListener,
 
 	public void setTextInVersionLabel(String vers) {
 		versionLabel.setText(vers);
-	}
-
-	private boolean isVisibleByDefault(ServiceInformation _si, String layerid) {
-		int layercount = _si.getLayers().size();
-
-		for (int i = 0; i < layercount; i++) {
-			ServiceInformationLayer sil = (ServiceInformationLayer) _si
-					.getLayerById(layerid);
-
-			if (isTrueString(sil.getVisible())) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	private boolean isTrueString(String visible) {
-		if (visible.compareToIgnoreCase("true") == 0) {
-			return true;
-		}
-
-		return false;
 	}
 } // @jve:decl-index=0:visual-constraint="10,10"

@@ -88,12 +88,12 @@ public class PluginClassLoader extends URLClassLoader {
 			.getName());
 
 	/** DOCUMENT ME! */
-	private Hashtable clasesJar = new Hashtable();
+	private Hashtable<String, ZipFile> clasesJar = new Hashtable<String, ZipFile>();
 
 	/** DOCUMENT ME! */
 	private File baseDir;
 	private PluginClassLoader[] pluginLoaders;
-	private static ArrayList otherLoaders = new ArrayList();
+	private static ArrayList<ClassLoader> otherLoaders = new ArrayList<ClassLoader>();
 	private boolean isOtherLoader = false;
 
 	/**
@@ -126,10 +126,11 @@ public class PluginClassLoader extends URLClassLoader {
 			try {
 				jarFiles[i] = new ZipFile(jars[i].getPath());
 
-				Enumeration entradas = jarFiles[i].entries();
+				Enumeration<? extends ZipEntry> entradas = jarFiles[i]
+						.entries();
 
 				while (entradas.hasMoreElements()) {
-					ZipEntry file = (ZipEntry) entradas.nextElement();
+					ZipEntry file = entradas.nextElement();
 					String fileName = file.getName();
 
 					if (!fileName.toLowerCase().endsWith(".class")) { //$NON-NLS-1$
@@ -151,8 +152,7 @@ public class PluginClassLoader extends URLClassLoader {
 										+ jarFiles[i].getName()
 										+ Messages.getString("y_en")
 										+ " "
-										+ ((ZipFile) clasesJar.get(fileName))
-												.getName());
+										+ clasesJar.get(fileName).getName());
 					}
 
 					clasesJar.put(fileName, jarFiles[i]);
@@ -177,16 +177,17 @@ public class PluginClassLoader extends URLClassLoader {
 	 * @throws ClassNotFoundException
 	 *             DOCUMENT ME!
 	 */
-	protected Class singleLoadClass(String name) throws ClassNotFoundException {
+	protected Class<?> singleLoadClass(String name)
+			throws ClassNotFoundException {
 		// Buscamos en las clases de las librerías del plugin
-		Class c = findLoadedClass(name);
+		Class<?> c = findLoadedClass(name);
 
 		if (c != null) {
 			return c;
 		}
 
 		try {
-			ZipFile jar = (ZipFile) clasesJar.get(name);
+			ZipFile jar = clasesJar.get(name);
 
 			// No está en ningún jar
 			if (jar == null) {
@@ -253,9 +254,9 @@ public class PluginClassLoader extends URLClassLoader {
 	 * @throws ClassNotFoundException
 	 *             Si no se pudo encontrar la clase
 	 */
-	protected Class loadClass(String name, boolean resolve)
+	protected Class<?> loadClass(String name, boolean resolve)
 			throws ClassNotFoundException {
-		Class c = null;
+		Class<?> c = null;
 
 		// Intentamos cargar con el system classloader
 		try {
@@ -287,12 +288,10 @@ public class PluginClassLoader extends URLClassLoader {
 		return c;
 	}
 
-	private Class loadOtherClass(String name) throws ClassNotFoundException {
-		ClassLoader[] ocl = (ClassLoader[]) otherLoaders
-				.toArray(new ClassLoader[0]);
-		Class c = null;
+	private Class<?> loadOtherClass(String name) throws ClassNotFoundException {
+		ClassLoader[] ocl = otherLoaders.toArray(new ClassLoader[0]);
 		for (int i = 0; i < ocl.length; i++) {
-			c = ocl[i].loadClass(name);
+			Class<?> c = ocl[i].loadClass(name);
 			if (c != null)
 				return c;
 		}
@@ -396,7 +395,7 @@ public class PluginClassLoader extends URLClassLoader {
 	 */
 	public URL getResource(String res) {
 		try {
-			ArrayList resource = new ArrayList();
+			ArrayList<String> resource = new ArrayList<String>();
 			StringTokenizer st = new StringTokenizer(res, "\\/");
 
 			while (st.hasMoreTokens()) {
@@ -427,10 +426,10 @@ public class PluginClassLoader extends URLClassLoader {
 	 * 
 	 * @return Resource's URL if it was found, nul otherwise.
 	 */
-	private URL getResource(File base, List res) {
+	private URL getResource(File base, List<String> res) {
 		File[] files = base.listFiles();
 
-		String parte = (String) res.get(0);
+		String parte = res.get(0);
 
 		for (int i = 0; i < files.length; i++) {
 			if (files[i].getName().compareTo(parte) == 0) {
@@ -490,7 +489,7 @@ public class PluginClassLoader extends URLClassLoader {
 	 *            An ArrayList of ClassLoaders which will be used to load
 	 *            classes when all the normal methods fail.
 	 */
-	public static void addLoaders(ArrayList classLoaders) {
+	public static void addLoaders(ArrayList<ClassLoader> classLoaders) {
 		otherLoaders.addAll(classLoaders);
 	}
 }

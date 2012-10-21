@@ -49,7 +49,7 @@ public class LoginUI extends JDialog {
 		passwordField = new JPasswordField(25);
 		serverURLField = new JTextField(25);
 
-		String server_text = (String) authentication.get("server_url");
+		String server_text = authentication.get("server_url");
 		if (server_text != null) {
 			serverURLField.setText(server_text);
 		}
@@ -100,14 +100,14 @@ public class LoginUI extends JDialog {
 	}
 
 	public void OK() {
-		if (((String) serverURLField.getText() == null)
-				|| (((String) serverURLField.getText()).length() == 0)) {
+		if (serverURLField.getText() == null
+				|| serverURLField.getText().length() == 0) {
 			return;
 		}
 
-		authentication.put("user", (String) usernameField.getText());
+		authentication.put("user", usernameField.getText());
 		authentication.put("pwd", new String(passwordField.getPassword()));
-		authentication.put("server", (String) serverURLField.getText());
+		authentication.put("server", serverURLField.getText());
 
 		if (authentication.isValidUser()) {
 			authentication.setLogged(true);

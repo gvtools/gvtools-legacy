@@ -210,18 +210,6 @@ public class ServicesTableDataSource {
 		return null;
 	}
 
-	private int getInsertPosition(String str, Vector data) {
-		for (int i = 0; i < data.size(); i++) {
-			String aux = (String) ((ArrayList) data.get(i)).get(0);
-
-			if (aux.compareToIgnoreCase(str) > 0) {
-				return i;
-			}
-		}
-
-		return data.size();
-	}
-
 	/**
 	 * Gets the name of the <i>n</i>th column (<i>n</i> = columnIndex)
 	 * 

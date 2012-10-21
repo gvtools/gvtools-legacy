@@ -166,18 +166,18 @@ public class ExtensionPage extends AbstractPreferencePage {
 	 * Lee del config.xml la configuración.
 	 */
 	public void unmarshalPlugins() {
-		HashMap pc = Launcher.getPluginConfig();
-		Iterator iter = pc.keySet().iterator();
+		HashMap<String, PluginConfig> pc = Launcher.getPluginConfig();
+		Iterator<String> iter = pc.keySet().iterator();
 
 		while (iter.hasNext()) {
-			Object obj = iter.next();
-			PluginConfig pconfig = (PluginConfig) pc.get(obj);
+			String obj = iter.next();
+			PluginConfig pconfig = pc.get(obj);
 
 			try {
 				String fileName = Launcher.getAndamiConfig()
 						.getPluginsDirectory()
 						+ File.separator
-						+ (String) obj
+						+ obj
 						+ File.separator + "config.xml";
 				FileInputStream is = new FileInputStream(fileName);
 				Reader reader = com.iver.utiles.xml.XMLEncodingUtils

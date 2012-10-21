@@ -53,7 +53,7 @@ import com.iver.andami.messages.Messages;
  */
 public class KeyMapping {
 	/** Asocia caracteres con KeyEvents */
-	private static HashMap key = new HashMap();
+	private static HashMap<Character, Integer> key = new HashMap<Character, Integer>();
 
 	static {
 		key.put(new Character('a'), new Integer(KeyEvent.VK_A));
@@ -109,7 +109,7 @@ public class KeyMapping {
 	 *             Si el caracter no tiene una tecla asociada
 	 */
 	public static int getKey(char a) {
-		Integer ret = (Integer) key.get(new Character(a));
+		Integer ret = key.get(new Character(a));
 
 		if (ret == null) {
 			throw new RuntimeException(

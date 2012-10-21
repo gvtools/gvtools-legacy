@@ -6,6 +6,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * Esta clase permite registrar extensiones para un punto de extension. <br>
@@ -25,14 +26,14 @@ import java.util.Map;
  * @author jjdelcerro
  * 
  */
-public class ExtensionPoint extends LinkedHashMap {
+public class ExtensionPoint extends LinkedHashMap<String, Object> {
 
 	private static final long serialVersionUID = -5908427725588553371L;
 
 	private String name;
 	private String description;
-	private Hashtable extensionDescriptions = new Hashtable();
-	private Hashtable aliases = new Hashtable();
+	private Hashtable<String, String> extensionDescriptions = new Hashtable<String, String>();
+	private Hashtable<String, String> aliases = new Hashtable<String, String>();
 
 	/**
 	 * Construye un punto de extension. <br>
@@ -92,7 +93,7 @@ public class ExtensionPoint extends LinkedHashMap {
 	 * @return descripcion del punto de extension
 	 */
 	public String getExtensionDescription(String key) {
-		return (String) this.extensionDescriptions.get(key);
+		return this.extensionDescriptions.get(key);
 	}
 
 	/**
@@ -139,10 +140,11 @@ public class ExtensionPoint extends LinkedHashMap {
 	public Object insert(String beforeKey, String key, String description,
 			Object value) {
 		boolean mover = false;
-		Map tmp = new LinkedHashMap();
+		Map<String, Object> tmp = new LinkedHashMap<String, Object>();
 
-		for (Iterator i = this.entrySet().iterator(); i.hasNext();) {
-			Map.Entry e = (Map.Entry) i.next();
+		for (Iterator<Entry<String, Object>> i = this.entrySet().iterator(); i
+				.hasNext();) {
+			Entry<String, Object> e = i.next();
 			if (e.getKey().equals(beforeKey)) {
 				mover = true;
 			}
@@ -150,9 +152,8 @@ public class ExtensionPoint extends LinkedHashMap {
 				tmp.put(e.getKey(), e.getValue());
 			}
 		}
-		for (Iterator i = tmp.keySet().iterator(); i.hasNext();) {
-			String key1 = (String) i.next();
-			this.remove(key1);
+		for (Iterator<String> i = tmp.keySet().iterator(); i.hasNext();) {
+			this.remove(i.next());
 		}
 		if (description != null) {
 			this.extensionDescriptions.put(key, description);
@@ -189,7 +190,7 @@ public class ExtensionPoint extends LinkedHashMap {
 		if (extension instanceof IExtensionBuilder) {
 			return ((IExtensionBuilder) extension).create();
 		}
-		return ExtensionBuilder.create((Class) extension);
+		return ExtensionBuilder.create((Class<?>) extension);
 	}
 
 	/**
@@ -229,13 +230,13 @@ public class ExtensionPoint extends LinkedHashMap {
 		if (extension instanceof IExtensionBuilder) {
 			return ((IExtensionBuilder) extension).create(args);
 		}
-		return ExtensionBuilder.create((Class) extension, args);
+		return ExtensionBuilder.create((Class<?>) extension, args);
 	}
 
-	public Object create(String name, Map args) throws SecurityException,
-			NoSuchMethodException, IllegalArgumentException,
-			InstantiationException, IllegalAccessException,
-			InvocationTargetException {
+	public Object create(String name, Map<Object, Object> args)
+			throws SecurityException, NoSuchMethodException,
+			IllegalArgumentException, InstantiationException,
+			IllegalAccessException, InvocationTargetException {
 		Object extension = this.get(name);
 		if (extension == null) {
 			extension = this.get(this.aliases.get(name));
@@ -244,7 +245,7 @@ public class ExtensionPoint extends LinkedHashMap {
 		if (extension instanceof IExtensionBuilder) {
 			return ((IExtensionBuilder) extension).create(args);
 		}
-		return ExtensionBuilder.create((Class) extension, args);
+		return ExtensionBuilder.create((Class<?>) extension, args);
 	}
 
 	/**

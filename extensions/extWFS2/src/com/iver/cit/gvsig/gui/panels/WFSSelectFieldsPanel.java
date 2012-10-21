@@ -1,6 +1,5 @@
 package com.iver.cit.gvsig.gui.panels;
 
-import java.awt.Component;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Vector;
@@ -388,27 +387,6 @@ public class WFSSelectFieldsPanel extends AbstractWFSPanel {
 		 */
 		public JScrollPaneML() {
 			super();
-		}
-
-		/**
-		 * @see JScrollPane#JScrollPane(Component, int, int)
-		 */
-		public JScrollPaneML(Component view, int vsbPolicy, int hsbPolicy) {
-			super(view, vsbPolicy, hsbPolicy);
-		}
-
-		/**
-		 * @see JScrollPane#JScrollPane(Component)
-		 */
-		public JScrollPaneML(Component view) {
-			super(view);
-		}
-
-		/**
-		 * @see JScrollPane#JScrollPane(int, int)
-		 */
-		public JScrollPaneML(int vsbPolicy, int hsbPolicy) {
-			super(vsbPolicy, hsbPolicy);
 		}
 
 		/*

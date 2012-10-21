@@ -97,9 +97,9 @@ public class NewStatusBar extends JPanel {
 	private ImageIcon errorIcon;
 	private int estado;
 	private JProgressBar progressBar = null;
-	private HashMap idLabel = new HashMap();
+	private HashMap<String, JLabel> idLabel = new HashMap<String, JLabel>();
 	private int[] widthlabels = null;
-	private HashMap controls = new HashMap();
+	private HashMap<String, Object> controls = new HashMap<String, Object>();
 	private JPanel controlContainer;
 
 	/**
@@ -382,8 +382,7 @@ public class NewStatusBar extends JPanel {
 			idLabel.put(labels[i].getId(), lbl);
 		}
 
-		JLabel[] configlabels = (JLabel[]) idLabel.values().toArray(
-				new JLabel[0]);
+		JLabel[] configlabels = idLabel.values().toArray(new JLabel[0]);
 		widthlabels = new int[configlabels.length];
 
 		for (int i = 0; i < labels.length; i++) {
@@ -401,9 +400,7 @@ public class NewStatusBar extends JPanel {
 			return;
 		}
 
-		int ws = this.getWidth();
-
-		JLabel[] labels = (JLabel[]) idLabel.values().toArray(new JLabel[0]);
+		JLabel[] labels = idLabel.values().toArray(new JLabel[0]);
 
 		/*
 		 * double total = 1; for (int i = 0; i < widthlabels.length; i++) { if
@@ -412,12 +409,12 @@ public class NewStatusBar extends JPanel {
 		 */
 		for (int i = 0; i < labels.length; i++) {
 			// if (labels[i] instanceof JLabel){
-			JLabel label = (JLabel) labels[i];
+			JLabel label = labels[i];
 
 			if (label.getText().compareTo("") != 0) {
 				label.setVisible(true);
-				label.setPreferredSize(new Dimension((int) (widthlabels[i]),
-						this.getHeight() - 2));
+				label.setPreferredSize(new Dimension(widthlabels[i], this
+						.getHeight() - 2));
 			} else {
 				label.setVisible(false);
 
@@ -445,19 +442,6 @@ public class NewStatusBar extends JPanel {
 	}
 
 	/**
-	 * Removes all the controls (including labels) from the status bar.
-	 */
-	private void removeAllControls() {
-		Component[] controlArray = controlContainer.getComponents();
-
-		for (int i = 0; i < controlArray.length; i++) {
-			if ((controlArray[i] != lblIcon) && (controlArray[i] != lblTexto)) {
-				controlContainer.remove(controlArray[i]);
-			}
-		}
-	}
-
-	/**
 	 * Sets the text of the provided label.
 	 * 
 	 * @param id
@@ -467,7 +451,7 @@ public class NewStatusBar extends JPanel {
 	 *            The message to show in the label
 	 */
 	public void setMessage(String id, String msg) {
-		JLabel lbl = (JLabel) idLabel.get(id);
+		JLabel lbl = idLabel.get(id);
 
 		if (lbl != null) {
 			lbl.setText(msg);

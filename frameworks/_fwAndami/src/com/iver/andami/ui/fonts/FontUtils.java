@@ -114,7 +114,7 @@ public class FontUtils {
 
 		Font[] allfonts = GraphicsEnvironment.getLocalGraphicsEnvironment()
 				.getAllFonts();
-		HashSet workingFonts = new HashSet();
+		HashSet<String> workingFonts = new HashSet<String>();
 
 		for (int i = allfonts.length - 1; i >= 0; i--) {
 			if (allfonts[i].canDisplayUpTo(Messages
@@ -136,10 +136,10 @@ public class FontUtils {
 		}
 
 		// try to set any working font
-		Iterator iterator = workingFonts.iterator();
+		Iterator<String> iterator = workingFonts.iterator();
 
 		if (iterator.hasNext()) {
-			String fontName = (String) iterator.next();
+			String fontName = iterator.next();
 			setFont(fontName);
 			PluginServices.getLogger().info("FontSet: " + fontName);
 		}
@@ -190,15 +190,5 @@ public class FontUtils {
 			return preferredChineseFonts;
 		}
 		return new String[0];
-	}
-
-	private static void listSystemFonts() {
-		Font[] allfonts = GraphicsEnvironment.getLocalGraphicsEnvironment()
-				.getAllFonts();
-
-		for (int i = allfonts.length - 1; i >= 0; i--) {
-			System.out.println(allfonts[i].getName() + " --- "
-					+ allfonts[i].getFontName());
-		}
 	}
 }

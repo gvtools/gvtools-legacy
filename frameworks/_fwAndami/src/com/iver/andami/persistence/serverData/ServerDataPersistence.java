@@ -206,8 +206,8 @@ public class ServerDataPersistence {
 				ServerData.SERVER_SUBTYPE_CATALOG_Z3950)) {
 			xmlEnt.putProperty(SERVER_DATABASE, server.getDatabase());
 		}
-		Set keys = server.getProperies().keySet();
-		Iterator it = keys.iterator();
+		Set<Object> keys = server.getProperies().keySet();
+		Iterator<Object> it = keys.iterator();
 		while (it.hasNext()) {
 			String next = (String) it.next();
 			xmlEnt.putProperty(next, server.getProperies().get(next));
