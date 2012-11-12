@@ -1,26 +1,52 @@
 Plans for the geotools branch
 =============================
 
-After some efforts to adapt gvSIG design to Geotools we've created the following list of tasks:
+After some efforts to adapt gvSIG design to Geotools we've identified the following tasks:
 
 1.- Replace the adapter layer for DataStores.
+
+This involves removing the adapters completely. We thought about creating an adapter layer
+to adapt the calls to old gvSIG adapter layer to the new GeoTools based one but we found some
+problems:
+
+- The layer is very big, it should involve reading as well as writing operations.
+- The layer has random access to the features while geotools has only sequential access.
+
+We have decided that investing in this layer it is not worth. We prefer to remove completely old
+API and adapt the extensions. This will lead to incompatibility with extensions maintained for
+Association gvSIG but in the case of NavTable and OpenCADTools it seems like there is some
+interest in decoupling the data access layer so that 95% of the code is compatible. 
 
 - There are many points were the instance of the adapter is checked. This can be implemented by
   methods at the FLayer level (isFile, isDB, etc.). The layer gets the information from the
   DataStore or at construction time.
 
-- Edition. Good question.
+- Remove the adapters and see how many compile errors we get. We can compare it with the many errors
+  we got with the CRS replacing where we got hundreds of errors and it only took 30 hours to compile
+  it back (there is pending effort there). 
+
+- Adapt selection to DataStores (http://docs.geotools.org/latest/userguide/library/main/filter.html#handling-selection)
+
+- Edition. Good point. Research on GT necessary here.
 
 - Intelligent usage of DataStores. They are heavy objects. They should be cached, shared between layers
 and closed when not used anymore (or when not used for some time). SourceManager in libFMap is a very primitive
 implementation of this.
 
-- An adapter has been developed to adapt the calls to old gvSIG adapters API to new GeoTools based one.
+- FLyrWFS could be just a FLyrVect with a WFS DataStore on it.
 
-2.- Remove libDriverManager
+2.- Remove libDriverManager, remove writers, remove GDBMS.
 
-- Move the drivers to a legacy project so that extensions that use them for writing can still use them. Deprecate
-  them since it can be done with Geotools.
+We should remove all these projects and see how many compile errors we get. We can compare it with the many errors
+we got with the CRS replacing where we got hundreds of errors and it only took 30 hours to compile
+it back (there is pending effort there).  
+
+- It is still necessary to show the user a list of available DB connectors, file formats with writing capabilities,
+  etc. So in place of the drivers a "Source" abstraction must be built.
+  
+- To connect to databases it is necessary to create connections, to query all the available tables, etc. Not sure if
+  this can be done with GT. It is necessary to check. If it is not possible maybe a specialization of Source called
+  DBSouce should be built to manage that.
 
 3.- Remove all raster stuff under FLyrRaster.
 
@@ -42,11 +68,36 @@ a Geotools WMS client, etc. and the name of the layer, the relation with the oth
 
 6.- Include image-io-ext providers: GDAL providers available as GT GridCoverages.
 
+7.- Mavenization of build. 
 
+- We can take advantage of the efforts done in 2.0
 
+- It will allow to run tests easily, produce coverage reports, sonar reports, keep 
+  dependencies out of the SVN repository (faster checkouts and commits), put in place
+  an integration server, etc.
 
+- We could allow any refactoring (in the strict meaning of the word) that improves a sonar report.
 
+8.- Tests (lots of) 
 
+- Even if it is not the perfect indicator, we should produce a coverage report in order to motivate people to add tests.
 
+- We could allow any refactoring (in the strict meaning of the word) that extracts some functionality and
+  covers it with tests. Even if something breaks, it's better in the long term.
 
-.- Remove libGDBMS.
+9.- Persistence through extensible schemas.
+
+- Create a extensible schema.
+
+- Keep the methods that reads old projects and adapt to the new changes. Add an option "Import old project" that
+  calls these methods. 
+
+10.- Remove libGDBMS.
+
+11.- Recover WMS Dimension support
+
+12.- Data access abstraction layer for OpenCADTools and NavTable
+
+13.- Andami simplification
+
+- Make all plugins work under the same classloader -> Faster startup time.
