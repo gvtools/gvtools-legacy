@@ -26,6 +26,10 @@
 		<module>libGPE-XML</module>
 		<module>libInternationalization</module>
 		<module>libIverUtiles</module>
+		<module>libjni-ecw</module>
+		<module>libjni-gdal</module>
+		<module>libjni-mrsid</module>
+		<module>libjni-potrace</module>
 		<module>libProjection</module>
 		<module>libRaster</module>
 		<module>libRemoteServices</module>
