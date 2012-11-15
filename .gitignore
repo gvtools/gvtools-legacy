@@ -5,3 +5,12 @@ bin-test
 .project
 .externalToolBuilders
 maven-eclipse.xml
+binaries/linux/*so*
+extensions/extJDBC/dist/
+extensions/extOracleSpatial/dist/
+extensions/extRasterTools-SE/dist/
+frameworks/_fwAndami/cachedir/
+frameworks/_fwAndami/gvSIG/
+libraries/libFMap/dist/
+libraries/libInternationalization/bin-utils/
+target
