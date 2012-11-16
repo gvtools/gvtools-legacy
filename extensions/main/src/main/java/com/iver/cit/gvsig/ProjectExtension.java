@@ -738,7 +738,9 @@ public class ProjectExtension extends Extension implements IExtensionStatus {
 				if (VERSION != null) {
 					proj = Project.createFromXML(xml);
 				} else {
-					proj = Project.createFromXML03(new XMLEntity(tag));
+					NotificationManager.showMessageInfo(PluginServices.getText(
+							this, "0.3 project?? come on! I'm not " +
+									"even translating this message"), null);
 				}
 				if (!VERSION.equals(Version.format())) {
 					NotificationManager.showMessageInfo(PluginServices.getText(
