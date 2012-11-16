@@ -1585,7 +1585,7 @@ public class Project implements Serializable, PropertyChangeListener {
 				defaultMapUnits = xml.getIntProperty("DefaultMapUnits");
 			} else {
 				// first app run case
-				String[] unitNames = MapContext.getDistanceNames();
+				String[] unitNames = Units.getDistanceNames();
 				for (int i = 0; i < unitNames.length; i++) {
 					// meter is the factory default's map unit
 					if (unitNames[i].equals("Metros")) {
@@ -1595,8 +1595,8 @@ public class Project implements Serializable, PropertyChangeListener {
 				}
 			}
 			if (defaultMapUnits == -1
-					|| defaultMapUnits >= MapContext.getDistanceNames().length)
-				defaultMapUnits = MapContext.getDistancePosition("Metros");
+					|| defaultMapUnits >= Units.getDistanceNames().length)
+				defaultMapUnits = Units.getDistancePosition("Metros");
 		}
 		return defaultMapUnits;
 	}
@@ -1616,7 +1616,7 @@ public class Project implements Serializable, PropertyChangeListener {
 						.getIntProperty("DefaultDistanceUnits");
 			} else {
 				// first app run case
-				String[] unitNames = MapContext.getDistanceNames();
+				String[] unitNames = Units.getDistanceNames();
 				for (int i = 0; i < unitNames.length; i++) {
 					// meter is the factory default's distance unit
 					if (unitNames[i].equals("Metros")) {
@@ -1626,8 +1626,8 @@ public class Project implements Serializable, PropertyChangeListener {
 				}
 			}
 			if (defaultDistanceUnits == -1
-					|| defaultDistanceUnits >= MapContext.getDistanceNames().length)
-				defaultDistanceUnits = MapContext.getDistancePosition("Metros");
+					|| defaultDistanceUnits >= Units.getDistanceNames().length)
+				defaultDistanceUnits = Units.getDistancePosition("Metros");
 		}
 		return defaultDistanceUnits;
 	}
@@ -1646,7 +1646,7 @@ public class Project implements Serializable, PropertyChangeListener {
 				defaultDistanceArea = xml.getIntProperty("DefaultDistanceArea");
 			} else {
 				// first app run case
-				String[] unitNames = MapContext.getAreaNames();
+				String[] unitNames = Units.getAreaNames();
 				for (int i = 0; i < unitNames.length; i++) {
 					// meter is the factory default's distance unit
 					if (unitNames[i].equals("Metros")) {
@@ -1656,7 +1656,7 @@ public class Project implements Serializable, PropertyChangeListener {
 				}
 			}
 			if (defaultDistanceArea == -1
-					|| defaultDistanceArea >= MapContext.getAreaNames().length) {
+					|| defaultDistanceArea >= Units.getAreaNames().length) {
 				defaultDistanceArea = getDefaultDistanceUnits();
 			}
 		}
