@@ -49,13 +49,11 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
-import com.hardcode.gdbms.engine.data.driver.DriverException;
+import org.gvsig.persistence.generated.DocumentType;
+
 import com.iver.andami.PluginServices;
 import com.iver.andami.messages.NotificationManager;
 import com.iver.andami.ui.mdiManager.IWindow;
-import com.iver.cit.gvsig.fmap.drivers.DriverIOException;
-import com.iver.cit.gvsig.fmap.layers.XMLException;
 import com.iver.cit.gvsig.project.Project;
 import com.iver.cit.gvsig.project.documents.exceptions.OpenException;
 import com.iver.cit.gvsig.project.documents.exceptions.SaveException;
@@ -72,6 +70,7 @@ import com.iver.utiles.extensionPoints.ExtensionPointsSingleton;
  */
 public abstract class ProjectDocument implements Serializable {
 	public static HashMap<String, Integer> NUMS = new HashMap<String, Integer>();
+
 	protected PropertyChangeSupport change;
 	protected Project project;
 	protected int index;
@@ -195,53 +194,13 @@ public abstract class ProjectDocument implements Serializable {
 	 * @throws XMLException
 	 * @throws SaveException
 	 */
-	public XMLEntity getXMLEntity() throws SaveException {
-		XMLEntity xml = new XMLEntity();
-		try {
-			// xml.putProperty("nameRegister",this.getRegisterName());
-			xml.putProperty("className",
-					projectDocumentFactory.getRegisterName());
-			xml.putProperty("comment", comment);
-			xml.putProperty("creationDate", creationDate);
-			xml.putProperty("name", name);
-			xml.putProperty("owner", owner);
-		} catch (Exception e) {
-			throw new SaveException(e, this.getClass().getName());
-		}
-		return xml;
-	}
+	public abstract DocumentType getXMLEntity();
 
-	/**
-	 * DOCUMENT ME!
-	 * 
-	 * @param xml
-	 *            DOCUMENT ME!
-	 * @param p
-	 *            DOCUMENT ME!
-	 * 
-	 * @return DOCUMENT ME!
-	 * @throws XMLException
-	 */
-	public static ProjectDocument createFromXML03(XMLEntity xml, Project p)
-			throws XMLException {
-		ProjectDocument pe = null;
-
-		Class clase;
-		try {
-			clase = Class.forName(xml.getStringProperty("className"));
-			pe = (ProjectDocument) clase.newInstance();
-		} catch (ClassNotFoundException e) {
-			NotificationManager.addError(
-					"Clase de ProjectElement no reconocida", e);
-		} catch (InstantiationException e) {
-			NotificationManager.addError(
-					"Clase de ProjectElement no reconocida", e);
-		} catch (IllegalAccessException e) {
-			NotificationManager.addError(
-					"Clase de ProjectElement no reconocida", e);
-		}
-
-		return pe;
+	protected void fill(DocumentType document) {
+		document.setComment(comment);
+		document.setCreationDate(creationDate);
+		document.setName(name);
+		document.setOwner(owner);
 	}
 
 	/**
@@ -415,8 +374,7 @@ public abstract class ProjectDocument implements Serializable {
 			throws XMLException, OpenException, ReadDriverException;
 
 	public void importFromXML(XMLEntity root, XMLEntity typeRoot,
-			int elementIndex, Project project) throws XMLException,
-			OpenException, ReadDriverException {
+			int elementIndex, Project project) throws OpenException {
 		importFromXML(root, typeRoot, elementIndex, project, false);
 	}
 

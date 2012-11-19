@@ -23,4 +23,10 @@ public interface Layer {
 	 */
 	String getName();
 
+	/**
+	 * Returns this layer along with all the children layers
+	 * @return
+	 */
+	Layer[] getAllLayers();
+
 }

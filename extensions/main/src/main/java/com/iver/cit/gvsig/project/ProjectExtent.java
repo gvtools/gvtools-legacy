@@ -1,4 +1,4 @@
-/* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
+/* gvSIG. Sistema de Informaciï¿½n Geogrï¿½fica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
  *
@@ -20,7 +20,7 @@
  *
  *  Generalitat Valenciana
  *   Conselleria d'Infraestructures i Transport
- *   Av. Blasco Ibáñez, 50
+ *   Av. Blasco Ibï¿½ï¿½ez, 50
  *   46010 VALENCIA
  *   SPAIN
  *
@@ -42,12 +42,14 @@ package com.iver.cit.gvsig.project;
 
 import java.awt.geom.Rectangle2D;
 
+import org.gvsig.persistence.generated.LabeledExtentType;
+
 import com.iver.utiles.XMLEntity;
 
 /**
  * DOCUMENT ME!
  * 
- * @author Fernando González Cortés
+ * @author Fernando Gonzï¿½lez Cortï¿½s
  */
 public class ProjectExtent {
 	private Rectangle2D extent = new Rectangle2D.Double();
@@ -125,13 +127,13 @@ public class ProjectExtent {
 	 * 
 	 * @return DOCUMENT ME!
 	 */
-	public XMLEntity getXMLEntity() {
-		XMLEntity xml = new XMLEntity();
-		xml.putProperty("description", description);
-		xml.putProperty("extentX", extent.getX());
-		xml.putProperty("extentY", extent.getY());
-		xml.putProperty("extentW", extent.getWidth());
-		xml.putProperty("extentH", extent.getHeight());
+	public LabeledExtentType getXMLEntity() {
+		LabeledExtentType xml = new LabeledExtentType();
+		xml.setComment(description);
+		xml.setMinx(extent.getMinX());
+		xml.setMiny(extent.getMinY());
+		xml.setMaxx(extent.getMaxX());
+		xml.setMaxy(extent.getMaxY());
 
 		return xml;
 	}

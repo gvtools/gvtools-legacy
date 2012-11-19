@@ -11,6 +11,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import org.gvsig.exceptions.BaseException;
+import org.gvsig.map.ErrorListener;
 import org.gvsig.map.MapContext;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
@@ -74,7 +75,7 @@ public abstract class ProjectViewBase extends ProjectDocument implements
 	 */
 	public void setMapOverViewContext(MapContext fmap) {
 		mapOverViewContext = fmap;
-		mapOverViewContext.setCrs(mapContext.getCrs());
+		mapOverViewContext.setCRS(mapContext.getCRS());
 	}
 
 	public void showErrors() {
@@ -165,7 +166,7 @@ public abstract class ProjectViewBase extends ProjectDocument implements
 	}
 
 	public CoordinateReferenceSystem getCrs() {
-		return mapContext.getCrs();
+		return mapContext.getCRS();
 	}
 
 	/**
@@ -174,12 +175,12 @@ public abstract class ProjectViewBase extends ProjectDocument implements
 	 * @return DOCUMENT ME!
 	 */
 	public CoordinateReferenceSystem getOverViewCrs() {
-		return mapOverViewContext.getCrs();
+		return mapOverViewContext.getCRS();
 	}
 
 	public void setCrs(CoordinateReferenceSystem crs) {
-		mapContext.setCrs(crs);
-		mapOverViewContext.setCrs(crs);
+		mapContext.setCRS(crs);
+		mapOverViewContext.setCRS(crs);
 	}
 
 	/**
@@ -266,7 +267,7 @@ public abstract class ProjectViewBase extends ProjectDocument implements
 	public void setBackColor(Color c) {
 		// getMapContext().getViewPort().addViewPortListener(getMapContext()
 		// .getEventBuffer());
-		getMapContext().getViewPort().setBackColor(c);
+		getMapContext().setBackColor(c);
 		// getMapContext().getViewPort().removeViewPortListener(getMapContext()
 		// .getEventBuffer());
 	}

@@ -1,4 +1,4 @@
-/* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
+/* gvSIG. Sistema de Informaciï¿½n Geogrï¿½fica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
  *
@@ -20,7 +20,7 @@
  *
  *  Generalitat Valenciana
  *   Conselleria d'Infraestructures i Transport
- *   Av. Blasco Ibáñez, 50
+ *   Av. Blasco Ibï¿½ï¿½ez, 50
  *   46010 VALENCIA
  *   SPAIN
  *
@@ -46,6 +46,8 @@ import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
+import org.gvsig.persistence.generated.ViewDocumentType;
+
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.hardcode.gdbms.engine.data.driver.DriverException;
 import com.iver.andami.PluginServices;
@@ -70,7 +72,7 @@ import com.iver.utiles.XMLEntity;
 /**
  * Clase que representa una vista del proyecto
  * 
- * @author Fernando González Cortés
+ * @author Fernando Gonzï¿½lez Cortï¿½s
  */
 public class ProjectView extends ProjectViewBase {
 	// public static int numViews = 0;
@@ -87,33 +89,24 @@ public class ProjectView extends ProjectViewBase {
 	 * @throws XMLException
 	 * @throws SaveException
 	 */
-	public XMLEntity getXMLEntity() throws SaveException {
-		XMLEntity xml = super.getXMLEntity();
+	public ViewDocumentType getXMLEntity() {
+
+		ViewDocumentType xml = new ViewDocumentType();
+		super.fill(xml);
 		// xml.putProperty("nameClass", this.getClass().getName());
-		try {
-			int numViews = ((Integer) ProjectDocument.NUMS
-					.get(ProjectViewFactory.registerName)).intValue();
+		int numViews = ((Integer) ProjectDocument.NUMS
+				.get(ProjectViewFactory.registerName)).intValue();
 
-			xml.putProperty("numViews", numViews);
+		xml.putProperty("numViews", numViews);
 
-			// remove old hyperlink persistence
-			// xml.putProperty("m_selectedField", m_selectedField);
-			// xml.putProperty("m_typeLink", m_typeLink);
-			// xml.putProperty("m_extLink", m_extLink);
-			xml.addChild(mapContext.getXMLEntity());
+		// remove old hyperlink persistence
+		// xml.putProperty("m_selectedField", m_selectedField);
+		// xml.putProperty("m_typeLink", m_typeLink);
+		// xml.putProperty("m_extLink", m_extLink);
+		xml.setMainMap(mapContext.getXML());
 
-			if (mapOverViewContext != null) {
-				if (mapOverViewContext.getViewPort() != null) {
-					xml.putProperty("mapOverView", true);
-					xml.addChild(mapOverViewContext.getXMLEntity());
-				} else {
-					xml.putProperty("mapOverView", false);
-				}
-			} else {
-				xml.putProperty("mapOverView", false);
-			}
-		} catch (Exception e) {
-			throw new SaveException(e, this.getClass().getName());
+		if (mapOverViewContext != null) {
+			xml.setOverviewMap(mapOverViewContext.getXML());
 		}
 		return xml;
 	}

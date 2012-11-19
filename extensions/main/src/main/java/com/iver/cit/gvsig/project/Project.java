@@ -52,21 +52,30 @@ import java.util.Date;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.TreeMap;
 
 import javax.inject.Inject;
 
+import org.apache.log4j.Logger;
+import org.exolab.castor.xml.XMLException;
 import org.geotools.referencing.CRS;
+import org.gvsig.exceptions.DriverException;
 import org.gvsig.layer.Layer;
 import org.gvsig.layer.Source;
+import org.gvsig.layer.SourceFactory;
 import org.gvsig.layer.SourceManager;
+import org.gvsig.persistence.generated.DataSourceType;
+import org.gvsig.persistence.generated.DocumentType;
+import org.gvsig.persistence.generated.StringPropertyType;
 import org.gvsig.tools.file.PathGenerator;
+import org.opengis.referencing.FactoryException;
+import org.opengis.referencing.NoSuchAuthorityCodeException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.iver.andami.PluginServices;
 import com.iver.andami.messages.NotificationManager;
 import com.iver.andami.ui.mdiManager.IWindow;
-import com.iver.andami.ui.mdiManager.SingletonWindow;
 import com.iver.andami.ui.mdiManager.WindowInfo;
 import com.iver.cit.gvsig.ProjectExtension;
 import com.iver.cit.gvsig.Version;
@@ -74,12 +83,9 @@ import com.iver.cit.gvsig.project.documents.ProjectDocument;
 import com.iver.cit.gvsig.project.documents.ProjectDocumentFactory;
 import com.iver.cit.gvsig.project.documents.exceptions.OpenException;
 import com.iver.cit.gvsig.project.documents.exceptions.SaveException;
-import com.iver.cit.gvsig.project.documents.gui.IDocumentWindow;
-import com.iver.cit.gvsig.project.documents.gui.ProjectWindow;
 import com.iver.cit.gvsig.project.documents.gui.WindowData;
 import com.iver.cit.gvsig.project.documents.layout.ProjectMap;
 import com.iver.cit.gvsig.project.documents.layout.ProjectMapFactory;
-import com.iver.cit.gvsig.project.documents.layout.gui.Layout;
 import com.iver.cit.gvsig.project.documents.table.ProjectTable;
 import com.iver.cit.gvsig.project.documents.table.ProjectTableFactory;
 import com.iver.cit.gvsig.project.documents.view.ProjectView;
@@ -100,12 +106,17 @@ import com.iver.utiles.extensionPoints.ExtensionPointsSingleton;
 public class Project implements Serializable, PropertyChangeListener {
 	public static String VERSION = Version.format();
 
+	private static final Logger logger = Logger.getLogger(Project.class);
+
 	@Inject
 	private SourceManager sourceManager;
-	
+
+	@Inject
+	private SourceFactory sourceFactory;
+
 	static private CoordinateReferenceSystem defaultCrs = null;
 
-	static private CoordinateReferenceSystem defaultFactoryCrs = CRS.decode("EPSG:23030");
+	static private CoordinateReferenceSystem defaultFactoryCrs;
 
 	/*
 	 * distiguishing between a static field "defaultSelectionColor" and a
@@ -183,8 +194,13 @@ public class Project implements Serializable, PropertyChangeListener {
 
 	/**
 	 * Creates a new Project object.
+	 * 
+	 * @throws FactoryException
+	 *             If the default CRS cannot be instantiated
+	 * @throws NoSuchAuthorityCodeException
+	 *             If the default CRS cannot be instantiated
 	 */
-	public Project() {
+	public Project() throws NoSuchAuthorityCodeException, FactoryException {
 		change = new PropertyChangeSupport(this);
 
 		// change.addPropertyChangeListener(this);
@@ -194,11 +210,7 @@ public class Project implements Serializable, PropertyChangeListener {
 		getDefaultCrs(); // For initialize it
 		// signatureAtStartup = computeSignature();
 
-		/*
-		 * LayerFactory.setDriversPath(PluginServices.getPluginServices(this)
-		 * .getPluginDirectory() .getAbsolutePath() + File.separator +
-		 * "drivers");
-		 */
+		defaultFactoryCrs = CRS.decode("EPSG:23030");
 	}
 
 	/**
@@ -231,8 +243,8 @@ public class Project implements Serializable, PropertyChangeListener {
 	// }
 
 	/**
-	 * Asigna la fecha de creaci�n del proyecto. Este m�todo tiene sentido
-	 * s�lo por que al recuperar la fecha del XML hay que asignarla al objeto
+	 * Asigna la fecha de creaci�n del proyecto. Este m�todo tiene sentido s�lo
+	 * por que al recuperar la fecha del XML hay que asignarla al objeto
 	 * proyecto de alguna manera. La fecha se asigna en el constructor y no se
 	 * deber�a de modificar nunca
 	 * 
@@ -414,7 +426,7 @@ public class Project implements Serializable, PropertyChangeListener {
 	 */
 	public void setSelectionColor(Color color) {
 		selectionColor = color;
-		MapContext.setSelectionColor(color);
+		assert false : "Set the selection color to the MapContext";
 		// modified = true;
 		change.firePropertyChange("selectionColor", null, color);
 	}
@@ -429,8 +441,8 @@ public class Project implements Serializable, PropertyChangeListener {
 	}
 
 	/**
-	 * M�todo invocado al recuperar de XML para establecer el color de
-	 * seleccion del proyecto
+	 * M�todo invocado al recuperar de XML para establecer el color de seleccion
+	 * del proyecto
 	 * 
 	 * @param color
 	 *            Entero que representa un color
@@ -635,193 +647,35 @@ public class Project implements Serializable, PropertyChangeListener {
 	 * @throws DriverException
 	 * @throws XMLException
 	 */
-	public XMLEntity getXMLEntity() {
-		XMLEntity xml = new XMLEntity();
-		xml.putProperty("className", this.getClass().getName());
-		xml.putProperty("VERSION", VERSION);
-		xml.putProperty("comments", getComments());
-		xml.putProperty("creationDate", creationDate);
-		xml.putProperty("isAbsolutePath", isAbsolutePath);
+	public org.gvsig.persistence.generated.Project getXMLEntity() {
+		org.gvsig.persistence.generated.Project ret = new org.gvsig.persistence.generated.Project();
+		ret.setVersion(VERSION);
+		ret.setName(name);
+		ret.setComments(getComments());
+		ret.setOwner(owner);
+		ret.setCreationDate(creationDate);
+		ret.setModificationDate(modificationDate);
+		ret.setAbsolutePath(isAbsolutePath);
+		ret.setSelectionColor(StringUtilities.color2String(selectionColor));
+		ret.setDefaultProjection(CRS.toSRS(crs));
 
-		int numExtents = extents.size();
-		xml.putProperty("numExtents", numExtents);
-
-		for (int i = 0; i < numExtents; i++) {
-			xml.addChild(((ProjectExtent) extents.get(i)).getXMLEntity());
+		for (int i = 0; i < extents.size(); i++) {
+			ret.getExtents().add(extents.get(i).getXMLEntity());
 		}
 
-		// Guardando propiedades de las camaras
-		int numCameras = this.cameras.size();
-		xml.putProperty("numCameras", numCameras);
+		Source[] source = sourceManager.getSources();
 
-		for (int i = 0; i < numCameras; i++) {
-			xml.addChild(((IPersistence) this.cameras.get(i)).getXMLEntity());
+		for (int i = 0; i < source.length; i++) {
+			Source di = source[i];
+			DataSourceType child = this.getSourceInfoXMLEntity(di);
+			ret.getDataSources().add(child);
 		}
-
-		// NUEVO: ESTO ESTA EN PRUEBAS. SIRVE PARA
-		// BORRAR LAS REFERENCIAS A DATASOURCES QUE HEMOS
-		// BORRADO. Hay que probar a borrarlos cuando se
-		// borra una tabla y cuando se borra una capa.
-		try {
-			// cleanBadReferences();
-		} catch (Exception e) {
-			NotificationManager.addError("clean_bad_references", e);
-		}
-		Source[] infos = sourceManager.getSources();
-		xml.putProperty("data-source-count", infos.length);
-
-		for (int i = 0; i < infos.length; i++) {
-			Source di = infos[i];
-			XMLEntity child = this.getSourceInfoXMLEntity(di);
-			xml.addChild(child);
-		}
-		int numDocuments = 0;
 		for (int i = 0; i < documents.size(); i++) {
-			try {
-				XMLEntity xmlchild = ((ProjectDocument) documents.get(i))
-						.getXMLEntity();
-				xml.addChild(xmlchild);
-				numDocuments++;
-			} catch (SaveException e) {
-				e.showError();
-			}
-		}
-		xml.putProperty("numDocuments", numDocuments);
-		/*
-		 * int numViews=0; for (int i = 0; i < views.size(); i++) { try {
-		 * XMLEntity xmlchild=((ProjectView) views.get(i)).getXMLEntity();
-		 * xml.addChild(xmlchild); numViews++; } catch (SaveException e) {
-		 * e.showError(); } } xml.putProperty("numViews", numViews);
-		 * 
-		 * int numMaps=0; for (int i = 0; i < maps.size(); i++) { try {
-		 * XMLEntity xmlchild=((ProjectMap) maps.get(i)).getXMLEntity();
-		 * xml.addChild(xmlchild); numMaps++; } catch (SaveException e) {
-		 * e.showError(); } } xml.putProperty("numMaps", numMaps);
-		 */
-		xml.putProperty("modificationDate", modificationDate);
-		xml.putProperty("name", name, false);
-		xml.putProperty("owner", owner);
-		xml.putProperty("selectionColor",
-				StringUtilities.color2String(selectionColor));
-		/*
-		 * int numTables=0; for (int i = 0; i < tables.size(); i++) { try {
-		 * XMLEntity xmlchild=((ProjectTable) tables.get(i)).getXMLEntity();
-		 * xml.addChild(xmlchild); numTables++; } catch (SaveException e) {
-		 * 
-		 * e.showError(); } } xml.putProperty("numTables", numTables);
-		 */
-		xml.putProperty("projection", CRS.toSRS(crs));
-
-		saveWindowProperties(xml);
-		return xml;
-	}
-
-	private void saveWindowProperties(XMLEntity xml) {
-		XMLEntity propertyList = new XMLEntity();
-
-		propertyList.setName("AndamiPersistence");
-		propertyList.putProperty("className", Project.class.getName(), false);
-
-		boolean projectWindowSaved = false;
-
-		IWindow[] windowList = PluginServices.getMDIManager()
-				.getOrderedWindows();
-		WindowInfo wi;
-		XMLEntity windowProperties;
-		for (int winIndex = windowList.length - 1; winIndex >= 0; winIndex--) {
-			wi = PluginServices.getMDIManager().getWindowInfo(
-					windowList[winIndex]);
-			if (wi != null && wi.checkPersistence()) {
-				if (windowList[winIndex] instanceof Layout) { // for the
-					// moment we
-					// can't do this
-					// for Maps
-					// because they
-					// don't have a
-					// standard
-					// model
-					Layout layoutWindow = (Layout) windowList[winIndex];
-					windowProperties = wi.getXMLEntity();
-					windowProperties.putProperty("documentType",
-							ProjectMapFactory.registerName, false);
-					windowProperties.putProperty("documentName",
-							layoutWindow.getName(), false);
-					windowProperties.putProperty("zPosition", winIndex, false);
-					propertyList.addChild(windowProperties);
-				} else if (windowList[winIndex] instanceof ProjectWindow) {
-					projectWindowSaved = true;
-					windowProperties = wi.getXMLEntity();
-					windowProperties
-							.putProperty(
-									"className",
-									"com.iver.cit.gvsig.project.document.gui.ProjectWindow",
-									false);
-					windowProperties.putProperty("zPosition", winIndex, false);
-					propertyList.addChild(windowProperties);
-				} else if (windowList[winIndex] instanceof SingletonWindow) { // for
-					// table,
-					// view
-					// and
-					// maybe
-					// other
-					// documents
-					SingletonWindow viewWindow = (SingletonWindow) windowList[winIndex];
-					if (viewWindow.getWindowModel() instanceof ProjectDocument) {
-						ProjectDocument doc = (ProjectDocument) viewWindow
-								.getWindowModel();
-						windowProperties = wi.getXMLEntity();
-						windowProperties.putProperty("documentType", doc
-								.getProjectDocumentFactory().getRegisterName(),
-								false);
-						windowProperties.putProperty("documentName",
-								((ProjectDocument) viewWindow.getWindowModel())
-										.getName(), false);
-						windowProperties.putProperty("zPosition", winIndex,
-								false);
-
-						// TODO this will be generalized to all ProjectDocuments
-						// as soon as possible
-						// if (viewWindow instanceof BaseView) {
-						// BaseView win = (BaseView) viewWindow;
-						// windowProperties.addChild(win.getWindowData().getXMLEntity());
-						// }
-						if (viewWindow instanceof IDocumentWindow) {
-							IDocumentWindow win = (IDocumentWindow) viewWindow;
-							windowProperties.addChild(win.getWindowData()
-									.getXMLEntity());
-						}
-
-						propertyList.addChild(windowProperties);
-					}
-				}
-			}
+			DocumentType xmlchild = documents.get(i).getXMLEntity();
+			ret.getDocuments().add(xmlchild);
 		}
 
-		if (projectWindowSaved == false) {
-			// If the Project Manager was closed, it was not in the
-			// previous window list. Save it now
-			ProjectExtension pe = (ProjectExtension) PluginServices
-					.getExtension(com.iver.cit.gvsig.ProjectExtension.class);
-
-			if (pe != null) {
-				IWindow projectWindow = pe.getProjectWindow();
-				wi = PluginServices.getMDIManager()
-						.getWindowInfo(projectWindow);
-				if (wi != null && wi.checkPersistence()) {
-					windowProperties = wi.getXMLEntity();
-					if (windowProperties != null) {
-						windowProperties
-								.putProperty(
-										"className",
-										"com.iver.cit.gvsig.project.document.gui.ProjectWindow",
-										false);
-						propertyList.addChild(windowProperties);
-					}
-				}
-			}
-		}
-
-		xml.addChild(propertyList);
+		return ret;
 	}
 
 	/**
@@ -1047,9 +901,9 @@ public class Project implements Serializable, PropertyChangeListener {
 	public static Project createFromXML(XMLEntity xml) throws OpenException {
 
 		int childNumber = 0;
-		Project p = new Project();
 
 		try {
+			Project p = new Project();
 			p.comments = xml.getStringProperty("comments");
 			p.creationDate = xml.getStringProperty("creationDate");
 			PathGenerator pg = PathGenerator.getInstance();
@@ -1095,7 +949,8 @@ public class Project implements Serializable, PropertyChangeListener {
 
 			for (int i = childNumber; i < (childNumber + numDataSources); i++) {
 				XMLEntity child = xml.getChild(i);
-				registerDataSourceFromXML(child);
+				registerDataSourceFromXML(p.sourceManager, p.sourceFactory,
+						child);
 			}
 
 			childNumber += numDataSources;
@@ -1173,11 +1028,10 @@ public class Project implements Serializable, PropertyChangeListener {
 			}
 
 			PostProcessSupport.executeCalls();
+			return p;
 		} catch (Exception e) {
-			throw new OpenException(e, p.getClass().getName());
+			throw new OpenException(e, null);
 		}
-
-		return p;
 
 	}
 
@@ -1305,13 +1159,21 @@ public class Project implements Serializable, PropertyChangeListener {
 					"com.iver.cit.gvsig").getPersistentXML();
 
 			// Default Projection
-			String projCode = null;
+			CoordinateReferenceSystem crs = null;
 			if (xml.contains("DefaultProjection")) {
-				projCode = xml.getStringProperty("DefaultProjection");
-				Project.setDefaultCrs(CRS.decode(projCode));
-			} else {
-				Project.setDefaultCrs(defaultFactoryCrs);
+				String projCode = xml.getStringProperty("DefaultProjection");
+				try {
+					crs = CRS.decode(projCode);
+				} catch (NoSuchAuthorityCodeException e) {
+					logger.debug("Cannot parse CRS", e);
+				} catch (FactoryException e) {
+					logger.debug("Cannot parse CRS", e);
+				}
 			}
+			if (crs == null) {
+				crs = defaultFactoryCrs;
+			}
+			Project.setDefaultCrs(crs);
 
 		}
 		return Project.defaultCrs;
@@ -1374,7 +1236,7 @@ public class Project implements Serializable, PropertyChangeListener {
 	 * return (ProjectMap) o; }
 	 */
 	public void getDataSourceByLayer(Layer layer) {
-		assert false: "Should just get the source of the associated table";
+		assert false : "Should just get the source of the associated table";
 	}
 
 	/**
@@ -1444,37 +1306,21 @@ public class Project implements Serializable, PropertyChangeListener {
 		return result;
 	}
 
-	public XMLEntity getSourceInfoXMLEntity(Source di) {
-		XMLEntity child = new XMLEntity();
-
-		if (di instanceof ObjectSourceInfo) {
-			ObjectSourceInfo driver = (ObjectSourceInfo) di;
-			child.putProperty("type", "sameDriverFile");
-			child.putProperty("gdbmsname", di.getId());
-		} else if (di instanceof FileSourceInfo) {
-			FileSourceInfo vfdi = (FileSourceInfo) di;
-			child.putProperty("type", "otherDriverFile");
-			child.putProperty("gdbmsname", di.getId());
-			if (vfdi.file != null)
-				child.putProperty("file", pathGenerator.getPath(vfdi.file));
-			else
-				child.putProperty("file", vfdi.file);
-			child.putProperty("driverName", vfdi.driverName);
-		} else if (di instanceof DBSourceInfo) {
-			DBTableSourceInfo dbdi = (DBTableSourceInfo) di;
-			child.putProperty("type", "db");
-			child.putProperty("gdbmsname", di.getId());
-			child.putProperty("dbms", dbdi.dbms);
-			child.putProperty("host", dbdi.host);
-			child.putProperty("port", dbdi.port);
-			child.putProperty("user", dbdi.user);
-			child.putProperty("password", dbdi.password);
-			child.putProperty("dbName", dbdi.dbName);
-			child.putProperty("tableName", dbdi.tableName);
-			child.putProperty("driverInfo", dbdi.driverName);
+	public DataSourceType getSourceInfoXMLEntity(Source di) {
+		DataSourceType ret = new DataSourceType();
+		Map<String, Object> properties = di.getPersistentProperties();
+		Iterator<String> keyIterator = properties.keySet().iterator();
+		while (keyIterator.hasNext()) {
+			String persistencePropertyKey = (String) keyIterator.next();
+			Object persistencePropertyValue = properties
+					.get(persistencePropertyKey);
+			StringPropertyType property = new StringPropertyType();
+			property.setPropertyName(persistencePropertyKey);
+			property.setPropertyValue(persistencePropertyValue.toString());
+			ret.getProperty().add(property);
 		}
 
-		return child;
+		return ret;
 	}
 
 	/**
@@ -1853,8 +1699,7 @@ public class Project implements Serializable, PropertyChangeListener {
 
 	public void exportToXMLDataSource(XMLEntity root, String dataSourceName) {
 		XMLEntity dsRoot = this.getExportXMLTypeRootNode(root, "dataSources");
-		SourceInfo sourceInfo = LayerFactory.getDataSourceFactory()
-				.getDriverInfo(dataSourceName);
+		Source sourceInfo = sourceManager.getSource(dataSourceName);
 		dsRoot.addChild(this.getSourceInfoXMLEntity(sourceInfo));
 	}
 
@@ -1880,30 +1725,31 @@ public class Project implements Serializable, PropertyChangeListener {
 		return xmlDataSources;
 	}
 
-	private static boolean registerDataSourceFromXML(XMLEntity xmlDataSource) {
+	private static boolean registerDataSourceFromXML(
+			SourceManager sourceManager, SourceFactory sourceFactory,
+			XMLEntity xmlDataSource) {
 		String name = xmlDataSource.getStringProperty("gdbmsname");
 
-		if (LayerFactory.getDataSourceFactory().getDriverInfo(name) == null) {
+		if (sourceManager.getSource(name) == null) {
 			if (xmlDataSource.getStringProperty("type").equals(
 					"otherDriverFile")) {
-				LayerFactory.getDataSourceFactory().addFileDataSource(
-						xmlDataSource.getStringProperty("driverName"),
-						name,
-						pathGenerator.getAbsolutePath(xmlDataSource
+				Source source = sourceFactory.createFileSource(pathGenerator
+						.getAbsolutePath(xmlDataSource
 								.getStringProperty("file")));
-
+				sourceManager.register(name, source);
 			} else if (xmlDataSource.getStringProperty("type").equals(
 					"sameDriverFile")) {
 
 			} else if (xmlDataSource.getStringProperty("type").equals("db")) {
-				LayerFactory.getDataSourceFactory().addDBDataSourceByTable(
-						name, xmlDataSource.getStringProperty("host"),
+				Source source = sourceFactory.createDBSource(
+						xmlDataSource.getStringProperty("host"),
 						xmlDataSource.getIntProperty("port"),
 						xmlDataSource.getStringProperty("user"),
 						xmlDataSource.getStringProperty("password"),
 						xmlDataSource.getStringProperty("dbName"),
 						xmlDataSource.getStringProperty("tableName"),
 						xmlDataSource.getStringProperty("driverInfo"));
+				sourceManager.register(name, source);
 			} else {
 				return false;
 			}
@@ -1918,11 +1764,11 @@ public class Project implements Serializable, PropertyChangeListener {
 
 			if (numDataSources == 0)
 				return true;
-			DataSourceFactory dsFactory = LayerFactory.getDataSourceFactory();
 
 			for (int i = 0; i < numDataSources; i++) {
 				XMLEntity child = xmlDataSources.getChild(i);
-				if (!this.registerDataSourceFromXML(child)) {
+				if (!registerDataSourceFromXML(sourceManager, sourceFactory,
+						child)) {
 					return false;
 				}
 			}

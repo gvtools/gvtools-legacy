@@ -1,4 +1,5 @@
 package com.iver.cit.gvsig;
+
 /* gvSIG. Sistema de Informaci�n Geogr�fica de la Generalitat Valenciana
  *
  * Copyright (C) 2004-2007 IVER T.I. and Generalitat Valenciana.
@@ -40,7 +41,6 @@ package com.iver.cit.gvsig;
  *   dac@iver.es
  */
 
-
 import java.awt.Component;
 import java.io.BufferedReader;
 import java.io.File;
@@ -63,10 +63,9 @@ import java.util.prefs.Preferences;
 
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Marshaller;
 
-import org.exolab.castor.xml.MarshalException;
-import org.exolab.castor.xml.Marshaller;
-import org.exolab.castor.xml.ValidationException;
 import org.gvsig.gui.beans.swing.JFileChooser;
 import org.gvsig.tools.file.PathGenerator;
 
@@ -455,12 +454,6 @@ public class ProjectExtension extends Extension implements IExtensionStatus {
 			} catch (FileNotFoundException e) {
 				NotificationManager.addError(
 						PluginServices.getText(this, "Al_leer_la_leyenda"), e);
-			} catch (MarshalException e) {
-				NotificationManager.addError(
-						PluginServices.getText(this, "Al_leer_la_leyenda"), e);
-			} catch (ValidationException e) {
-				NotificationManager.addError(
-						PluginServices.getText(this, "Al_leer_la_leyenda"), e);
 			}
 			ProjectMap pmap = ProjectFactory.createMap(file.getName());
 			pmap.setModel(layout);
@@ -514,16 +507,18 @@ public class ProjectExtension extends Extension implements IExtensionStatus {
 			FileOutputStream fos = new FileOutputStream(file.getAbsolutePath());
 			OutputStreamWriter writer = new OutputStreamWriter(fos,
 					PROJECTENCODING);
-			Marshaller m = new Marshaller(writer);
-			m.setEncoding(PROJECTENCODING);
 			p.setName(file.getName());
 			// p.setPath(file.toString());
 			p.setModificationDate(DateFormat.getDateInstance().format(
 					new Date()));
 			p.setModified(false);
-			XMLEntity xml = p.getXMLEntity();
-			xml.putProperty("followHeaderEncoding", true, false);
-			m.marshal(xml.getXmlTag());
+			org.gvsig.persistence.generated.Project xml = p.getXMLEntity();
+			JAXBContext context = JAXBContext.newInstance(xml.getClass()
+					.getPackage().getName(), xml.getClass().getClassLoader());
+			Marshaller marshaller = context.createMarshaller();
+			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT,
+					Boolean.TRUE);
+			marshaller.marshal(xml, writer);
 			fireAfterSavingFileEvent(new SaveEvent(this,
 					SaveEvent.AFTER_SAVING, file));
 			PluginServices.getMainFrame().setTitle(file.getName());
@@ -738,9 +733,11 @@ public class ProjectExtension extends Extension implements IExtensionStatus {
 				if (VERSION != null) {
 					proj = Project.createFromXML(xml);
 				} else {
-					NotificationManager.showMessageInfo(PluginServices.getText(
-							this, "0.3 project?? come on! I'm not " +
-									"even translating this message"), null);
+					NotificationManager.showMessageInfo(
+							PluginServices.getText(this,
+									"0.3 project?? come on! I'm not "
+											+ "even translating this message"),
+							null);
 				}
 				if (!VERSION.equals(Version.format())) {
 					NotificationManager.showMessageInfo(PluginServices.getText(

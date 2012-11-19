@@ -36,5 +36,6 @@
 		<module>libTopology</module>
 		<module>libUIComponent</module>
     <module>core</module>
+    <module>persistence</module>
   </modules>
 </project>
