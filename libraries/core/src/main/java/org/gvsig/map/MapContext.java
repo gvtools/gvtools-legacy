@@ -38,4 +38,6 @@ public interface MapContext {
 
 	MapType getXML();
 
+	void setXML(MapType mainMap);
+
 }

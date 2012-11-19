@@ -1,5 +1,8 @@
 package org.gvsig.layer;
 
+import org.geotools.data.DataStore;
+import org.geotools.data.simple.SimpleFeatureSource;
+
 public interface SourceManager {
 
 	/**
@@ -20,7 +23,8 @@ public interface SourceManager {
 
 	/**
 	 * Registers the specified <code>source</code> in this manager with the
-	 * specified id.
+	 * specified id. The <code>id</code> attribute of the Source is set after a
+	 * successful register
 	 * 
 	 * @param id
 	 * 
@@ -30,5 +34,7 @@ public interface SourceManager {
 	 *             {@link SourceManager} instance
 	 */
 	void register(String id, Source source) throws IllegalArgumentException;
+
+	SimpleFeatureSource getFeatureSource(Source source);
 
 }

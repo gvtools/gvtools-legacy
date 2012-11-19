@@ -44,11 +44,15 @@ import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import javax.inject.Inject;
 import javax.swing.JOptionPane;
 
 import org.geotools.data.DataStore;
+import org.geotools.data.simple.SimpleFeatureSource;
 import org.gvsig.layer.Layer;
 import org.gvsig.layer.Source;
+import org.gvsig.layer.SourceManager;
+import org.opengis.feature.simple.SimpleFeatureType;
 
 import com.hardcode.driverManager.DriverLoadException;
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
@@ -95,9 +99,12 @@ import com.iver.utiles.XMLEntity;
 public class ProjectTable extends ProjectDocument {
 	// public static int numTables = 0;
 
-	private IEditableSource esModel;
+	private Source esModel;
 
-	private IEditableSource original;
+	private Source original;
+
+	@Inject
+	private SourceManager sourceManager;
 
 	private String linkTable;
 
@@ -108,7 +115,7 @@ public class ProjectTable extends ProjectDocument {
 	private String field2;
 
 	/* No es necesaria para operar, s�lo para guardar el proyecto */
-	private AlphanumericData associatedTable;
+	private Layer associatedTable;
 
 	private int[] mapping;
 
@@ -167,14 +174,16 @@ public class ProjectTable extends ProjectDocument {
 		change.firePropertyChange("visibles", value, value);
 	}
 
-	public void createAlias() throws ReadDriverException {
-		SelectableDataSource sds = esModel.getRecordset();
-		int fieldCount = sds.getFieldCount();
+	public void createAlias() {
+		SimpleFeatureSource sds = sourceManager.getFeatureSource(esModel);
+		SimpleFeatureType featureType = sds.getSchema();
+		int fieldCount = featureType.getAttributeCount();
 		mapping = new int[fieldCount];
 		alias = new String[fieldCount];
 		for (int i = 0; i < fieldCount; i++) {
 			mapping[i] = i;
-			alias[i] = sds.getFieldName(i);
+			alias[i] = featureType.getAttributeDescriptors().get(i)
+					.getLocalName();
 		}
 		recalculateColumnsFromAliases();
 
@@ -203,11 +212,10 @@ public class ProjectTable extends ProjectDocument {
 	 * @throws DriverLoadException
 	 * @throws ReadDriverException
 	 */
-	public void setDataSource(IEditableSource es) throws DriverLoadException,
-			ReadDriverException {
+	public void setDataSource(Source es) {
 		setModel(es);
 
-		setName(esModel.getRecordset().getName());
+		setName(esModel.getId());
 		setCreationDate(DateFormat.getInstance().format(new Date()));
 		change.firePropertyChange("model", esModel, esModel);
 	}
@@ -220,8 +228,7 @@ public class ProjectTable extends ProjectDocument {
 	 * @throws ReadDriverException
 	 * @throws com.hardcode.gdbms.engine.data.driver.DriverException
 	 */
-	public void replaceDataSource(IEditableSource es)
-			throws ReadDriverException {
+	public void replaceDataSource(Source es) {
 		if (original == null) {
 			original = esModel;
 		}
@@ -233,13 +240,7 @@ public class ProjectTable extends ProjectDocument {
 		// FJP:
 		// Si la tabla proviene de un layer, cambiamos su recordset
 		if (associatedTable != null) {
-			if (associatedTable instanceof FLyrVect) {
-				// ((EditableAdapter)((FLyrVect)
-				// associatedTable).getSource()).setRecordSet((SelectableDataSource)es.getRecordset());
-				FLyrVect lyrVect = (FLyrVect) associatedTable;
-				lyrVect.setRecordset(es.getRecordset());
-				((FLyrVect) associatedTable).setIsJoined(true);
-			}
+			associatedTable.setSource(es);
 		}
 
 		change.firePropertyChange("model", original, esModel);
@@ -251,78 +252,73 @@ public class ProjectTable extends ProjectDocument {
 	 * @throws com.hardcode.gdbms.engine.data.driver.DriverException
 	 * @throws DriverLoadException
 	 */
-	public void restoreDataSource() throws ReadDriverException,
-			DriverLoadException {
+	public void restoreDataSource() {
 		// FJP:
 		// Si la tabla proviene de un layer, cambiamos su recordset
 		if (associatedTable != null) {
-			if (associatedTable instanceof FLyrVect) {
-				// Miramos si la leyenda que est� usando es una
-				// leyenda basada en un campo de los de la uni�n.
-				// Si lo es, avisamos al usuario de que ponemos una leyenda por
-				// defecto.
-				// Si los campos son de los originales, les ponemos el nombre
-				// correcto en la leyenda
+			// Miramos si la leyenda que est� usando es una
+			// leyenda basada en un campo de los de la uni�n.
+			// Si lo es, avisamos al usuario de que ponemos una leyenda por
+			// defecto.
+			// Si los campos son de los originales, les ponemos el nombre
+			// correcto en la leyenda
 
-				FLyrVect lyr = ((FLyrVect) associatedTable);
-				SelectableDataSource sdsOrig = original.getRecordset();
-				SelectableDataSource sdsJoined = lyr.getRecordset();
+			Source sdsOrig = original;
+			Source sdsJoined = associatedTable.getSource();
 
-				if (lyr.getLegend() instanceof IClassifiedVectorLegend) {
-					IClassifiedVectorLegend legend = (IClassifiedVectorLegend) lyr
-							.getLegend();
-					String[] legendFields = legend.getClassifyingFieldNames();
-					boolean bUsingJoinedField = false;
-					for (int i = 0; i < legendFields.length; i++) {
-						int idField = sdsJoined
-								.getFieldIndexByName(legendFields[i]);
-						String fieldName = sdsJoined.getFieldName(idField);
-						int idOriginal = sdsOrig.getFieldIndexByName(fieldName);
-						if (idOriginal == -1) {
-							bUsingJoinedField = true;
-							break;
-						} else {
-							legendFields[i] = fieldName;
-						}
-					}
-
-					if (bUsingJoinedField) {
-						JOptionPane.showMessageDialog(null, PluginServices
-								.getText(null, "legend_using_joined_field"));
-						try {
-							lyr.setLegend(LegendFactory
-									.createSingleSymbolLegend(lyr
-											.getShapeType()));
-						} catch (LegendLayerException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-							NotificationManager
-									.addWarning(
-											"Error in com.iver.cit.gvsig.project.documents.table.ProjectTable.restoreDataSource()",
-											null);
-							return;
-						}
+			if (lyr.getLegend() instanceof IClassifiedVectorLegend) {
+				IClassifiedVectorLegend legend = (IClassifiedVectorLegend) lyr
+						.getLegend();
+				String[] legendFields = legend.getClassifyingFieldNames();
+				boolean bUsingJoinedField = false;
+				for (int i = 0; i < legendFields.length; i++) {
+					int idField = sdsJoined
+							.getFieldIndexByName(legendFields[i]);
+					String fieldName = sdsJoined.getFieldName(idField);
+					int idOriginal = sdsOrig.getFieldIndexByName(fieldName);
+					if (idOriginal == -1) {
+						bUsingJoinedField = true;
+						break;
 					} else {
-						legend.setClassifyingFieldNames(legendFields);
-						try {
-							legend.setDataSource(original.getRecordset());
-						} catch (FieldNotFoundException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-							NotificationManager
-									.addWarning(
-											"Error in com.iver.cit.gvsig.project.documents.table.ProjectTable.restoreDataSource()",
-											null);
-						}
-
+						legendFields[i] = fieldName;
 					}
-				} // ClassifiedVectorLegend
-				checkLabelling(lyr, sdsOrig, sdsJoined);
+				}
 
-				lyr.setRecordset(original.getRecordset());
+				if (bUsingJoinedField) {
+					JOptionPane.showMessageDialog(null, PluginServices.getText(
+							null, "legend_using_joined_field"));
+					try {
+						lyr.setLegend(LegendFactory
+								.createSingleSymbolLegend(lyr.getShapeType()));
+					} catch (LegendLayerException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+						NotificationManager
+								.addWarning(
+										"Error in com.iver.cit.gvsig.project.documents.table.ProjectTable.restoreDataSource()",
+										null);
+						return;
+					}
+				} else {
+					legend.setClassifyingFieldNames(legendFields);
+					try {
+						legend.setDataSource(original.getRecordset());
+					} catch (FieldNotFoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+						NotificationManager
+								.addWarning(
+										"Error in com.iver.cit.gvsig.project.documents.table.ProjectTable.restoreDataSource()",
+										null);
+					}
 
-				lyr.setIsJoined(false);
-			}
+				}
+			} // ClassifiedVectorLegend
+			checkLabelling(lyr, sdsOrig, sdsJoined);
+
+			lyr.setRecordset(original.getRecordset());
+
+			lyr.setIsJoined(false);
 		}
 
 		setModel(original);
@@ -464,66 +460,6 @@ public class ProjectTable extends ProjectDocument {
 		return xml;
 	}
 
-	/**
-	 * DOCUMENT ME!
-	 * 
-	 * @param xml
-	 *            DOCUMENT ME!
-	 * @param p
-	 *            DOCUMENT ME!
-	 * 
-	 * @throws XMLException
-	 * @throws ReadDriverException
-	 * @throws DriverException
-	 * 
-	 * @see com.iver.cit.gvsig.project.documents.ProjectDocument#setXMLEntity(com.iver.utiles.XMLEntity)
-	 */
-	public void setXMLEntity03(XMLEntity xml) throws XMLException,
-			ReadDriverException {
-		super.setXMLEntity03(xml);
-		int numTables = xml.getIntProperty("numTables");
-		ProjectDocument.NUMS.put(ProjectTableFactory.registerName, new Integer(
-				numTables));
-
-		if (xml.getStringProperty("type").equals("otherDriverFile")) {
-			LayerFactory.getDataSourceFactory().addFileDataSource(
-					xml.getStringProperty("driverName"),
-					xml.getStringProperty("gdbmsname"),
-					xml.getStringProperty("file"));
-
-			setSelectableDataSource03(xml);
-		} else if (xml.getStringProperty("type").equals("sameDriverFile")) {
-			String layerName = xml.getStringProperty("layerName");
-
-			ProjectView vista = (ProjectView) project.getProjectDocumentByName(
-					xml.getStringProperty("viewName"),
-					ProjectViewFactory.registerName);
-			FLayer layer = vista.getMapContext().getLayers()
-					.getLayer(layerName);
-
-			setTheModel((VectorialEditableAdapter) ((FLyrVect) layer)
-					.getSource());
-			associatedTable = (AlphanumericData) layer;
-
-			LayerFactory.getDataSourceFactory().addDataSource(
-					(ObjectDriver) ((FLyrVect) layer).getSource().getDriver(),
-					xml.getStringProperty("gdbmsname"));
-		} else if (xml.getStringProperty("type").equals("db")) {
-			LayerFactory.getDataSourceFactory().addDBDataSourceByTable(
-					xml.getStringProperty("gdbmsname"),
-					xml.getStringProperty("host"), xml.getIntProperty("port"),
-					xml.getStringProperty("user"),
-					xml.getStringProperty("password"),
-					xml.getStringProperty("dbName"),
-					xml.getStringProperty("tableName"),
-					xml.getStringProperty("driverInfo"));
-
-			setSelectableDataSource03(xml);
-		}
-
-		setName(xml.getStringProperty("name"));
-	}
-
 	private void fillAsEmpty() {
 		this.esModel = null;
 		mapping = new int[0];
@@ -545,8 +481,7 @@ public class ProjectTable extends ProjectDocument {
 	 * 
 	 * @see com.iver.cit.gvsig.project.documents.ProjectDocument#setXMLEntity(com.iver.utiles.XMLEntity)
 	 */
-	public void setXMLEntity(XMLEntity xml) throws XMLException,
-			ReadDriverException, OpenException {
+	public void setXMLEntity(XMLEntity xml) throws OpenException {
 		try {
 			super.setXMLEntity(xml);
 			backupXMLEntity = xml;
@@ -635,60 +570,6 @@ public class ProjectTable extends ProjectDocument {
 					.createColumns(xml.getChild(xml.getChildrenCount() - 1));
 		}
 
-	}
-
-	/**
-	 * DOCUMENT ME!
-	 * 
-	 * @param xml
-	 *            DOCUMENT ME!
-	 * 
-	 * @throws XMLException
-	 *             DOCUMENT ME!
-	 * @throws DriverException
-	 *             DOCUMENT ME!
-	 */
-	private void setSelectableDataSource03(XMLEntity xml) throws XMLException {
-		String layerName = null;
-
-		if (xml.contains("layerName")) {
-			layerName = xml.getStringProperty("layerName");
-		}
-
-		if (layerName == null) {
-			DataSource dataSource;
-
-			try {
-				dataSource = LayerFactory.getDataSourceFactory()
-						.createRandomDataSource(
-								xml.getStringProperty("gdbmsname"),
-								DataSourceFactory.AUTOMATIC_OPENING);
-
-				SelectableDataSource sds = new SelectableDataSource(dataSource);
-
-				sds.setXMLEntity03(xml.getChild(0));
-				EditableAdapter auxea = new EditableAdapter();
-				auxea.setOriginalDataSource(sds);
-				setDataSource(auxea);
-			} catch (NoSuchTableException e) {
-				throw new XMLException(e);
-			} catch (DriverLoadException e) {
-				throw new XMLException(e);
-			} catch (ReadDriverException e) {
-				throw new XMLException(e);
-			}
-
-		} else {
-			ProjectView vista = (ProjectView) project.getProjectDocumentByName(
-					xml.getStringProperty("viewName"),
-					ProjectViewFactory.registerName);
-			FLayer layer = vista.getMapContext().getLayers()
-					.getLayer(layerName);
-
-			setTheModel((VectorialEditableAdapter) ((FLyrVect) layer)
-					.getSource());
-			associatedTable = (AlphanumericData) layer;
-		}
 	}
 
 	/**
@@ -796,7 +677,7 @@ public class ProjectTable extends ProjectDocument {
 		assert false : "call getAssociatedLayer instead";
 		return associatedTable;
 	}
-	
+
 	public Layer getAssociatedLayer() {
 		return associatedTable;
 	}
@@ -807,7 +688,7 @@ public class ProjectTable extends ProjectDocument {
 	 * @param associatedTable
 	 *            DOCUMENT ME!
 	 */
-	public void setAssociatedTable(AlphanumericData associatedTable) {
+	public void setAssociatedTable(Layer associatedTable) {
 		this.associatedTable = associatedTable;
 	}
 
@@ -818,7 +699,7 @@ public class ProjectTable extends ProjectDocument {
 	 * 
 	 * @return Returns the original.
 	 */
-	public IEditableSource getOriginal() {
+	public Source getOriginal() {
 		return original;
 	}
 
@@ -929,7 +810,7 @@ public class ProjectTable extends ProjectDocument {
 		this.mapping = mapping;
 	}
 
-	public void setModel(IEditableSource ies) {
+	public void setModel(Source ies) {
 		setTheModel(ies);
 		try {
 			createAlias();
@@ -980,7 +861,7 @@ public class ProjectTable extends ProjectDocument {
 
 	}
 
-	private void setTheModel(IEditableSource es) {
+	private void setTheModel(Source es) {
 		this.esModel = es;
 
 	}

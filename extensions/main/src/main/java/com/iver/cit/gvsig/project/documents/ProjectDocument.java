@@ -202,6 +202,13 @@ public abstract class ProjectDocument implements Serializable {
 		document.setName(name);
 		document.setOwner(owner);
 	}
+	
+	protected void read(DocumentType document) {
+		this.comment = document.getComment();
+		this.creationDate = document.getCreationDate();
+		this.name = document.getName();
+		this.owner = document.getOwner();
+	}
 
 	/**
 	 * DOCUMENT ME!

@@ -46,19 +46,14 @@ import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
+import javax.inject.Inject;
+
+import org.gvsig.map.MapContext;
+import org.gvsig.map.MapContextFactory;
 import org.gvsig.persistence.generated.ViewDocumentType;
 
-import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
-import com.hardcode.gdbms.engine.data.driver.DriverException;
 import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiManager.IWindow;
-import com.iver.cit.gvsig.fmap.MapContext;
-import com.iver.cit.gvsig.fmap.drivers.DriverIOException;
-import com.iver.cit.gvsig.fmap.layers.FLayer;
-import com.iver.cit.gvsig.fmap.layers.FLayers;
-import com.iver.cit.gvsig.fmap.layers.LayersIterator;
-import com.iver.cit.gvsig.fmap.layers.XMLException;
-import com.iver.cit.gvsig.fmap.layers.layerOperations.AlphanumericData;
 import com.iver.cit.gvsig.project.Project;
 import com.iver.cit.gvsig.project.documents.ProjectDocument;
 import com.iver.cit.gvsig.project.documents.ProjectDocumentFactory;
@@ -81,6 +76,9 @@ public class ProjectView extends ProjectViewBase {
 	// public static int KILOMETROS = 1;
 	// public static int[] unidades = new int[] { METROS, KILOMETROS };
 	// /private Color backgroundColor = new Color(255, 255, 255);
+
+	@Inject
+	private MapContextFactory mapContextFactory;
 
 	/**
 	 * DOCUMENT ME!
@@ -125,35 +123,22 @@ public class ProjectView extends ProjectViewBase {
 	 * 
 	 * @see com.iver.cit.gvsig.project.documents.ProjectDocument#setXMLEntity(com.iver.utiles.XMLEntity)
 	 */
-	public void setXMLEntity(XMLEntity xml) throws XMLException,
-			ReadDriverException, OpenException {
+	public void setXMLEntity(ViewDocumentType xml) throws OpenException {
+		super.read(xml);
 		try {
-			super.setXMLEntity(xml);
 			int currentChild = 0;
 			int numViews = xml.getIntProperty("numViews");
 			ProjectDocument.NUMS.put(ProjectViewFactory.registerName,
 					new Integer(numViews));
 
-			setMapContext(MapContext.createFromXML(xml.getChild(currentChild)));
+			MapContext mapContext = mapContextFactory.createMapContext();
+			mapContext.setXML(xml.getMainMap());
+			setMapContext(mapContext);
 			currentChild++;
-			if (xml.getBooleanProperty("mapOverView")) {
-				setMapOverViewContext(MapContext.createFromXML(xml
-						.getChild(currentChild)));
-				currentChild++;
-			}
-
-			// legacy hyperlink stuff
-			if (xml.contains("m_selectedField")) {
-				String selectedField, extension = null;
-				int type = -1;
-				selectedField = xml.getStringProperty("m_selectedField");
-				if (xml.contains("m_typeLink")) {
-					type = xml.getIntProperty("m_typeLink");
-				}
-				if (xml.contains("m_extLink")) {
-					extension = xml.getStringProperty("m_extLink");
-				}
-				applyHyperlinkToLayers(selectedField, type, extension);
+			if (xml.getOverviewMap() != null) {
+				mapContext = mapContextFactory.createMapContext();
+				mapContext.setXML(xml.getMainMap());
+				setMapOverViewContext(mapContext);
 			}
 
 			showErrors();
@@ -161,58 +146,6 @@ public class ProjectView extends ProjectViewBase {
 			throw new OpenException(e, this.getClass().getName());
 		}
 	}
-
-	/**
-	 * <p>
-	 * Legacy code to keep compatibility with old 1.1.x hyperlink.
-	 * </p>
-	 * 
-	 * @param selectedField
-	 * @param type
-	 * @param extension
-	 */
-	private void applyHyperlinkToLayers(String selectedField, int type,
-			String extension) {
-		final String LAYERPROPERTYNAME = "org.gvsig.hyperlink.config";
-
-		LayersIterator iterator = new LayersIterator(getMapContext()
-				.getLayers());
-		while (iterator.hasNext()) {
-			FLayer layer = iterator.nextLayer();
-			// don't apply 1.1.x compatibility if a property from 1.9 alpha
-			// hyperlink is found
-			String auxFieldName = (String) layer
-					.getProperty("legacy.hyperlink.selectedField");
-
-			if (auxFieldName == null && selectedField != null) {
-				layer.setProperty("legacy.hyperlink.selectedField",
-						selectedField);
-				layer.setProperty("legacy.hyperlink.type", new Integer(type));
-				if (extension != null) {
-					layer.setProperty("legacy.hyperlink.extension", extension);
-				}
-			}
-		}
-
-	}
-
-	/**
-	 * DOCUMENT ME!
-	 * 
-	 * @param p
-	 *            DOCUMENT ME!
-	 * 
-	 * @return DOCUMENT ME!
-	 * @throws XMLException
-	 * @throws DriverException
-	 * @throws DriverIOException
-	 * @throws OpenException
-	 */
-	/*
-	 * public ProjectView cloneProjectView(Project p) throws XMLException,
-	 * DriverException, DriverIOException, OpenException { return (ProjectView)
-	 * createFromXML(getXMLEntity(), p); }
-	 */
 
 	public String getFrameName() {
 		return PluginServices.getText(this, "Vista");
