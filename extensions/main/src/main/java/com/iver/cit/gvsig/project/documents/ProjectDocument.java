@@ -225,7 +225,7 @@ public abstract class ProjectDocument implements Serializable {
 	 * @throws DriverIOException
 	 * @throws OpenException
 	 */
-	public static ProjectDocument createFromXML(XMLEntity xml, Project p)
+	public static ProjectDocument createFromXML(String className, Project p)
 			throws OpenException {
 		ProjectDocumentFactory pde = null;
 		ExtensionPoints extensionPoints = ExtensionPointsSingleton
@@ -233,28 +233,27 @@ public abstract class ProjectDocument implements Serializable {
 		ExtensionPoint extPoint = ((ExtensionPoint) extensionPoints
 				.get("Documents"));
 		try {
-			pde = (ProjectDocumentFactory) extPoint.create(xml
-					.getStringProperty("className"));
+			pde = (ProjectDocumentFactory) extPoint.create(className);
 		} catch (InstantiationException e) {
 			NotificationManager.showMessageError(
 					PluginServices.getText(p, "documento_no_reconocido") + ": "
-							+ xml.getStringProperty("className"), e);
+							+ className, e);
 		} catch (IllegalAccessException e) {
 			NotificationManager.showMessageError(
 					PluginServices.getText(p, "documento_no_reconocido") + ": "
-							+ xml.getStringProperty("className"), e);
+							+ className, e);
 		} catch (Exception e) {
-			throw new OpenException(e, xml.getStringProperty("className"));
+			throw new OpenException(e, className);
 		}
 		if (pde == null) {
 			Exception e = new Exception(PluginServices.getText(p,
 					"documento_no_reconocido")
 					+ ": "
-					+ xml.getStringProperty("className"));
+					+ className);
 			NotificationManager.showMessageWarning(
 					PluginServices.getText(p, "documento_no_reconocido") + ": "
-							+ xml.getStringProperty("className"), e);
-			throw new OpenException(e, xml.getStringProperty("className"));
+							+ className, e);
+			throw new OpenException(e, className);
 		}
 		ProjectDocument pe = pde.create(p);
 		pe.setProjectDocumentFactory(pde);
@@ -262,26 +261,7 @@ public abstract class ProjectDocument implements Serializable {
 
 	}
 
-	/**
-	 * DOCUMENT ME!
-	 * 
-	 * @param xml
-	 *            DOCUMENT ME!
-	 * @param p
-	 *            DOCUMENT ME!
-	 * 
-	 * @throws XMLException
-	 * @throws OpenException
-	 * @throws ReadDriverException
-	 */
-	public void setXMLEntity(XMLEntity xml) throws OpenException {
-
-		this.setComment(xml.getStringProperty("comment"));
-		this.setCreationDate(xml.getStringProperty("creationDate"));
-		this.setName(xml.getStringProperty("name"));
-		this.setOwner(xml.getStringProperty("owner"));
-
-	}
+	public abstract void setXMLEntity(DocumentType document) throws OpenException ;
 
 	/**
 	 * DOCUMENT ME!
@@ -371,18 +351,6 @@ public abstract class ProjectDocument implements Serializable {
 
 	public ProjectDocumentFactory getProjectDocumentFactory() {
 		return projectDocumentFactory;
-	}
-
-	public abstract void exportToXML(XMLEntity root, Project project)
-			throws SaveException;
-
-	public abstract void importFromXML(XMLEntity root, XMLEntity typeRoot,
-			int elementIndex, Project project, boolean removeDocumentsFromRoot)
-			throws XMLException, OpenException, ReadDriverException;
-
-	public void importFromXML(XMLEntity root, XMLEntity typeRoot,
-			int elementIndex, Project project) throws OpenException {
-		importFromXML(root, typeRoot, elementIndex, project, false);
 	}
 
 	/**

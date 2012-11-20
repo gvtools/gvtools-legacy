@@ -47,7 +47,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -64,11 +63,16 @@ import java.util.prefs.Preferences;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
 
 import org.gvsig.gui.beans.swing.JFileChooser;
+import org.gvsig.inject.InjectorSingleton;
+import org.gvsig.inject.Module;
 import org.gvsig.tools.file.PathGenerator;
 
+import com.google.inject.Guice;
 import com.iver.andami.Launcher;
 import com.iver.andami.Launcher.TerminationProcess;
 import com.iver.andami.PluginServices;
@@ -86,13 +90,8 @@ import com.iver.cit.gvsig.project.ProjectFactory;
 import com.iver.cit.gvsig.project.documents.ProjectDocument;
 import com.iver.cit.gvsig.project.documents.exceptions.OpenException;
 import com.iver.cit.gvsig.project.documents.gui.ProjectWindow;
-import com.iver.cit.gvsig.project.documents.layout.ProjectMap;
-import com.iver.cit.gvsig.project.documents.layout.ProjectMapFactory;
-import com.iver.cit.gvsig.project.documents.layout.gui.Layout;
-import com.iver.cit.gvsig.project.documents.table.ProjectTableFactory;
 import com.iver.cit.gvsig.project.documents.view.ProjectViewFactory;
 import com.iver.utiles.GenericFileFilter;
-import com.iver.utiles.XMLEntity;
 import com.iver.utiles.extensionPoints.ExtensionPoint;
 import com.iver.utiles.extensionPoints.ExtensionPoints;
 import com.iver.utiles.extensionPoints.ExtensionPointsSingleton;
@@ -101,7 +100,6 @@ import com.iver.utiles.save.BeforeSavingListener;
 import com.iver.utiles.save.SaveEvent;
 import com.iver.utiles.swing.threads.IMonitorableTask;
 import com.iver.utiles.xml.XMLEncodingUtils;
-import com.iver.utiles.xmlEntity.generate.XmlTag;
 
 /**
  * Extension que proporciona controles para crear proyectos nuevos, abrirlos y
@@ -153,6 +151,9 @@ public class ProjectExtension extends Extension implements IExtensionStatus {
 	 * @see com.iver.mdiApp.plugins.IExtension#initialize()
 	 */
 	public void initialize() {
+		
+		InjectorSingleton.setInjector(Guice.createInjector(new Module()));
+		
 		try {
 			Class.forName("javax.media.jai.EnumeratedParameter");
 		} catch (ClassNotFoundException e) {
@@ -409,59 +410,63 @@ public class ProjectExtension extends Extension implements IExtensionStatus {
 	}
 
 	public void openLayout() {
-		// Project project = ((ProjectExtension)
-		// PluginServices.getExtension(ProjectExtension.class)).getProject();
-		Layout layout = null;
-
-		if (templatesPath == null) {
-			Preferences prefs = Preferences.userRoot().node("gvsig.foldering");
-			templatesPath = prefs.get("TemplatesFolder", null);
-		}
-
-		JFileChooser jfc = new JFileChooser(LAYOUT_TEMPLATE_FILECHOOSER_ID,
-				templatesPath);
-		jfc.addChoosableFileFilter(new GenericFileFilter("gvt", PluginServices
-				.getText(this, "plantilla")));
-
-		if (jfc.showOpenDialog((Component) PluginServices.getMainFrame()) == JFileChooser.APPROVE_OPTION) {
-			File file = jfc.getSelectedFile();
-			if (!(file.getPath().endsWith(".gvt") || file.getPath().endsWith(
-					".GVT"))) {
-				file = new File(file.getPath() + ".gvt");
-			}
-			try {
-				File xmlFile = new File(file.getAbsolutePath());
-				FileInputStream is = new FileInputStream(xmlFile);
-				Reader reader = XMLEncodingUtils.getReader(is);
-
-				XmlTag tag = (XmlTag) XmlTag.unmarshal(reader);
-				try {
-					XMLEntity xml = new XMLEntity(tag);
-					if (xml.contains("followHeaderEncoding")) {
-						layout = Layout.createLayout(xml, p);
-					} else {
-						reader = new FileReader(xmlFile);
-						tag = (XmlTag) XmlTag.unmarshal(reader);
-						xml = new XMLEntity(tag);
-						layout = Layout.createLayout(xml, p);
-					}
-
-				} catch (OpenException e) {
-					e.showError();
-				}
-				// fPanelLegendManager.setRenderer(LegendFactory.createFromXML(new
-				// XMLEntity(tag)));
-			} catch (FileNotFoundException e) {
-				NotificationManager.addError(
-						PluginServices.getText(this, "Al_leer_la_leyenda"), e);
-			}
-			ProjectMap pmap = ProjectFactory.createMap(file.getName());
-			pmap.setModel(layout);
-			pmap.getModel().setProjectMap(pmap);
-			p.addDocument(pmap);
-			PluginServices.getMDIManager().addWindow(layout);
-
-		}
+		assert false;
+		// gtrefactor Commented because we don't want Layouts yet
+		// // Project project = ((ProjectExtension)
+		// // PluginServices.getExtension(ProjectExtension.class)).getProject();
+		// Layout layout = null;
+		//
+		// if (templatesPath == null) {
+		// Preferences prefs = Preferences.userRoot().node("gvsig.foldering");
+		// templatesPath = prefs.get("TemplatesFolder", null);
+		// }
+		//
+		// JFileChooser jfc = new JFileChooser(LAYOUT_TEMPLATE_FILECHOOSER_ID,
+		// templatesPath);
+		// jfc.addChoosableFileFilter(new GenericFileFilter("gvt",
+		// PluginServices
+		// .getText(this, "plantilla")));
+		//
+		// if (jfc.showOpenDialog((Component) PluginServices.getMainFrame()) ==
+		// JFileChooser.APPROVE_OPTION) {
+		// File file = jfc.getSelectedFile();
+		// if (!(file.getPath().endsWith(".gvt") || file.getPath().endsWith(
+		// ".GVT"))) {
+		// file = new File(file.getPath() + ".gvt");
+		// }
+		// try {
+		// File xmlFile = new File(file.getAbsolutePath());
+		// FileInputStream is = new FileInputStream(xmlFile);
+		// Reader reader = XMLEncodingUtils.getReader(is);
+		//
+		// XmlTag tag = (XmlTag) XmlTag.unmarshal(reader);
+		// try {
+		// XMLEntity xml = new XMLEntity(tag);
+		// if (xml.contains("followHeaderEncoding")) {
+		// layout = Layout.createLayout(xml, p);
+		// } else {
+		// reader = new FileReader(xmlFile);
+		// tag = (XmlTag) XmlTag.unmarshal(reader);
+		// xml = new XMLEntity(tag);
+		// layout = Layout.createLayout(xml, p);
+		// }
+		//
+		// } catch (OpenException e) {
+		// e.showError();
+		// }
+		// // fPanelLegendManager.setRenderer(LegendFactory.createFromXML(new
+		// // XMLEntity(tag)));
+		// } catch (FileNotFoundException e) {
+		// NotificationManager.addError(
+		// PluginServices.getText(this, "Al_leer_la_leyenda"), e);
+		// }
+		// ProjectMap pmap = ProjectFactory.createMap(file.getName());
+		// pmap.setModel(layout);
+		// pmap.getModel().setProjectMap(pmap);
+		// p.addDocument(pmap);
+		// PluginServices.getMDIManager().addWindow(layout);
+		//
+		// }
 	}
 
 	/**
@@ -700,38 +705,23 @@ public class ProjectExtension extends Extension implements IExtensionStatus {
 		Project proj = null;
 
 		try {
-			XmlTag tag = (XmlTag) XmlTag.unmarshal(reader);
-			XMLEntity xml = new XMLEntity(tag);
-			String VERSION = xml.getStringProperty("VERSION");
-			NotificationManager.addInfo(PluginServices.getText(this,
-					"openning_project") + ": " + xml.getStringProperty("name"));
+			Class<org.gvsig.persistence.generated.Project> persistenceClass = org.gvsig.persistence.generated.Project.class;
+			JAXBContext context = JAXBContext.newInstance(persistenceClass
+					.getPackage().getName(), persistenceClass.getClassLoader());
+			Unmarshaller unmarshaller = context.createUnmarshaller();
+			org.gvsig.persistence.generated.Project project = (org.gvsig.persistence.generated.Project) unmarshaller
+					.unmarshal(reader);
 
-			if (encodingFollowed) {
-				if (xml.contains("followHeaderEncoding")) {
-					boolean useEncoding = xml
-							.getBooleanProperty("followHeaderEncoding");
-					if (!useEncoding) {
-						throw new UnsupportedEncodingException(
-								"the encoding specified in the xml header is not safe");
-					}
-				} else {
-					// Old projects didn't contain followHeaderEncoding and they
-					// were
-					// not correctly encoded. We throw an exception now, and
-					// we'll try
-					// to reopen the project
-					// using the default system encoding.
-					throw new UnsupportedEncodingException(
-							"the encoding specified in the xml header is not safe");
-				}
-			}
+			String VERSION = project.getVersion();
+			NotificationManager.addInfo(PluginServices.getText(this,
+					"openning_project") + ": " + project.getName());
 
 			try {
 				// if ((VERSION!=null) && (VERSION.equals("0.5") ||
 				// VERSION.equals("0.4") || (VERSION.indexOf("GISPLANET") !=
 				// -1))){
 				if (VERSION != null) {
-					proj = Project.createFromXML(xml);
+					proj = Project.createFromXML(project);
 				} else {
 					NotificationManager.showMessageInfo(
 							PluginServices.getText(this,
@@ -748,14 +738,7 @@ public class ProjectExtension extends Extension implements IExtensionStatus {
 				e.showError();
 				// NotificationManager.addInfo("Al leer el proyecto", e);
 			}
-		} catch (MarshalException e) {
-			PluginServices.getLogger().error(
-					PluginServices.getText(this, "formato_incorrecto"), e);
-			JOptionPane.showMessageDialog(
-					(Component) PluginServices.getMainFrame(),
-					PluginServices.getText(this, "formato_incorrecto"));
-			// NotificationManager.addError("Al leer el proyecto", e);
-		} catch (ValidationException e) {
+		} catch (JAXBException e) {
 			PluginServices.getLogger().error(
 					PluginServices.getText(this, "formato_incorrecto"), e);
 			JOptionPane.showMessageDialog(
@@ -804,8 +787,9 @@ public class ProjectExtension extends Extension implements IExtensionStatus {
 
 	private void registerDocuments() {
 		ProjectViewFactory.register();
-		ProjectTableFactory.register();
-		ProjectMapFactory.register();
+		// gtrefactor We don't want layouts nor tables yet
+		// ProjectTableFactory.register();
+		// ProjectMapFactory.register();
 	}
 
 	private void initializeDocumentActionsExtensionPoint() {

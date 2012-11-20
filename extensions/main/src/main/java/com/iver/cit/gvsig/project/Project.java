@@ -47,6 +47,7 @@ import java.beans.PropertyChangeSupport;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.Hashtable;
@@ -67,8 +68,11 @@ import org.gvsig.layer.SourceFactory;
 import org.gvsig.layer.SourceManager;
 import org.gvsig.persistence.generated.DataSourceType;
 import org.gvsig.persistence.generated.DocumentType;
+import org.gvsig.persistence.generated.LabeledExtentType;
 import org.gvsig.persistence.generated.StringPropertyType;
 import org.gvsig.tools.file.PathGenerator;
+import org.gvsig.units.AreaUnit;
+import org.gvsig.units.DistanceUnit;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.NoSuchAuthorityCodeException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
@@ -84,10 +88,6 @@ import com.iver.cit.gvsig.project.documents.ProjectDocumentFactory;
 import com.iver.cit.gvsig.project.documents.exceptions.OpenException;
 import com.iver.cit.gvsig.project.documents.exceptions.SaveException;
 import com.iver.cit.gvsig.project.documents.gui.WindowData;
-import com.iver.cit.gvsig.project.documents.layout.ProjectMap;
-import com.iver.cit.gvsig.project.documents.layout.ProjectMapFactory;
-import com.iver.cit.gvsig.project.documents.table.ProjectTable;
-import com.iver.cit.gvsig.project.documents.table.ProjectTableFactory;
 import com.iver.cit.gvsig.project.documents.view.ProjectView;
 import com.iver.cit.gvsig.project.documents.view.ProjectViewFactory;
 import com.iver.utiles.IPersistence;
@@ -111,13 +111,18 @@ public class Project implements Serializable, PropertyChangeListener {
 	@Inject
 	private SourceManager sourceManager;
 
-	@Inject
-	private SourceFactory sourceFactory;
-
 	static private CoordinateReferenceSystem defaultCrs = null;
 
 	static private CoordinateReferenceSystem defaultFactoryCrs;
-
+	static {
+		try {
+			defaultFactoryCrs = CRS.decode("EPSG:23030");
+		} catch (NoSuchAuthorityCodeException e) {
+			throw new RuntimeException("Bug", e);
+		} catch (FactoryException e) {
+			throw new RuntimeException("Bug", e);
+		}
+	}
 	/*
 	 * distiguishing between a static field "defaultSelectionColor" and a
 	 * selectionColor field will allow to define default color in a multiple
@@ -125,11 +130,11 @@ public class Project implements Serializable, PropertyChangeListener {
 	 */
 	static private Color defaultSelectionColor = Color.YELLOW;
 
-	private static int defaultMapUnits = -1;
+	private static DistanceUnit defaultMapUnits = null;
 
-	private static int defaultDistanceUnits = -1;
+	private static DistanceUnit defaultDistanceUnits = null;
 
-	private static int defaultDistanceArea = -1;
+	private static AreaUnit defaultDistanceArea = null;
 
 	private PropertyChangeSupport change;
 
@@ -176,31 +181,11 @@ public class Project implements Serializable, PropertyChangeListener {
 
 	private static PathGenerator pathGenerator = PathGenerator.getInstance();
 
-	private TreeMap<ProjectDocument, Integer> sortedDocuments = new TreeMap<ProjectDocument, Integer>(
-			new Comparator() {
-				public int compare(Object o1, Object o2) {
-					if ((o1 != null) && (o2 != null)) {
-						int priority1 = ((ProjectDocument) o1)
-								.getProjectDocumentFactory().getPriority();
-						int priority2 = ((ProjectDocument) o2)
-								.getProjectDocumentFactory().getPriority();
-						if (priority1 >= priority2)
-							return 1;
-						return -1;
-					}
-					return 0;
-				}
-			}); // Para poder ordenar
-
 	/**
 	 * Creates a new Project object.
 	 * 
-	 * @throws FactoryException
-	 *             If the default CRS cannot be instantiated
-	 * @throws NoSuchAuthorityCodeException
-	 *             If the default CRS cannot be instantiated
 	 */
-	public Project() throws NoSuchAuthorityCodeException, FactoryException {
+	public Project() {
 		change = new PropertyChangeSupport(this);
 
 		// change.addPropertyChangeListener(this);
@@ -209,8 +194,6 @@ public class Project implements Serializable, PropertyChangeListener {
 		setSelectionColor(getDefaultSelectionColor());
 		getDefaultCrs(); // For initialize it
 		// signatureAtStartup = computeSignature();
-
-		defaultFactoryCrs = CRS.decode("EPSG:23030");
 	}
 
 	/**
@@ -266,70 +249,6 @@ public class Project implements Serializable, PropertyChangeListener {
 		// modified = true;
 		change.firePropertyChange("", null, null);
 	}
-
-	/**
-	 * Devuelve a partir de la capa la tabla asociada.
-	 * 
-	 * @param co
-	 *            Capa.
-	 * 
-	 * @return ProjectTable de la tabla asociada.
-	 */
-	public ProjectTable getTable(Layer co) {
-		ArrayList tables = getDocumentsByType(ProjectTableFactory.registerName);
-		/**
-		 * Como las tablas se pueden a�adir cuando se pincha en "ver tabla" de
-		 * una capa, se puede intentar a�adir dos veces la misma tabla
-		 */
-		for (int i = 0; i < tables.size(); i++) {
-			if (((ProjectTable) tables.get(i)).getAssociatedTable() == co) {
-				return (ProjectTable) tables.get(i);
-			}
-		}
-
-		return null;
-	}
-
-	/**
-	 * Devuelve a partir del nombre la tabla asociada.
-	 * 
-	 * @param name
-	 *            Nombre.
-	 * @deprecated utilizar getProjectDocumentByName(...);
-	 * @return ProjectTable de la tabla asociada.
-	 */
-	public ProjectTable getTable(String name) {
-		ArrayList tables = getDocumentsByType(ProjectTableFactory.registerName);
-		/**
-		 * Como las tablas se pueden a�adir cuando se pincha en "ver tabla" de
-		 * una capa, se puede intentar a�adir dos veces la misma tabla
-		 */
-		for (int i = 0; i < tables.size(); i++) {
-			if (((ProjectTable) tables.get(i)).getName().equals(name)) {
-				return (ProjectTable) tables.get(i);
-			}
-		}
-
-		return null;
-	}
-
-	// /**
-	// * Devuelve true si el proyecto (o alguna tabla, vista o mapa que
-	// contiene)
-	// * fue modificado
-	// *
-	// * @return
-	// */
-	// public boolean isModified() {
-	// if ((this.getDocuments().size() == 0) && !modified &&
-	// !isModifiedDocuments()) {
-	// return false;
-	// }
-	// return true;
-	// // /return modified; TODO El atributo modified solo detecta cuando se
-	// // elimina o a�ade una vista,
-	// // /mapa o tabla pero no cuando se modifican.
-	// }
 
 	/**
 	 * Obtiene los comentarios
@@ -546,102 +465,6 @@ public class Project implements Serializable, PropertyChangeListener {
 	/**
 	 * DOCUMENT ME!
 	 * 
-	 * @deprecated utilizar getDocument(String s);
-	 * @return
-	 */
-	public ArrayList getMaps() {
-		return getDocumentsByType(ProjectMapFactory.registerName);
-	}
-
-	/**
-	 * DOCUMENT ME!
-	 * 
-	 * @deprecated utilizar getDocument(String s);
-	 * @return
-	 */
-	public ArrayList getTables() {
-		return getDocumentsByType(ProjectTableFactory.registerName);
-	}
-
-	/**
-	 * DOCUMENT ME!
-	 * 
-	 * @deprecated utilizar getDocument(String s);
-	 * @return
-	 */
-	public ArrayList getViews() {
-		return getDocumentsByType(ProjectViewFactory.registerName);
-	}
-
-	/**
-	 * A�ade un mapa al proyecto
-	 * 
-	 * @deprecated utilizar addDocument(ProjectDocument pD);
-	 * @param m
-	 */
-	public void addMap(ProjectMap m) {
-		addDocument(m);
-	}
-
-	/**
-	 * Elimina un mapa del proyecto
-	 * 
-	 * @deprecated utilizar delDocument(ProjectDocument pD);
-	 * @param i
-	 *            indice del mapa
-	 */
-	public void delMap(int i) {
-		ArrayList list = getDocumentsByType(ProjectMapFactory.registerName);
-		delDocument((ProjectDocument) list.get(i));
-	}
-
-	/**
-	 * A�ade una tabla al proyecto
-	 * 
-	 * @deprecated utilizar addDocument(ProjectDocument pD);
-	 * @param t
-	 */
-	public void addTable(ProjectTable t) {
-		addDocument(t);
-	}
-
-	/**
-	 * Elimina una tabla del proyecto
-	 * 
-	 * @deprecated utilizar delDocument(ProjectDocument pD);
-	 * @param i
-	 *            indice de la tabla
-	 */
-	public void delTable(int i) {
-		ArrayList list = getDocumentsByType(ProjectTableFactory.registerName);
-		delDocument((ProjectDocument) list.get(i));
-	}
-
-	/**
-	 * A�ade una vista al proyecto
-	 * 
-	 * @deprecated utilizar addDocument(ProjectDocument pD);
-	 * @param v
-	 */
-	public void addView(ProjectView v) {
-		addDocument(v);
-	}
-
-	/**
-	 * Elimina una tabla del proyecto
-	 * 
-	 * @deprecated utilizar delDocument(ProjectDocument pD);
-	 * @param i
-	 *            indice del proyecto
-	 */
-	public void delView(int i) {
-		ArrayList list = getDocumentsByType(ProjectViewFactory.registerName);
-		delDocument((ProjectDocument) list.get(i));
-	}
-
-	/**
-	 * DOCUMENT ME!
-	 * 
 	 * @return DOCUMENT ME!
 	 * 
 	 * @throws DriverException
@@ -657,19 +480,15 @@ public class Project implements Serializable, PropertyChangeListener {
 		ret.setModificationDate(modificationDate);
 		ret.setAbsolutePath(isAbsolutePath);
 		ret.setSelectionColor(StringUtilities.color2String(selectionColor));
-		ret.setDefaultProjection(CRS.toSRS(crs));
+		ret.setDefaultCrs(CRS.toSRS(crs));
 
 		for (int i = 0; i < extents.size(); i++) {
 			ret.getExtents().add(extents.get(i).getXMLEntity());
 		}
 
-		Source[] source = sourceManager.getSources();
+		Collections
+				.addAll(ret.getDataSources(), sourceManager.getPersistence());
 
-		for (int i = 0; i < source.length; i++) {
-			Source di = source[i];
-			DataSourceType child = this.getSourceInfoXMLEntity(di);
-			ret.getDataSources().add(child);
-		}
 		for (int i = 0; i < documents.size(); i++) {
 			DocumentType xmlchild = documents.get(i).getXMLEntity();
 			ret.getDocuments().add(xmlchild);
@@ -713,83 +532,6 @@ public class Project implements Serializable, PropertyChangeListener {
 		}
 
 		this.initialWindowProperties = orderedProperties.values().iterator();
-	}
-
-	/**
-	 * Store the initial window properties, to later restore the window sizes
-	 * and positions
-	 */
-	private void storeInitialWindowProperties061(XMLEntity xml) {
-		XMLEntity child;
-		int childNumb = 0;
-		ArrayList windowList = new ArrayList();
-
-		child = xml.getChild(xml.getChildrenCount() - 1);
-		if (child.contains("className")
-				&& child.getStringProperty("className").equals(
-						"com.iver.cit.gvsig.project.Project")
-				&& child.contains("name")
-				&& child.getStringProperty("name").equals("ViewInfoProperties")) {
-			child.putProperty("className",
-					"com.iver.cit.gvsig.project.document.gui.ProjectWindow");
-			windowList.add(child);
-		}
-
-		// try to open the views
-		if (xml.contains("numExtents"))
-			childNumb += xml.getIntProperty("numExtents");
-		if (xml.contains("data-source-count"))
-			childNumb += xml.getIntProperty("data-source-count");
-		int limit = 0;
-		if (xml.contains("numViews"))
-			limit = xml.getIntProperty("numViews") + childNumb;
-
-		XMLEntity view;
-		for (int i = childNumb; i < limit; i++) {
-			view = xml.getChild(i);
-			child = view.getChild(view.getChildrenCount() - 1);
-			if (child.contains("className")
-					&& child.getStringProperty("className").equals(
-							"com.iver.cit.gvsig.project.ProjectView")
-					&& child.contains("name")
-					&& child.getStringProperty("name").equals(
-							"ViewInfoProperties")) {
-				child.putProperty("documentName",
-						view.getStringProperty("name"));
-				child.putProperty("documentType",
-						ProjectViewFactory.registerName);
-				windowList.add(child);
-			}
-		}
-
-		if (xml.contains("numViews"))
-			childNumb += xml.getIntProperty("numViews");
-
-		if (xml.contains("numMaps"))
-			limit = childNumb + xml.getIntProperty("numMaps");
-
-		// try to open the maps
-		XMLEntity map;
-		for (int i = childNumb; i < limit; i++) {
-			map = xml.getChild(i);
-			for (int j = 0; j < map.getChildrenCount(); j++) {
-				child = map.getChild(j);
-				if (child.contains("className")
-						&& child.getStringProperty("className").equals(
-								"com.iver.cit.gvsig.project.ProjectMap")
-						&& child.contains("name")
-						&& child.getStringProperty("name").equals(
-								"ViewInfoProperties")) {
-					child.putProperty("documentName",
-							map.getStringProperty("name"));
-					child.putProperty("documentType",
-							ProjectMapFactory.registerName);
-					windowList.add(child);
-				}
-			}
-		}
-
-		this.initialWindowProperties = windowList.iterator();
 	}
 
 	/**
@@ -898,133 +640,51 @@ public class Project implements Serializable, PropertyChangeListener {
 	 * @throws OpenException
 	 * @throws VersionException
 	 */
-	public static Project createFromXML(XMLEntity xml) throws OpenException {
+	public static Project createFromXML(
+			org.gvsig.persistence.generated.Project xml) throws OpenException {
 
 		int childNumber = 0;
 
 		try {
 			Project p = new Project();
-			p.comments = xml.getStringProperty("comments");
-			p.creationDate = xml.getStringProperty("creationDate");
+			p.comments = xml.getComments();
+			p.creationDate = xml.getCreationDate();
 			PathGenerator pg = PathGenerator.getInstance();
-			if (xml.contains("isAbsolutePath")) {
-				p.isAbsolutePath = xml.getBooleanProperty("isAbsolutePath");
-				pg.setIsAbsolutePath(p.isAbsolutePath);
-			} else {
-				pg.setIsAbsolutePath(true);
-			}
-			int numExtents = xml.getIntProperty("numExtents");
+			boolean absolutePath = xml.isAbsolutePath();
+			p.isAbsolutePath = absolutePath;
+			pg.setIsAbsolutePath(p.isAbsolutePath);
 
-			for (int i = 0; i < numExtents; i++) {
-				ProjectExtent pe = ProjectExtent.createFromXML(xml.getChild(i));
+			for (LabeledExtentType extent : xml.getExtents()) {
+				ProjectExtent pe = ProjectExtent.createFromXML(extent);
 				p.extents.add(pe);
 			}
 
-			// Leemos el ultiom hijo recogido
-			childNumber = numExtents;
+			p.sourceManager.setPersistence(xml.getDataSources());
 
-			// Recogiendo el numero de cameras
-			int numCameras = 0;
-			if (xml.contains("numCameras"))
-				numCameras = xml.getIntProperty("numCameras");
-
-			// Recogiendo todo las camaras
-			for (int i = childNumber; i < (childNumber + numCameras); i++) {
-				XMLEntity xmlProp = xml.getChild(i);
-				try {
-					String className = xmlProp.getStringProperty("className");
-					Class classProp = Class.forName(className);
-					Object obj = classProp.newInstance();
-					IPersistence objPersist = (IPersistence) obj;
-					objPersist.setXMLEntity(xmlProp);
-					p.cameras.add(obj);
-				} catch (Exception e) {
-					continue;
-				}
-			}
-
-			childNumber += numCameras;
-
-			int numDataSources = xml.getIntProperty("data-source-count");
-
-			for (int i = childNumber; i < (childNumber + numDataSources); i++) {
-				XMLEntity child = xml.getChild(i);
-				registerDataSourceFromXML(p.sourceManager, p.sourceFactory,
-						child);
-			}
-
-			childNumber += numDataSources;
-			int numDocuments = 0;
-			if (xml.contains("numDocuments")) {
-				numDocuments = xml.getIntProperty("numDocuments");
-			} else {
-				int numViews = xml.getIntProperty("numViews");
-				int numMaps = xml.getIntProperty("numMaps");
-				int numTables = xml.getIntProperty("numTables");
-				numDocuments = numViews + numMaps + numTables;
-			}
-			int i = 0;
-			for (i = childNumber; i < (numDocuments + childNumber); i++) {
+			for (int i = 0; i < xml.getDocuments().size(); i++) {
+				DocumentType document = xml.getDocuments().get(i);
 				try {
 					ProjectDocument pD = ProjectDocument.createFromXML(
-							xml.getChild(i), p);
+							document.getClassName(), p);
+					pD.setXMLEntity(document);
 					p.addDocument(pD);
-					p.sortedDocuments.put(pD, new Integer(i));
 				} catch (OpenException e) {
-					XMLEntity childXML = xml.getChild(i);
-					e.showMessageError(childXML.getName() + "\n  "
-							+ childXML.getStringProperty("className"));
+					e.showMessageError(document.getName() + "\n  "
+							+ document.getClassName());
 				}
 			}
-			ProjectDocument[] sortDocKeys = (ProjectDocument[]) p.sortedDocuments
-					.keySet().toArray(new ProjectDocument[0]);
-			Integer[] sortDocValues = (Integer[]) p.sortedDocuments.values()
-					.toArray(new Integer[0]);
 
-			i = 0;
-			for (i = 0; i < sortDocValues.length; i++) {
-				try {
-					sortDocKeys[i].setXMLEntity(xml.getChild(sortDocValues[i]
-							.intValue()));
-				} catch (OpenException e) {
-					p.delDocument(sortDocKeys[i]);
-					XMLEntity childXML = xml.getChild(sortDocValues[i]
-							.intValue());
-					e.showMessageError(childXML.getName() + "\n  "
-							+ childXML.getStringProperty("className"));
-				}
-			}
-			childNumber += numDocuments;
-
-			p.modificationDate = xml.getStringProperty("modificationDate");
+			p.modificationDate = xml.getModificationDate();
 			// p.modified = xml.getBooleanProperty("modified");
-			p.name = xml.getStringProperty("name");
-			p.owner = xml.getStringProperty("owner");
+			p.name = xml.getName();
+			p.owner = xml.getOwner();
 			p.selectionColor = StringUtilities.string2Color(xml
-					.getStringProperty("selectionColor"));
+					.getSelectionColor());
 
-			p.setLinkTable();
-			String strProj = xml.getStringProperty("projection");
+			String strProj = xml.getDefaultCrs();
 
 			if (strProj != null) {
 				p.setCrs(CRS.decode(strProj));
-			}
-
-			if (childNumber < xml.getChildrenCount()) { // restore the position
-				// of the windows
-				XMLEntity child = xml.getChild(childNumber);
-				if (child.contains("name")
-						&& child.getStringProperty("name").equals(
-								"AndamiPersistence")) {
-					p.storeInitialWindowProperties(child);
-				} else if (child.contains("className")
-						&& child.getStringProperty("className").equals(
-								"com.iver.cit.gvsig.project.Project")
-						&& child.contains("name")
-						&& child.getStringProperty("name").equals(
-								"ViewInfoProperties")) {
-					p.storeInitialWindowProperties061(xml);
-				}
 			}
 
 			PostProcessSupport.executeCalls();
@@ -1033,48 +693,6 @@ public class Project implements Serializable, PropertyChangeListener {
 			throw new OpenException(e, null);
 		}
 
-	}
-
-	/**
-	 * Reestablece los link que ten�a cada tabla con las dem�s.
-	 */
-	public void setLinkTable() {
-		ArrayList tables = getDocumentsByType(ProjectTableFactory.registerName);
-
-		for (int i = 0; i < tables.size(); i++) {
-			for (int j = 0; j < tables.size(); j++) {
-				/*
-				 * System.out.println("name = " + ((ProjectTable)
-				 * tables.get(j)).getModelo().getName());
-				 * System.out.println("linktable = " + ((ProjectTable)
-				 * tables.get(i)).getLinkTable());
-				 */
-				if ((((ProjectTable) tables.get(i)).getLinkTable() != null)
-						&& ((ProjectTable) tables.get(i)).getLinkTable()
-								.equals(((ProjectTable) tables.get(j))
-										.getModel().getId())) {
-					/*
-					 * gtrefactor The implementation of LinkSelectionListener is
-					 * quite strange and I wonder if this code is ever executed,
-					 * hence the assert and commented code.
-					 */
-					assert false;
-					/*
-					 * LinkSelectionListener lsl;
-					 * 
-					 * lsl = new LinkSelectionListener( ((ProjectTable)
-					 * tables.get(i)).getModelo() .getRecordset(),
-					 * ((ProjectTable) tables.get(j)).getModelo()
-					 * .getRecordset(), ((ProjectTable)
-					 * tables.get(i)).getField1(), ((ProjectTable)
-					 * tables.get(i)).getField2());
-					 * 
-					 * (((ProjectTable) tables.get(i)).getModelo()
-					 * .getRecordset()).addSelectionListener(lsl);
-					 */
-				}
-			}
-		}
 	}
 
 	/**
@@ -1308,6 +926,7 @@ public class Project implements Serializable, PropertyChangeListener {
 
 	public DataSourceType getSourceInfoXMLEntity(Source di) {
 		DataSourceType ret = new DataSourceType();
+		ret.setId(di.getId());
 		Map<String, Object> properties = di.getPersistentProperties();
 		Iterator<String> keyIterator = properties.keySet().iterator();
 		while (keyIterator.hasNext()) {
@@ -1420,29 +1039,18 @@ public class Project implements Serializable, PropertyChangeListener {
 	/**
 	 * Returns the user's default map units. This is the cartography data
 	 * distance units.
-	 * 
-	 * @return int (index of the <b>Attributes.NAMES array</b>)
 	 */
-	public static int getDefaultMapUnits() {
-		if (defaultMapUnits == -1) {
+	public static DistanceUnit getDefaultMapUnits() {
+		if (defaultMapUnits == null) {
 			XMLEntity xml = PluginServices.getPluginServices(
 					"com.iver.cit.gvsig").getPersistentXML();
 			if (xml.contains("DefaultMapUnits")) {
-				defaultMapUnits = xml.getIntProperty("DefaultMapUnits");
-			} else {
-				// first app run case
-				String[] unitNames = Units.getDistanceNames();
-				for (int i = 0; i < unitNames.length; i++) {
-					// meter is the factory default's map unit
-					if (unitNames[i].equals("Metros")) {
-						defaultMapUnits = i;
-						break;
-					}
-				}
+				defaultMapUnits = DistanceUnit.fromName(xml
+						.getStringProperty("DefaultMapUnits"));
 			}
-			if (defaultMapUnits == -1
-					|| defaultMapUnits >= Units.getDistanceNames().length)
-				defaultMapUnits = Units.getDistancePosition("Metros");
+			if (defaultMapUnits == null) {
+				defaultMapUnits = DistanceUnit.M;
+			}
 		}
 		return defaultMapUnits;
 	}
@@ -1451,29 +1059,18 @@ public class Project implements Serializable, PropertyChangeListener {
 	 * Returns the user's default view units for measuring distances. This is
 	 * the units that the user will see in the status bar of the view.
 	 * 
-	 * @return int (index of the <b>Attributes.NAMES array</b>)
 	 */
-	public static int getDefaultDistanceUnits() {
-		if (defaultDistanceUnits == -1) {
+	public static DistanceUnit getDefaultDistanceUnits() {
+		if (defaultDistanceUnits == null) {
 			XMLEntity xml = PluginServices.getPluginServices(
 					"com.iver.cit.gvsig").getPersistentXML();
 			if (xml.contains("DefaultDistanceUnits")) {
-				defaultDistanceUnits = xml
-						.getIntProperty("DefaultDistanceUnits");
-			} else {
-				// first app run case
-				String[] unitNames = Units.getDistanceNames();
-				for (int i = 0; i < unitNames.length; i++) {
-					// meter is the factory default's distance unit
-					if (unitNames[i].equals("Metros")) {
-						defaultDistanceUnits = i;
-						break;
-					}
-				}
+				defaultDistanceUnits = DistanceUnit.fromName(xml
+						.getStringProperty("DefaultDistanceUnits"));
 			}
-			if (defaultDistanceUnits == -1
-					|| defaultDistanceUnits >= Units.getDistanceNames().length)
-				defaultDistanceUnits = Units.getDistancePosition("Metros");
+			if (defaultDistanceUnits == null) {
+				defaultDistanceUnits = DistanceUnit.M;
+			}
 		}
 		return defaultDistanceUnits;
 	}
@@ -1482,28 +1079,17 @@ public class Project implements Serializable, PropertyChangeListener {
 	 * Returns the user's default view units for measuring areas. This is the
 	 * units that the user will see in the status bar of the view.
 	 * 
-	 * @return int (index of the <b>Attributes.NAMES array</b>)
 	 */
-	public static int getDefaultDistanceArea() {
-		if (defaultDistanceArea == -1) {
+	public static AreaUnit getDefaultDistanceArea() {
+		if (defaultDistanceArea == null) {
 			XMLEntity xml = PluginServices.getPluginServices(
 					"com.iver.cit.gvsig").getPersistentXML();
 			if (xml.contains("DefaultDistanceArea")) {
-				defaultDistanceArea = xml.getIntProperty("DefaultDistanceArea");
-			} else {
-				// first app run case
-				String[] unitNames = Units.getAreaNames();
-				for (int i = 0; i < unitNames.length; i++) {
-					// meter is the factory default's distance unit
-					if (unitNames[i].equals("Metros")) {
-						defaultDistanceArea = i;
-						break;
-					}
-				}
+				defaultDistanceArea = AreaUnit.fromName(xml
+						.getStringProperty("DefaultDistanceArea"));
 			}
-			if (defaultDistanceArea == -1
-					|| defaultDistanceArea >= Units.getAreaNames().length) {
-				defaultDistanceArea = getDefaultDistanceUnits();
+			if (defaultDistanceArea == null) {
+				defaultDistanceArea = AreaUnit.M2;
 			}
 		}
 		return defaultDistanceArea;
@@ -1514,7 +1100,7 @@ public class Project implements Serializable, PropertyChangeListener {
 	 * 
 	 * @param mapUnits
 	 */
-	public static void setDefaultMapUnits(int mapUnits) {
+	public static void setDefaultMapUnits(DistanceUnit mapUnits) {
 		defaultMapUnits = mapUnits;
 	}
 
@@ -1523,7 +1109,7 @@ public class Project implements Serializable, PropertyChangeListener {
 	 * 
 	 * @param distanceUnits
 	 */
-	public static void setDefaultDistanceUnits(int distanceUnits) {
+	public static void setDefaultDistanceUnits(DistanceUnit distanceUnits) {
 		defaultDistanceUnits = distanceUnits;
 	}
 
@@ -1532,122 +1118,8 @@ public class Project implements Serializable, PropertyChangeListener {
 	 * 
 	 * @param distanceUnits
 	 */
-	public static void setDefaultDistanceArea(int distanceArea) {
+	public static void setDefaultDistanceArea(AreaUnit distanceArea) {
 		defaultDistanceArea = distanceArea;
-	}
-
-	public String exportToXML() throws SaveException {
-		XMLEntity xml = this.newExportXMLRootNode();
-
-		Iterator iter = this.documents.iterator();
-		ProjectDocument document;
-		// FIXME: Falta atrapar los errores
-		while (iter.hasNext()) {
-			document = (ProjectDocument) iter.next();
-			document.exportToXML(xml, this);
-		}
-
-		return xml.toString();
-	}
-
-	public String exportToXML(ProjectDocument[] documents) throws SaveException {
-		XMLEntity xml = this.newExportXMLRootNode();
-
-		for (int i = 0; i < documents.length; i++) {
-			documents[i].exportToXML(xml, this);
-		}
-
-		return xml.toString();
-	}
-
-	public void importFromXML(String xml) throws Exception {
-		throw new Exception("Not Implemented");
-		/*
-		 * // FIXME: ?? Exceptions XMLEntity xmlEntity = new XMLEntity();
-		 * 
-		 * try { xmlEntity.parse(xml); } catch (Exception e) { throw new
-		 * Exception(e); }
-		 * 
-		 * if (!checkExportXMLRootNode(xmlEntity)) { throw new Exception("Check
-		 * Error"); //FIXME: traducir }
-		 * 
-		 * int i;
-		 * 
-		 * XMLEntity xmlDocumentRoot; ProjectDocument document = null;
-		 * ProjectDocumentFactory documentFactory = null; for
-		 * (i=0;i<xmlEntity.getChildrenCount();i++) { xmlDocumentRoot =
-		 * xmlEntity.getChild(i); if (!xmlDocumentRoot.contains("type")) { throw
-		 * new Exception("Document root "+i+ "error"); } documentFactory =
-		 * Project
-		 * .getProjectDocumentFactory(xmlDocumentRoot.getStringProperty("type"
-		 * )); int j; }
-		 */
-
-	}
-
-	public void importFromXML(String xml, String type) throws Exception {
-		// FIXME: EXCEPTIONS!!!!
-		XMLEntity xmlEntity = XMLEntity.parse(xml);
-
-		if (!checkExportXMLRootNode(xmlEntity)) {
-			throw new Exception();
-		}
-
-		XMLEntity typeRoot = xmlEntity.firstChild("type", type);
-		if (typeRoot.getChildrenCount() == 0) {
-			return;
-		}
-
-		ProjectDocumentFactory documentFactory = getProjectDocumentFactory(type);
-
-		Hashtable conflicts = getConflicts(xmlEntity);
-
-		if (conflicts.size() != 0) {
-			if (!documentFactory.resolveImportXMLConflicts(xmlEntity, this,
-					conflicts)) {
-				return;
-			}
-		}
-		this.registerDataSources(this.getExportXMLTypeRootNode(xmlEntity,
-				"dataSources"));
-
-		int i;
-		ProjectDocument document;
-		for (i = 0; i < typeRoot.getChildrenCount(); i++) {
-			document = documentFactory.create(this);
-			document.importFromXML(xmlEntity, typeRoot, i, this);
-		}
-
-	}
-
-	private Hashtable getConflicts(XMLEntity xml) {
-		int iType;
-		Hashtable conflicts = new Hashtable();
-		ArrayList elements;
-		XMLEntity typeRoot;
-		for (iType = 0; iType < xml.getChildrenCount(); iType++) {
-			typeRoot = xml.getChild(iType);
-			elements = getDocumentsByType(typeRoot.getStringProperty("type"));
-			Hashtable conflictsType = new Hashtable();
-			for (int iXML = 0; iXML < typeRoot.getChildrenCount(); iXML++) {
-				XMLEntity child = typeRoot.getChild(iXML);
-				Iterator iter = elements.iterator();
-				while (iter.hasNext()) {
-					ProjectDocument element = (ProjectDocument) iter.next();
-					if (element.getName().equalsIgnoreCase(
-							child.getStringProperty("name"))) {
-						conflictsType.put(new Integer(iXML), child);
-						break;
-					}
-
-				}
-			}
-			if (conflictsType.size() > 0) {
-				conflicts
-						.put(typeRoot.getStringProperty("type"), conflictsType);
-			}
-		}
-		return conflicts;
 	}
 
 	public boolean isValidXMLForImport(String xml) {
@@ -1697,12 +1169,6 @@ public class Project implements Serializable, PropertyChangeListener {
 		return true;
 	}
 
-	public void exportToXMLDataSource(XMLEntity root, String dataSourceName) {
-		XMLEntity dsRoot = this.getExportXMLTypeRootNode(root, "dataSources");
-		Source sourceInfo = sourceManager.getSource(dataSourceName);
-		dsRoot.addChild(this.getSourceInfoXMLEntity(sourceInfo));
-	}
-
 	private XMLEntity newExportXMLRootNode() {
 		XMLEntity xml = new XMLEntity();
 		xml.putProperty("applicationName", "gvSIG");
@@ -1723,61 +1189,6 @@ public class Project implements Serializable, PropertyChangeListener {
 		XMLEntity xmlDataSources = new XMLEntity();
 		xmlDataSources.putProperty("type", type);
 		return xmlDataSources;
-	}
-
-	private static boolean registerDataSourceFromXML(
-			SourceManager sourceManager, SourceFactory sourceFactory,
-			XMLEntity xmlDataSource) {
-		String name = xmlDataSource.getStringProperty("gdbmsname");
-
-		if (sourceManager.getSource(name) == null) {
-			if (xmlDataSource.getStringProperty("type").equals(
-					"otherDriverFile")) {
-				Source source = sourceFactory.createFileSource(pathGenerator
-						.getAbsolutePath(xmlDataSource
-								.getStringProperty("file")));
-				sourceManager.register(name, source);
-			} else if (xmlDataSource.getStringProperty("type").equals(
-					"sameDriverFile")) {
-
-			} else if (xmlDataSource.getStringProperty("type").equals("db")) {
-				Source source = sourceFactory.createDBSource(
-						xmlDataSource.getStringProperty("host"),
-						xmlDataSource.getIntProperty("port"),
-						xmlDataSource.getStringProperty("user"),
-						xmlDataSource.getStringProperty("password"),
-						xmlDataSource.getStringProperty("dbName"),
-						xmlDataSource.getStringProperty("tableName"),
-						xmlDataSource.getStringProperty("driverInfo"));
-				sourceManager.register(name, source);
-			} else {
-				return false;
-			}
-
-		}
-		return true;
-	}
-
-	private boolean registerDataSources(XMLEntity xmlDataSources) {
-		try {
-			int numDataSources = xmlDataSources.getChildrenCount();
-
-			if (numDataSources == 0)
-				return true;
-
-			for (int i = 0; i < numDataSources; i++) {
-				XMLEntity child = xmlDataSources.getChild(i);
-				if (!registerDataSourceFromXML(sourceManager, sourceFactory,
-						child)) {
-					return false;
-				}
-			}
-
-			return true;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return false;
-		}
 	}
 
 	public static ProjectDocumentFactory getProjectDocumentFactory(String type) {

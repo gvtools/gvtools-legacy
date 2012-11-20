@@ -184,23 +184,6 @@ public abstract class ProjectDocumentFactory implements IExtensionBuilder {
 	}
 
 	/**
-	 * Try to resolve the documents conflicts before perform an import action
-	 * 
-	 * @param root
-	 *            the XML document
-	 * @param project
-	 *            the project
-	 * @param conflicts
-	 *            Hashtable - keys: documents register name. - values: Hashtable
-	 *            (keys = index of the child in the xml group of the XML, values
-	 *            = XMLEntity in conflict)
-	 * 
-	 * @return true if all the conflicts are resolved , else false
-	 */
-	public abstract boolean resolveImportXMLConflicts(XMLEntity root,
-			Project project, Hashtable conflicts);
-
-	/**
 	 * Return true if the name exists to another document.
 	 * 
 	 * @param project

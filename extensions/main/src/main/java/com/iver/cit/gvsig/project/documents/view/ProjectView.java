@@ -40,29 +40,17 @@
  */
 package com.iver.cit.gvsig.project.documents.view;
 
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map.Entry;
-import java.util.TreeMap;
 
-import javax.inject.Inject;
-
+import org.exolab.castor.xml.XMLException;
 import org.gvsig.map.MapContext;
-import org.gvsig.map.MapContextFactory;
+import org.gvsig.persistence.generated.DocumentType;
 import org.gvsig.persistence.generated.ViewDocumentType;
 
 import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiManager.IWindow;
-import com.iver.cit.gvsig.project.Project;
-import com.iver.cit.gvsig.project.documents.ProjectDocument;
-import com.iver.cit.gvsig.project.documents.ProjectDocumentFactory;
 import com.iver.cit.gvsig.project.documents.exceptions.OpenException;
 import com.iver.cit.gvsig.project.documents.exceptions.SaveException;
-import com.iver.cit.gvsig.project.documents.table.ProjectTable;
-import com.iver.cit.gvsig.project.documents.table.ProjectTableFactory;
 import com.iver.cit.gvsig.project.documents.view.gui.ViewProperties;
-import com.iver.utiles.XMLEntity;
 
 /**
  * Clase que representa una vista del proyecto
@@ -70,15 +58,13 @@ import com.iver.utiles.XMLEntity;
  * @author Fernando Gonz�lez Cort�s
  */
 public class ProjectView extends ProjectViewBase {
+
 	// public static int numViews = 0;
 
 	// public static int METROS = 0;
 	// public static int KILOMETROS = 1;
 	// public static int[] unidades = new int[] { METROS, KILOMETROS };
 	// /private Color backgroundColor = new Color(255, 255, 255);
-
-	@Inject
-	private MapContextFactory mapContextFactory;
 
 	/**
 	 * DOCUMENT ME!
@@ -92,11 +78,6 @@ public class ProjectView extends ProjectViewBase {
 		ViewDocumentType xml = new ViewDocumentType();
 		super.fill(xml);
 		// xml.putProperty("nameClass", this.getClass().getName());
-		int numViews = ((Integer) ProjectDocument.NUMS
-				.get(ProjectViewFactory.registerName)).intValue();
-
-		xml.putProperty("numViews", numViews);
-
 		// remove old hyperlink persistence
 		// xml.putProperty("m_selectedField", m_selectedField);
 		// xml.putProperty("m_typeLink", m_typeLink);
@@ -116,28 +97,20 @@ public class ProjectView extends ProjectViewBase {
 	 *            DOCUMENT ME!
 	 * @param p
 	 *            DOCUMENT ME!
-	 * @throws XMLException
-	 * @throws DriverException
-	 * @throws DriverIOException
 	 * @throws OpenException
 	 * 
 	 * @see com.iver.cit.gvsig.project.documents.ProjectDocument#setXMLEntity(com.iver.utiles.XMLEntity)
 	 */
-	public void setXMLEntity(ViewDocumentType xml) throws OpenException {
+	public void setXMLEntity(DocumentType xml) throws OpenException {
 		super.read(xml);
+		ViewDocumentType viewDocumentXML = (ViewDocumentType) xml;
 		try {
-			int currentChild = 0;
-			int numViews = xml.getIntProperty("numViews");
-			ProjectDocument.NUMS.put(ProjectViewFactory.registerName,
-					new Integer(numViews));
-
 			MapContext mapContext = mapContextFactory.createMapContext();
-			mapContext.setXML(xml.getMainMap());
+			mapContext.setXML(viewDocumentXML.getMainMap());
 			setMapContext(mapContext);
-			currentChild++;
-			if (xml.getOverviewMap() != null) {
+			if (viewDocumentXML.getOverviewMap() != null) {
 				mapContext = mapContextFactory.createMapContext();
-				mapContext.setXML(xml.getMainMap());
+				mapContext.setXML(viewDocumentXML.getMainMap());
 				setMapOverViewContext(mapContext);
 			}
 
@@ -163,119 +136,6 @@ public class ProjectView extends ProjectViewBase {
 
 	public IWindow getProperties() {
 		return new ViewProperties(this);
-	}
-
-	public void exportToXML(XMLEntity root, Project project)
-			throws SaveException {
-		XMLEntity viewsRoot = project.getExportXMLTypeRootNode(root,
-				ProjectViewFactory.registerName);
-		viewsRoot.addChild(this.getXMLEntity());
-		this.exportToXMLLayerDependencies(this.getMapContext().getLayers(),
-				root, project);
-		if (this.getMapOverViewContext() != null) {
-			this.exportToXMLLayerDependencies(this.getMapOverViewContext()
-					.getLayers(), root, project);
-		}
-	}
-
-	private void exportToXMLLayerDependencies(FLayer layer, XMLEntity root,
-			Project project) throws SaveException {
-
-		if (layer instanceof FLayers) {
-			FLayers layers = (FLayers) layer;
-			for (int i = 0; i < layers.getLayersCount(); i++) {
-				this.exportToXMLLayerDependencies(layers.getLayer(i), root,
-						project);
-			}
-		} else {
-			if (layer instanceof AlphanumericData) {
-				try {
-					project.exportToXMLDataSource(root,
-							((AlphanumericData) layer).getRecordset().getName());
-				} catch (ReadDriverException e) {
-					throw new SaveException(e, layer.getName());
-				}
-
-				ProjectTable pt = project.getTable((AlphanumericData) layer);
-				if (pt != null) {
-					pt.exportToXML(root, project);
-				}
-			}
-		}
-	}
-
-	public void importFromXML(XMLEntity root, XMLEntity typeRoot,
-			int elementIndex, Project project, boolean removeDocumentsFromRoot)
-			throws XMLException, ReadDriverException, OpenException {
-		XMLEntity element = typeRoot.getChild(elementIndex);
-		this.setXMLEntity(element);
-		project.addDocument(this);
-		if (removeDocumentsFromRoot) {
-			typeRoot.removeChild(elementIndex);
-		}
-
-		// Cargamos las tables vinculadas:
-
-		// Recuperamos todos los nombres
-		XMLEntity tablesRoot = project.getExportXMLTypeRootNode(root,
-				ProjectTableFactory.registerName);
-		int childIndex;
-		XMLEntity child;
-		// Lo hacemos en un map por si una vista se usa varias veces
-		HashMap tablesName = new HashMap();
-		Iterator iterTables = tablesRoot.findChildren("viewName",
-				this.getName());
-		while (iterTables.hasNext()) {
-			child = (XMLEntity) iterTables.next();
-			tablesName.put(child.getStringProperty("name"),
-					child.getStringProperty("name"));
-		}
-
-		XMLEntity tableXML;
-
-		// Construimos un diccionario ordenado inversamente por el indice
-		// del elemento (por si se van eliminando elementos al importar) y
-		// como valor el nombre de la vista
-		TreeMap tablesToImport = new TreeMap(new Comparator() {
-
-			public int compare(Object o1, Object o2) {
-
-				if (((Integer) o1).intValue() > ((Integer) o2).intValue()) {
-					return -1; // o1 first
-				} else if (((Integer) o1).intValue() < ((Integer) o2)
-						.intValue()) {
-					return 1; // o1 second
-				}
-				return 0;
-			}
-
-		});
-		Iterator iterTablesName = tablesName.keySet().iterator();
-		int tableIndex;
-		String tableName;
-		while (iterTablesName.hasNext()) {
-			tableName = (String) iterTablesName.next();
-			tableIndex = tablesRoot.firstIndexOfChild("name", tableName);
-			tablesToImport.put(new Integer(tableIndex), tableName);
-		}
-
-		ProjectTable table;
-		ProjectDocumentFactory tableFactory = project
-				.getProjectDocumentFactory(ProjectTableFactory.registerName);
-
-		Iterator iterTablesToImport = tablesToImport.entrySet().iterator();
-		Entry entry;
-		// Nos recorremos las vistas a importar
-		while (iterTablesToImport.hasNext()) {
-			entry = (Entry) iterTablesToImport.next();
-			tableName = (String) entry.getValue();
-			tableIndex = ((Integer) entry.getKey()).intValue();
-			table = (ProjectTable) tableFactory.create(project);
-			table.importFromXML(root, tablesRoot, tableIndex, project,
-					removeDocumentsFromRoot);
-
-		}
-
 	}
 
 	// public int computeSignature() {

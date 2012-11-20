@@ -44,8 +44,6 @@ import java.awt.geom.Rectangle2D;
 
 import org.gvsig.persistence.generated.LabeledExtentType;
 
-import com.iver.utiles.XMLEntity;
-
 /**
  * DOCUMENT ME!
  * 
@@ -146,32 +144,11 @@ public class ProjectExtent {
 	 * 
 	 * @return DOCUMENT ME!
 	 */
-	public static ProjectExtent createFromXML03(XMLEntity xml) {
+	public static ProjectExtent createFromXML(LabeledExtentType xml) {
 		ProjectExtent pe = new ProjectExtent();
-		pe.description = xml.getStringProperty("description");
-		pe.extent.setRect(xml.getDoubleProperty("extentX"),
-				xml.getDoubleProperty("extentY"),
-				xml.getDoubleProperty("extentW"),
-				xml.getDoubleProperty("extentH"));
-
-		return pe;
-	}
-
-	/**
-	 * DOCUMENT ME!
-	 * 
-	 * @param xml
-	 *            DOCUMENT ME!
-	 * 
-	 * @return DOCUMENT ME!
-	 */
-	public static ProjectExtent createFromXML(XMLEntity xml) {
-		ProjectExtent pe = new ProjectExtent();
-		pe.description = xml.getStringProperty("description");
-		pe.extent.setRect(xml.getDoubleProperty("extentX"),
-				xml.getDoubleProperty("extentY"),
-				xml.getDoubleProperty("extentW"),
-				xml.getDoubleProperty("extentH"));
+		pe.description = xml.getComment();
+		pe.extent.setRect(xml.getMinx(), xml.getMiny(),
+				xml.getMaxx() - xml.getMinx(), xml.getMaxy() - xml.getMiny());
 
 		return pe;
 	}

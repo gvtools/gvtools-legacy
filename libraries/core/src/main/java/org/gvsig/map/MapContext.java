@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.gvsig.layer.Layer;
 import org.gvsig.persistence.generated.MapType;
+import org.gvsig.units.AreaUnit;
+import org.gvsig.units.DistanceUnit;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 public interface MapContext {
@@ -39,5 +41,11 @@ public interface MapContext {
 	MapType getXML();
 
 	void setXML(MapType mainMap);
+
+	void setDistanceUnits(DistanceUnit unit);
+
+	void setDistanceArea(AreaUnit unit);
+
+	void setMapUnits(DistanceUnit unit);
 
 }

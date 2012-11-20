@@ -1,4 +1,4 @@
-/* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
+/* gvSIG. Sistema de Informaciï¿½n Geogrï¿½fica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
  *
@@ -20,7 +20,7 @@
  *
  *  Generalitat Valenciana
  *   Conselleria d'Infraestructures i Transport
- *   Av. Blasco Ibáñez, 50
+ *   Av. Blasco Ibï¿½ï¿½ez, 50
  *   46010 VALENCIA
  *   SPAIN
  *
@@ -40,12 +40,7 @@
  */
 package com.iver.cit.gvsig.project;
 
-import com.iver.cit.gvsig.fmap.edition.IEditableSource;
 import com.iver.cit.gvsig.project.documents.ProjectDocumentFactory;
-import com.iver.cit.gvsig.project.documents.layout.ProjectMap;
-import com.iver.cit.gvsig.project.documents.layout.ProjectMapFactory;
-import com.iver.cit.gvsig.project.documents.table.ProjectTable;
-import com.iver.cit.gvsig.project.documents.table.ProjectTableFactory;
 import com.iver.cit.gvsig.project.documents.view.ProjectView;
 import com.iver.cit.gvsig.project.documents.view.ProjectViewFactory;
 import com.iver.utiles.extensionPoints.ExtensionPoint;
@@ -53,45 +48,49 @@ import com.iver.utiles.extensionPoints.ExtensionPoints;
 import com.iver.utiles.extensionPoints.ExtensionPointsSingleton;
 
 public class ProjectFactory {
-	public static ProjectMap createMap(String baseName) {
-		ExtensionPoints extensionPoints = ExtensionPointsSingleton
-				.getInstance();
-		ExtensionPoint extPoint = ((ExtensionPoint) extensionPoints
-				.get("Documents"));
-		ProjectDocumentFactory pdf = null;
-		try {
-			pdf = (ProjectDocumentFactory) extPoint
-					.create(ProjectMapFactory.registerName);
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		}
-		ProjectMap pm = (ProjectMap) pdf.create((Project) null);
-		pm.setProjectDocumentFactory(pdf);
-		pm.setName(baseName);
-		return pm;
-	}
 
-	public static ProjectTable createTable(String name, IEditableSource ies) {
-		ExtensionPoints extensionPoints = ExtensionPointsSingleton
-				.getInstance();
-		ExtensionPoint extPoint = ((ExtensionPoint) extensionPoints
-				.get("Documents"));
-		ProjectDocumentFactory pdf = null;
-		try {
-			pdf = (ProjectDocumentFactory) extPoint
-					.create(ProjectTableFactory.registerName);
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		}
+	// gtrefactor We don't want maps yet
+	// public static ProjectMap createMap(String baseName) {
+	// ExtensionPoints extensionPoints = ExtensionPointsSingleton
+	// .getInstance();
+	// ExtensionPoint extPoint = ((ExtensionPoint) extensionPoints
+	// .get("Documents"));
+	// ProjectDocumentFactory pdf = null;
+	// try {
+	// pdf = (ProjectDocumentFactory) extPoint
+	// .create(ProjectMapFactory.registerName);
+	// } catch (InstantiationException e) {
+	// e.printStackTrace();
+	// } catch (IllegalAccessException e) {
+	// e.printStackTrace();
+	// }
+	// ProjectMap pm = (ProjectMap) pdf.create((Project) null);
+	// pm.setProjectDocumentFactory(pdf);
+	// pm.setName(baseName);
+	// return pm;
+	// }
 
-		ProjectTable pt = ProjectTableFactory.createTable(name, ies);
-		pt.setProjectDocumentFactory(pdf);
-		return pt;
-	}
+	// gtrefactor we don't want tables yet
+	// public static ProjectTable createTable(String name, IEditableSource ies)
+	// {
+	// ExtensionPoints extensionPoints = ExtensionPointsSingleton
+	// .getInstance();
+	// ExtensionPoint extPoint = ((ExtensionPoint) extensionPoints
+	// .get("Documents"));
+	// ProjectDocumentFactory pdf = null;
+	// try {
+	// pdf = (ProjectDocumentFactory) extPoint
+	// .create(ProjectTableFactory.registerName);
+	// } catch (InstantiationException e) {
+	// e.printStackTrace();
+	// } catch (IllegalAccessException e) {
+	// e.printStackTrace();
+	// }
+	//
+	// ProjectTable pt = ProjectTableFactory.createTable(name, ies);
+	// pt.setProjectDocumentFactory(pdf);
+	// return pt;
+	// }
 
 	// TODO implementar bien
 	/*

@@ -31,19 +31,10 @@ public interface Layer {
 	Layer[] getAllLayers();
 
 	/**
-	 * Replaces the source this layer access to.
+	 * Return true if the layer is in edition
 	 * 
-	 * @param es
-	 * @throws InvalidSourceException
-	 *             If the source is not valid. This can be due to several causes
-	 *             depending on the nature of the layer. In general, the new
-	 *             contents are not compatible with any of the data structures
-	 *             built at the layer level. In particular, the most common case
-	 *             is when there is a legend on a field that the new source data
-	 *             do not have
+	 * @return
 	 */
-	void setSource(Source es) throws InvalidSourceException;
-
-	Source getSource();
+	boolean isEditing();
 
 }

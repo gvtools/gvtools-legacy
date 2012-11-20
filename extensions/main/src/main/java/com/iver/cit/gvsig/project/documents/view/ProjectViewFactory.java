@@ -1,30 +1,18 @@
 package com.iver.cit.gvsig.project.documents.view;
 
-import java.awt.Component;
 import java.text.DateFormat;
 import java.util.Date;
-import java.util.Enumeration;
-import java.util.Hashtable;
 
 import javax.swing.ImageIcon;
-import javax.swing.JOptionPane;
+
+import org.gvsig.inject.InjectorSingleton;
+import org.gvsig.map.MapContext;
 
 import com.iver.andami.PluginServices;
-import com.iver.cit.gvsig.fmap.MapContext;
-import com.iver.cit.gvsig.fmap.MapControl;
-import com.iver.cit.gvsig.fmap.ViewPort;
 import com.iver.cit.gvsig.project.Project;
 import com.iver.cit.gvsig.project.documents.ProjectDocument;
 import com.iver.cit.gvsig.project.documents.ProjectDocumentFactory;
-import com.iver.cit.gvsig.project.documents.contextMenu.actions.CopyDocumentContextMenuAction;
-import com.iver.cit.gvsig.project.documents.contextMenu.actions.CutDocumentContextMenuAction;
-import com.iver.cit.gvsig.project.documents.contextMenu.actions.PasteDocumentContextMenuAction;
-import com.iver.cit.gvsig.project.documents.table.ProjectTableFactory;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
-import com.iver.cit.gvsig.project.documents.view.legend.gui.SingleSymbol;
-import com.iver.cit.gvsig.project.documents.view.legend.gui.VectorialInterval;
-import com.iver.cit.gvsig.project.documents.view.legend.gui.VectorialUniqueValue;
-import com.iver.utiles.XMLEntity;
 
 /**
  * Factory of View.
@@ -91,17 +79,13 @@ public class ProjectViewFactory extends ProjectDocumentFactory {
 	 * @return ProjectView.
 	 */
 	private static ProjectView createView(String viewName) {
+		InjectorSingleton.getInjector().getInstance(ProjectView.class);
 		ProjectView v = new ProjectView();
-		MapContext viewMapContext = new MapContext(new ViewPort(
-				Project.getDefaultCrs()));
-		ViewPort vp = viewMapContext.getViewPort();
-		vp.setBackColor(View.getDefaultBackColor());
-		vp.setDistanceUnits(Project.getDefaultDistanceUnits());
-		vp.setDistanceArea(Project.getDefaultDistanceArea());
-		vp.setMapUnits(Project.getDefaultMapUnits());
-
-		v.setMapContext(viewMapContext);
-		v.setMapOverViewContext(new MapContext(null));
+		MapContext viewMapContext = v.getMapContext();
+		viewMapContext.setBackColor(View.getDefaultBackColor());
+		viewMapContext.setDistanceUnits(Project.getDefaultDistanceUnits());
+		viewMapContext.setDistanceArea(Project.getDefaultDistanceArea());
+		viewMapContext.setMapUnits(Project.getDefaultMapUnits());
 
 		/*
 		 * jaume. ?no puedo definir color de fondo en localizador?
@@ -142,60 +126,47 @@ public class ProjectViewFactory extends ProjectDocumentFactory {
 		register(registerName, new ProjectViewFactory(),
 				"com.iver.cit.gvsig.project.ProjectView");
 
-		registerAction(registerName, "copy",
-				new CopyDocumentContextMenuAction());
-		registerAction(registerName, "cut", new CutDocumentContextMenuAction());
-		registerAction(registerName, "paste",
-				new PasteDocumentContextMenuAction());
+		PluginServices.getIconTheme().registerDefault("document-view-icon",
+				ProjectView.class.getResource("/images/Vista.png"));
+		PluginServices.getIconTheme().registerDefault("document-view-icon-sel",
+				ProjectView.class.getResource("/images/Vista_sel.png"));
 
-		PluginServices.getIconTheme().registerDefault(
-				"document-view-icon",
-				ProjectView.class.getClassLoader().getResource(
-						"images/Vista.png"));
-		PluginServices.getIconTheme().registerDefault(
-				"document-view-icon-sel",
-				ProjectView.class.getClassLoader().getResource(
-						"images/Vista_sel.png"));
-
-		PluginServices.getIconTheme().registerDefault(
-				"cursor-query-distance",
-				MapControl.class.getClassLoader().getResource(
-						"images/RulerCursor.gif"));
+		PluginServices.getIconTheme()
+				.registerDefault(
+						"cursor-query-distance",
+						ProjectViewFactory.class
+								.getResource("/images/RulerCursor.gif"));
 
 		PluginServices.getIconTheme().registerDefault(
 				"cursor-query-information",
-				MapControl.class.getResource("images/InfoCursor.gif"));
+				ProjectViewFactory.class.getResource("/images/InfoCursor.gif"));
 		PluginServices.getIconTheme().registerDefault("cursor-hiperlink",
-				MapControl.class.getResource("images/LinkCursor.gif"));
+				ProjectViewFactory.class.getResource("/images/LinkCursor.gif"));
 		PluginServices.getIconTheme().registerDefault(
 				"cursor-zoom-in",
-				MapControl.class.getClassLoader().getResource(
-						"images/ZoomInCursor.gif"));
+				ProjectViewFactory.class
+						.getResource("/images/ZoomInCursor.gif"));
 		PluginServices.getIconTheme().registerDefault(
 				"cursor-zoom-in",
-				MapControl.class.getClassLoader().getResource(
-						"images/ZoomInCursor.gif"));
+				ProjectViewFactory.class
+						.getResource("/images/ZoomInCursor.gif"));
 
 		PluginServices.getIconTheme().registerDefault(
 				"single-symbol",
-				SingleSymbol.class.getClassLoader().getResource(
-						"images/single-symbol.png"));
-		PluginServices.getIconTheme().registerDefault(
-				"vectorial-interval",
-				VectorialInterval.class.getClassLoader().getResource(
-						"images/Intervalos.png"));
+				ProjectViewFactory.class
+						.getResource("/images/single-symbol.png"));
+		PluginServices.getIconTheme().registerDefault("vectorial-interval",
+				ProjectViewFactory.class.getResource("/images/Intervalos.png"));
 		PluginServices.getIconTheme().registerDefault(
 				"vectorial-unique-value",
-				VectorialUniqueValue.class.getClassLoader().getResource(
-						"images/ValoresUnicos.png"));
+				ProjectViewFactory.class
+						.getResource("/images/ValoresUnicos.png"));
 		PluginServices.getIconTheme().registerDefault(
 				"vectorial-unique-value",
-				VectorialUniqueValue.class.getClassLoader().getResource(
-						"images/ValoresUnicos.png"));
-		PluginServices.getIconTheme().registerDefault(
-				"crux-cursor",
-				MapControl.class.getClassLoader().getResource(
-						"images/CruxCursor.png"));
+				ProjectViewFactory.class
+						.getResource("/images/ValoresUnicos.png"));
+		PluginServices.getIconTheme().registerDefault("crux-cursor",
+				ProjectViewFactory.class.getResource("/images/CruxCursor.png"));
 
 	}
 
@@ -208,103 +179,4 @@ public class ProjectViewFactory extends ProjectDocumentFactory {
 		return 0;
 	}
 
-	public boolean resolveImportXMLConflicts(XMLEntity root, Project project,
-			Hashtable conflicts) {
-		Hashtable viewsConflits = (Hashtable) conflicts.get(this
-				.getRegisterName());
-		Hashtable tablesConflits = (Hashtable) conflicts
-				.get(ProjectTableFactory.registerName);
-		XMLEntity xmlTables = root.firstChild("type",
-				ProjectTableFactory.registerName);
-
-		if (viewsConflits != null && viewsConflits.size() > 0) {
-			int option = JOptionPane
-					.showConfirmDialog(
-							(Component) PluginServices.getMainFrame(),
-							"<html>"
-									+ PluginServices
-											.getText(this,
-													"conflicto_de_nombres_de_vistas_al_pegar")
-									+ "<br>"
-									+ PluginServices
-											.getText(this,
-													"debera_introducir_nombres_para_las_vistas_a_pegar")
-									+ "<br>"
-									+ PluginServices.getText(this,
-											"no_se_pegaran_las_tablas")
-									+ "<br>"
-									+ PluginServices.getText(this,
-											"desea_continuar") + "</html>",
-							PluginServices.getText(this, "pegar_vistas"),
-							JOptionPane.YES_NO_OPTION);
-			if (option != JOptionPane.YES_OPTION) {
-				return false;
-			}
-			Enumeration en = viewsConflits.elements();
-			while (en.hasMoreElements()) {
-				XMLEntity view = (XMLEntity) en.nextElement();
-				String newName = JOptionPane
-						.showInputDialog(
-								(Component) PluginServices.getMainFrame(),
-								"<html>"
-										+ PluginServices
-												.getText(this,
-														"introduzca_nuevo_nombre_para_la_vista")
-										+ " " + view.getStringProperty("name")
-										+ ":" + "</html>", // Mensaje
-								view.getStringProperty("name") // Valor por
-																// defecto
-						);
-				if (newName == null) {
-					JOptionPane.showMessageDialog(
-							(Component) PluginServices.getMainFrame(),
-							"<html>"
-									+ PluginServices.getText(this,
-											"operacion_cancelada") + "</html>",// Mensaje
-							PluginServices.getText(this, "pegar_vistas"),// titulo
-							JOptionPane.ERROR_MESSAGE);
-				} else if (newName.equalsIgnoreCase(view
-						.getStringProperty("name"))) {
-					JOptionPane.showMessageDialog(
-							(Component) PluginServices.getMainFrame(),
-							"<html>"
-									+ PluginServices.getText(this,
-											"operacion_cancelada")
-									+ ":<br>"
-									+ PluginServices.getText(this,
-											"nombre_no_valido") + "</html>",// Mensaje
-							PluginServices.getText(this, "pegar_vistas"),// FIXME:
-																			// getText
-							JOptionPane.ERROR_MESSAGE);
-					return false;
-				}
-				view.setName(newName);
-			}
-			if (xmlTables != null)
-				xmlTables.removeAllChildren();
-			tablesConflits = null;
-		}
-
-		if (tablesConflits != null && tablesConflits.size() > 0) {
-			int option = JOptionPane.showConfirmDialog(
-					(Component) PluginServices.getMainFrame(),
-					"<html>"
-							+ PluginServices.getText(this,
-									"conflicto_de_nombres_de_tablas_al_pegar")
-							+ "<br>"
-							+ PluginServices.getText(this,
-									"no_se_pegaran_las_tablas") + "<br>"
-							+ PluginServices.getText(this, "desea_continuar")
-							+ "</html>", // Mensaje
-					PluginServices.getText(this, "pegar_vistas"),// FIXME:
-																	// getText
-					JOptionPane.YES_NO_OPTION);
-			if (option != JOptionPane.YES_OPTION) {
-				return false;
-			}
-			xmlTables.removeAllChildren();
-		}
-
-		return true;
-	}
 }

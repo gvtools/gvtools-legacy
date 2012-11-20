@@ -1,7 +1,9 @@
 package org.gvsig.layer;
 
-import org.geotools.data.DataStore;
+import java.util.List;
+
 import org.geotools.data.simple.SimpleFeatureSource;
+import org.gvsig.persistence.generated.DataSourceType;
 
 public interface SourceManager {
 
@@ -37,4 +39,7 @@ public interface SourceManager {
 
 	SimpleFeatureSource getFeatureSource(Source source);
 
+	DataSourceType[] getPersistence();
+
+	void setPersistence(List<DataSourceType> dataSources);
 }

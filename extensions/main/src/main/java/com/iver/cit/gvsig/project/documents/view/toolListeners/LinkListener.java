@@ -40,27 +40,17 @@
  */
 package com.iver.cit.gvsig.project.documents.view.toolListeners;
 
-import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.Toolkit;
-import java.awt.geom.Point2D;
-import java.net.URI;
-
-import javax.swing.JOptionPane;
 
 import org.apache.log4j.Logger;
 
 import com.iver.andami.PluginServices;
-import com.iver.cit.gvsig.fmap.MapControl;
-import com.iver.cit.gvsig.fmap.layers.FLayer;
-import com.iver.cit.gvsig.fmap.layers.FLyrVect;
-import com.iver.cit.gvsig.fmap.tools.BehaviorException;
-import com.iver.cit.gvsig.fmap.tools.Events.PointEvent;
-import com.iver.cit.gvsig.fmap.tools.Listeners.PointListener;
-import com.iver.cit.gvsig.gui.panels.LinkPanel;
-import com.iver.cit.gvsig.project.documents.view.gui.View;
+import com.iver.cit.gvsig.map.MapControl;
+import com.iver.cit.gvsig.tools.behavior.BehaviorException;
+import com.iver.cit.gvsig.tools.events.PointEvent;
 
 /**
  * <p>
@@ -76,11 +66,11 @@ import com.iver.cit.gvsig.project.documents.view.gui.View;
  * 
  * @author Vicente Caballero Navarro
  */
-public class LinkListener implements PointListener {
+public class LinkListener {
 	/**
 	 * Object used to log messages for this listener.
 	 */
-	private static Logger logger = Logger.getLogger(InfoListener.class
+	private static Logger logger = Logger.getLogger(LinkListener.class
 			.getName());
 
 	/**
@@ -132,36 +122,7 @@ public class LinkListener implements PointListener {
 	 * cit.gvsig.fmap.tools.Events.PointEvent)
 	 */
 	public void point(PointEvent event) throws BehaviorException {
-		Point2D pReal = mapCtrl.getMapContext().getViewPort()
-				.toMapPoint(event.getPoint());
-		View view = (View) PluginServices.getMDIManager().getActiveWindow();
-		FLayer[] sel = mapCtrl.getMapContext().getLayers().getActives();
-
-		URI[] uri = null;
-
-		for (int i = 0; i < sel.length; i++) {
-			FLayer laCapa = sel[i];
-			if (laCapa.allowLinks()) {
-				FLyrVect lyrVect = (FLyrVect) laCapa;
-				double tol = mapCtrl.getViewPort().toMapDistance(3);
-				uri = lyrVect.getLink(pReal, tol);
-				if (uri == null) {
-					JOptionPane
-							.showMessageDialog(
-									(Component) PluginServices.getMainFrame(),
-									"Error"
-											+ " no has seleccionado una geometr�a para realizar HyperLink.");
-					return;
-				}
-				for (int j = 0; j < uri.length; j++) {
-					if (uri[j] != null) {
-						LinkPanel lpanel = new LinkPanel(uri[j], lyrVect
-								.getLinkProperties().getType());
-						PluginServices.getMDIManager().addWindow(lpanel);
-					}
-				}
-			}
-		}
+		assert false;
 	}
 
 	/*

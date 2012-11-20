@@ -27,7 +27,7 @@
 			<xs:attribute name="modificationDate" type="xs:string" />
 			<xs:attribute name="absolute-path" type="xs:boolean" />
 			<xs:attribute name="selection-color" type="xs:string" />
-			<xs:attribute name="default-projection" type="xs:string" />
+			<xs:attribute name="default-crs" type="xs:string" />
 		</xs:complexType>
 	</xs:element>
 
@@ -49,6 +49,7 @@
 		<xs:sequence>
 			<xs:element name="property" type="PropertyType" maxOccurs="unbounded" />
 		</xs:sequence>
+		<xs:attribute name="id" type="xs:string" />
 	</xs:complexType>
 	<xs:complexType name="PropertyType" abstract="true">
 		<xs:attribute name="property-name" type="xs:string" />
@@ -66,6 +67,7 @@
 		<xs:attribute name="comment" type="xs:string" />
 		<xs:attribute name="creation-date" type="xs:string" />
 		<xs:attribute name="owner" type="xs:string" />
+		<xs:attribute name="class-name" type="xs:string" />
 	</xs:complexType>
 	<xs:complexType name="ViewDocumentType">
 		<xs:complexContent>

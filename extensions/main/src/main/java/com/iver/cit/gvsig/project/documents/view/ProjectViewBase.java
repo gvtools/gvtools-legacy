@@ -2,32 +2,26 @@ package com.iver.cit.gvsig.project.documents.view;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Dimension;
-import java.util.ArrayList;
-import java.util.List;
 
+import javax.inject.Inject;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 
-import org.gvsig.exceptions.BaseException;
+import org.gvsig.layer.Layer;
 import org.gvsig.map.ErrorListener;
 import org.gvsig.map.MapContext;
+import org.gvsig.map.MapContextFactory;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiManager.IWindow;
-import com.iver.andami.ui.mdiManager.WindowInfo;
-import com.iver.cit.gvsig.ProjectExtension;
-import com.iver.cit.gvsig.project.Project;
 import com.iver.cit.gvsig.project.documents.ProjectDocument;
-import com.iver.cit.gvsig.project.documents.table.ProjectTable;
-import com.iver.cit.gvsig.project.documents.table.ProjectTableFactory;
-import com.iver.cit.gvsig.project.documents.view.info.gui.HTMLInfoToolPanel;
 import com.iver.cit.gvsig.project.documents.view.toolListeners.LinkListener;
 
 public abstract class ProjectViewBase extends ProjectDocument implements
 		ErrorListener, IProjectView {
+
+	@Inject
+	protected MapContextFactory mapContextFactory;
 
 	protected MapContext mapOverViewContext;
 	protected MapContext mapContext;
@@ -92,79 +86,6 @@ public abstract class ProjectViewBase extends ProjectDocument implements
 		}
 	}
 
-	/**
-	 * Reports to the user a bundle of driver exceptions produced in the same
-	 * atomic MapContext transaction
-	 */
-	public void reportDriverExceptions(String introductoryText,
-			List driverExceptions) {
-		HtmlWindow htmlPanel = new HtmlWindow(570, 600, PluginServices.getText(
-				this, "driver_error"));
-		String htmlText = "";
-		if (introductoryText == null) {
-			htmlText += "<h2 text=\"#000080\">"
-					+ PluginServices
-							.getText(this,
-									"se_han_producido_los_siguientes_errores_durante_la_carga_de_las_capas")
-					+ "</h2>";
-		} else {
-			htmlText += introductoryText;
-		}
-		int numErrors = driverExceptions.size();
-		for (int i = 0; i < numErrors; i++) {
-			// htmlText += "<br>\n";
-			BaseException exception = (BaseException) driverExceptions.get(i);
-			htmlText += "<p text=\"#550080\">_________________________________________________________________________________________</p>";
-			htmlText += "<h3>"
-					+ PluginServices.getText(this, exception.getMessageKey())
-					+ "</h3>";
-			htmlText += "<p>" + exception.getMessage() + "</p>";
-			htmlText += "<p text=\"#550080\">_________________________________________________________________________________________</p>";
-		}
-
-		System.out.println(htmlText);
-		htmlPanel.show(htmlText);
-
-		PluginServices.getMDIManager().addCentredWindow(htmlPanel);
-
-	}
-
-	/**
-	 * HtmlInfoToolPanel that implements IWindow
-	 * 
-	 * @author azabala
-	 * 
-	 */
-	class HtmlWindow extends JPanel implements IWindow {
-		private HTMLInfoToolPanel htmlPanel = new HTMLInfoToolPanel();
-		WindowInfo viewInfo = null;
-
-		public HtmlWindow(int width, int height, String windowTitle) {
-			htmlPanel.setBackground(Color.white);
-			JScrollPane scrollPane = new JScrollPane(htmlPanel);
-			scrollPane.setPreferredSize(new Dimension(width - 30, height - 30));
-			this.add(scrollPane);
-			viewInfo = new WindowInfo(WindowInfo.MODELESSDIALOG);
-			viewInfo.setTitle(windowTitle);
-			viewInfo.setWidth(width);
-			viewInfo.setHeight(height);
-		}
-
-		public void show(String htmlText) {
-			htmlPanel.show(htmlText);
-		}
-
-		public WindowInfo getWindowInfo() {
-			return viewInfo;
-		}
-
-		public Object getWindowProfile() {
-			// TODO Auto-generated method stub
-			return WindowInfo.PROPERTIES_PROFILE;
-		}
-
-	}
-
 	public CoordinateReferenceSystem getCrs() {
 		return mapContext.getCRS();
 	}
@@ -222,35 +143,10 @@ public abstract class ProjectViewBase extends ProjectDocument implements
 	}
 
 	public void afterRemove() {
-		FLayers layers = this.getMapContext().getLayers();
-
-		for (int i = layers.getLayersCount() - 1; i >= 0; i--) {
-			try {
-				if (layers.getLayer(i) instanceof AlphanumericData) {
-					Project project = ((ProjectExtension) PluginServices
-							.getExtension(ProjectExtension.class)).getProject();
-					ProjectTable pt = project
-							.getTable((AlphanumericData) layers.getLayer(i));
-
-					ArrayList tables = project
-							.getDocumentsByType(ProjectTableFactory.registerName);
-					for (int j = 0; j < tables.size(); j++) {
-						if (tables.get(j) == pt) {
-							project.delDocument((ProjectDocument) tables.get(j));
-							break;
-						}
-					}
-
-					PluginServices.getMDIManager().closeSingletonWindow(pt);
-				}
-				layers.getLayer(i).getParentLayer()
-						.removeLayer(layers.getLayer(i));
-				PluginServices.getMainFrame().enableControls();
-			} catch (CancelationException e1) {
-				e1.printStackTrace();
-			}
-		}
-
+		assert false : "Create a test that checks that "
+				+ "removing a view removes the tables "
+				+ "associated with their layers. Let's implement"
+				+ "that with an EventBus";
 	}
 
 	public void afterAdd() {
@@ -291,20 +187,11 @@ public abstract class ProjectViewBase extends ProjectDocument implements
 		return m_selectedField;
 	}
 
-	public void errorThrown(ErrorEvent e) {
-		JOptionPane.showMessageDialog(
-				(Component) PluginServices.getMainFrame(),
-				PluginServices.getText(this, "fallo_capas") + " : \n"
-						+ e.getMessage());
-
-	}
-
 	public boolean isLocked() {
 		if (super.isLocked())
 			return true;
-		FLayers layers = getMapContext().getLayers();
-		for (int i = 0; i < layers.getLayersCount(); i++) {
-			FLayer layer = layers.getLayer(i);
+		Layer[] layers = getMapContext().getRootLayer().getAllLayers();
+		for (Layer layer : layers) {
 			if (layer.isEditing()) {
 				return true;
 			}
