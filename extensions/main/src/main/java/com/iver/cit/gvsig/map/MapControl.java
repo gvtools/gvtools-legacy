@@ -60,13 +60,17 @@ import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Set;
 
+import javax.inject.Inject;
 import javax.swing.JComponent;
 import javax.swing.Timer;
 
 import org.GNOME.Accessibility.CommandListener;
+import org.geotools.referencing.CRS;
 import org.gvsig.map.MapContext;
+import org.gvsig.map.MapContextFactory;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
+import com.iver.cit.gvsig.project.Project;
 import com.iver.cit.gvsig.tools.behavior.Behavior;
 import com.iver.cit.gvsig.tools.behavior.BehaviorException;
 import com.iver.cit.gvsig.tools.behavior.CompoundBehavior;
@@ -285,6 +289,9 @@ public class MapControl extends JComponent implements ComponentListener,
 	// private static Logger logger =
 	// Logger.getLogger(MapControl.class.getName());
 
+	@Inject
+	private MapContextFactory mapContextFactory;
+
 	/**
 	 * <p>
 	 * Inner model with the layers, event support for drawing them, and the
@@ -315,7 +322,7 @@ public class MapControl extends JComponent implements ComponentListener,
 	 * @see #getMapToolsKeySet()
 	 * @see #getNamesMapTools()
 	 */
-	protected HashMap namesMapTools = new HashMap();
+	protected HashMap<String, Behavior> namesMapTools = new HashMap<String, Behavior>();
 
 	/**
 	 * <p>
@@ -432,7 +439,7 @@ public class MapControl extends JComponent implements ComponentListener,
 	 * 
 	 * @see ViewPort
 	 */
-	protected ViewPort vp;
+	protected ViewPort viewPort;
 
 	// private Drawer drawer;
 
@@ -538,12 +545,7 @@ public class MapControl extends JComponent implements ComponentListener,
 		// Clase usada para cancelar el dibujado
 		canceldraw = new CancelDraw();
 
-		// Modelo de datos y ventana del mismo
-		// TODO: Cuando creamos un mapControl, deber�amos asignar
-		// la projecci�n por defecto con la que vayamos a trabajar.
-		// 23030 es el c�digo EPSG del UTM30 elipsoide ED50
-		vp = new ViewPort(ProjectionUtils.getCRS("EPSG:23030"));
-		setMapContext(new MapContext(vp));
+		setMapContext(mapContextFactory.createMapContext());
 
 		// eventos
 		this.addComponentListener(this);
@@ -600,15 +602,7 @@ public class MapControl extends JComponent implements ComponentListener,
 		}
 
 		mapContext = model;
-
-		if (mapContext.getViewPort() == null) {
-			mapContext.setViewPort(vp);
-		} else {
-			vp = mapContext.getViewPort();
-
-			// vp.setImageSize(new Dimension(getWidth(), getHeight()));
-			// System.err.println("Viewport en setMapContext:" + vp);
-		}
+		assert false : "Update view port";
 
 		mapContext.addAtomicEventListener(mapContextListener);
 
@@ -746,6 +740,8 @@ public class MapControl extends JComponent implements ComponentListener,
 	 * Returns a set view of the keys that identified the tools registered.
 	 * </p>
 	 * 
+	 * @return
+	 * 
 	 * @return a set view of the keys that identified the tools registered
 	 * 
 	 * @see HashMap#keySet()
@@ -754,7 +750,7 @@ public class MapControl extends JComponent implements ComponentListener,
 	 * @see #addMapTool(String, Behavior)
 	 * @see #addMapTool(String, Behavior[])
 	 */
-	public Set getMapToolsKeySet() {
+	public Set<String> getMapToolsKeySet() {
 		return namesMapTools.keySet();
 	}
 
@@ -915,19 +911,19 @@ public class MapControl extends JComponent implements ComponentListener,
 	 *         <code>false</code>
 	 */
 	private boolean adaptToImageSize() {
-		if ((image == null) || (vp.getImageWidth() != this.getWidth())
-				|| (vp.getImageHeight() != this.getHeight())) {
+		if ((image == null) || (viewPort.getImageWidth() != this.getWidth())
+				|| (viewPort.getImageHeight() != this.getHeight())) {
 			image = new BufferedImage(this.getWidth(), this.getHeight(),
 					BufferedImage.TYPE_INT_ARGB);
 			// ESTILO MAC
 			// image = GraphicsEnvironment.getLocalGraphicsEnvironment()
 			// .getDefaultScreenDevice().getDefaultConfiguration()
 			// .createCompatibleImage(this.getWidth(), this.getHeight());
-			vp.setImageSize(new Dimension(getWidth(), getHeight()));
-			getMapContext().getViewPort().refreshExtent();
+			viewPort.setImageSize(new Dimension(getWidth(), getHeight()));
+			viewPort.refreshExtent();
 
 			Graphics gTemp = image.createGraphics();
-			Color theBackColor = vp.getBackColor();
+			Color theBackColor = viewPort.getBackColor();
 			if (theBackColor == null)
 				gTemp.setColor(Color.WHITE);
 			else
@@ -1084,12 +1080,13 @@ public class MapControl extends JComponent implements ComponentListener,
 			// image = null; // Se usa para el PAN
 			if (image != null) {
 				Graphics2D g = image.createGraphics();
-				Color theBackColor = vp.getBackColor();
+				Color theBackColor = viewPort.getBackColor();
 				if (theBackColor == null)
 					g.setColor(Color.WHITE);
 				else
 					g.setColor(theBackColor);
-				g.fillRect(0, 0, vp.getImageWidth(), vp.getImageHeight());
+				g.fillRect(0, 0, viewPort.getImageWidth(),
+						viewPort.getImageHeight());
 				g.dispose();
 			}
 		}
@@ -1263,8 +1260,6 @@ public class MapControl extends JComponent implements ComponentListener,
 				 * + this.getWidth()); }
 				 */
 				Graphics2D g = image.createGraphics();
-
-				ViewPort viewPort = mapContext.getViewPort();
 
 				if (status == DESACTUALIZADO) {
 					Graphics2D gTemp = image.createGraphics();
@@ -1612,7 +1607,6 @@ public class MapControl extends JComponent implements ComponentListener,
 				// synchronized (Drawer.class) {
 				Graphics2D g = image.createGraphics();
 
-				ViewPort viewPort = mapContext.getViewPort();
 				if (status == DESACTUALIZADO) {
 					Color theBackColor = viewPort.getBackColor();
 					if (theBackColor == null)
@@ -1829,7 +1823,7 @@ public class MapControl extends JComponent implements ComponentListener,
 					// punto como v�lido.
 					if (t1 == 0) {
 						t1 = System.currentTimeMillis();
-						pReal = vp.toMapPoint(e.getPoint());
+						pReal = viewPort.toMapPoint(e.getPoint());
 					} else {
 						long t2 = System.currentTimeMillis();
 						if ((t2 - t1) > 1000)
@@ -1999,7 +1993,7 @@ public class MapControl extends JComponent implements ComponentListener,
 	 * @see MapContext#getViewPort()
 	 */
 	public ViewPort getViewPort() {
-		return vp;
+		return viewPort;
 	}
 
 	/**
