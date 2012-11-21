@@ -1253,7 +1253,7 @@ public class ViewPort {
 	 * 
 	 * @see #getMapUnits()
 	 */
-	public void setMapUnits(int mapUnits) {
+	public void setMapUnits(DistanceUnit mapUnits) {
 		this.mapUnits = mapUnits;
 	}
 
@@ -1619,7 +1619,7 @@ public class ViewPort {
 			// vp.callExtentListeners(vp.adjustedExtent);
 		}
 
-		vp.setMapUnits(xml.getIntProperty("mapUnits"));
+		vp.setMapUnits(DistanceUnit.fromName(xml.getStringProperty("mapUnits")));
 		vp.setOffset(new Point2D.Double(xml.getDoubleProperty("offsetX"), xml
 				.getDoubleProperty("offsetY")));
 

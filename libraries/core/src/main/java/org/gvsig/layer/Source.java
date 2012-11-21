@@ -15,13 +15,13 @@ public interface Source {
 	URL getURL();
 
 	/**
-	 * Returns a {@link WithDefaultLegend} instance if this source provides one.
+	 * Returns a {@link DefaultLegend} instance if this source provides one.
 	 * Null if the layers created from this source should have a default legend
 	 * initially
 	 * 
 	 * @return
 	 */
-	WithDefaultLegend getDefaultLegend();
+	DefaultLegend getDefaultLegend();
 
 	/**
 	 * Returns the unique id this source this source has in the manager it is

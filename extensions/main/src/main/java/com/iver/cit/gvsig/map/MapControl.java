@@ -40,6 +40,8 @@
  */
 package com.iver.cit.gvsig.map;
 
+import geomatico.events.EventBus;
+
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -65,12 +67,27 @@ import javax.swing.JComponent;
 import javax.swing.Timer;
 
 import org.GNOME.Accessibility.CommandListener;
-import org.geotools.referencing.CRS;
+import org.gvsig.events.BackgroundColorChangeEvent;
+import org.gvsig.events.BackgroundColorChangeHandler;
+import org.gvsig.events.EditionChangeEvent;
+import org.gvsig.events.EditionChangeHandler;
+import org.gvsig.events.LayerActivationChangeEvent;
+import org.gvsig.events.LayerActivationChangeHandler;
+import org.gvsig.events.LayerAddedEvent;
+import org.gvsig.events.LayerAddedHandler;
+import org.gvsig.events.LayerLegendChangeEvent;
+import org.gvsig.events.LayerLegendChangeHandler;
+import org.gvsig.events.LayerRemovedEvent;
+import org.gvsig.events.LayerRemovedHandler;
+import org.gvsig.events.LayerSelectionChangeEvent;
+import org.gvsig.events.LayerSelectionChangeHandler;
+import org.gvsig.events.LayerVisibilityChangeEvent;
+import org.gvsig.events.LayerVisibilityChangeHandler;
+import org.gvsig.layer.Layer;
 import org.gvsig.map.MapContext;
 import org.gvsig.map.MapContextFactory;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
-import com.iver.cit.gvsig.project.Project;
 import com.iver.cit.gvsig.tools.behavior.Behavior;
 import com.iver.cit.gvsig.tools.behavior.BehaviorException;
 import com.iver.cit.gvsig.tools.behavior.CompoundBehavior;
@@ -239,8 +256,7 @@ import com.iver.utiles.swing.threads.Cancellable;
  * @author Fernando Gonz�lez Cort�s
  * @author Pablo Piqueras Bartolom� (pablo.piqueras@iver.es)
  */
-public class MapControl extends JComponent implements ComponentListener,
-		CommandListener {
+public class MapControl extends JComponent implements ComponentListener {
 	/**
 	 * <p>
 	 * One of the possible status of <code>MapControl</code>. Determines that
@@ -303,6 +319,9 @@ public class MapControl extends JComponent implements ComponentListener,
 	 * @see #setMapContext(MapContext)
 	 */
 	private MapContext mapContext = null;
+
+	@Inject
+	private EventBus eventBus;
 
 	// private boolean drawerAlive = false;
 
@@ -563,6 +582,18 @@ public class MapControl extends JComponent implements ComponentListener,
 				}
 			}
 		});
+
+		eventBus.addHandler(EditionChangeEvent.class, mapContextListener);
+		eventBus.addHandler(BackgroundColorChangeEvent.class,
+				mapContextListener);
+		eventBus.addHandler(LayerAddedEvent.class, mapContextListener);
+		eventBus.addHandler(LayerRemovedEvent.class, mapContextListener);
+		eventBus.addHandler(LayerActivationChangeEvent.class,
+				mapContextListener);
+		eventBus.addHandler(LayerVisibilityChangeEvent.class,
+				mapContextListener);
+		eventBus.addHandler(LayerLegendChangeEvent.class, mapContextListener);
+		eventBus.addHandler(LayerSelectionChangeEvent.class, mapContextListener);
 	}
 
 	/**
@@ -597,14 +628,8 @@ public class MapControl extends JComponent implements ComponentListener,
 	 * @see #getMapContext()
 	 */
 	public void setMapContext(MapContext model) {
-		if (mapContext != null) {
-			mapContext.removeAtomicEventListener(mapContextListener);
-		}
-
 		mapContext = model;
 		assert false : "Update view port";
-
-		mapContext.addAtomicEventListener(mapContextListener);
 
 		status = DESACTUALIZADO;
 	}
@@ -1282,7 +1307,7 @@ public class MapControl extends JComponent implements ComponentListener,
 					// SIN MAC:
 
 					mapContext.draw(image, g, canceldraw,
-							mapContext.getScaleView());
+							viewPort.getScaleView());
 					if (!canceldraw.isCanceled()) {
 						status = ACTUALIZADO;
 					} else {
@@ -1293,7 +1318,7 @@ public class MapControl extends JComponent implements ComponentListener,
 				} else if (status == ONLY_GRAPHICS) {
 					status = ACTUALIZADO;
 					mapContext.drawGraphics(image, g, canceldraw,
-							mapContext.getScaleView());
+							viewPort.getScaleView());
 
 				}
 
@@ -1616,12 +1641,11 @@ public class MapControl extends JComponent implements ComponentListener,
 					g.fillRect(0, 0, viewPort.getImageWidth(),
 							viewPort.getImageHeight());
 					status = ACTUALIZADO;
-					mapContext
-							.draw(image, g, cancel, mapContext.getScaleView());
+					mapContext.draw(image, g, cancel, viewPort.getScaleView());
 				} else if (status == ONLY_GRAPHICS) {
 					status = ACTUALIZADO;
 					mapContext.drawGraphics(image, g, cancel,
-							mapContext.getScaleView());
+							viewPort.getScaleView());
 				}
 
 				timer.stop();
@@ -1921,66 +1945,15 @@ public class MapControl extends JComponent implements ComponentListener,
 	 * 
 	 * @author Fernando Gonz�lez Cort�s
 	 */
-	public class MapContextListener implements AtomicEventListener {
-		/**
-		 * @see com.iver.cit.gvsig.fmap.AtomicEventListener#atomicEvent(com.iver.cit.gvsig.fmap.AtomicEvent)
-		 */
-		public void atomicEvent(AtomicEvent e) {
-			LayerEvent[] layerEvents = e.getLayerEvents();
+	public class MapContextListener implements EditionChangeHandler,
+			BackgroundColorChangeHandler, LayerActivationChangeHandler,
+			LayerAddedHandler, LayerRemovedHandler, LayerLegendChangeHandler,
+			LayerSelectionChangeHandler, LayerVisibilityChangeHandler {
 
-			int eType;
-			for (int i = 0; i < layerEvents.length; i++) {
-				eType = layerEvents[i].getEventType();
-				// if (eType == LayerEvent.DRAW_VALUES_CHANGED || eType ==
-				// LayerEvent.VISIBILITY_CHANGED) {
-				// MapControl.this.drawMap(false);
-				// return;
-				// }
-				if (layerEvents[i].getProperty().equals("visible")) {
-					MapControl.this.drawMap(false);
-					return;
-				} else if (layerEvents[i].getEventType() == LayerEvent.EDITION_CHANGED) {
-					MapControl.this.drawMap(false);
-					return;
-				}
-
-			}
-
-			if (e.getColorEvents().length > 0) {
-				MapControl.this.drawMap(false);
-				return;
-			}
-
-			if (e.getExtentEvents().length > 0) {
-				MapControl.this.drawMap(false);
-				return;
-			}
-
-			if (e.getProjectionEvents().length > 0) {
-				// redraw = true;
-			}
-
-			LayerCollectionEvent[] aux = e.getLayerCollectionEvents();
-			if (aux.length > 0) {
-				for (int i = 0; i < aux.length; i++) {
-					if (aux[i].getAffectedLayer().getFLayerStatus()
-							.isDriverLoaded()) {
-						MapControl.this.drawMap(false);
-						return;
-					}
-				}
-
-			}
-
-			if (e.getLegendEvents().length > 0) {
-				MapControl.this.drawMap(false);
-				return;
-			}
-
-			if (e.getSelectionEvents().length > 0) {
-				MapControl.this.drawMap(false);
-				return;
-			}
+		@Override
+		public void layerAdded(MapContext map, Layer layer) {
+			MapControl.this.drawMap(false);
+			return;
 		}
 	}
 
