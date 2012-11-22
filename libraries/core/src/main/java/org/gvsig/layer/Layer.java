@@ -31,10 +31,19 @@ public interface Layer {
 	Layer[] getAllLayers();
 
 	/**
-	 * Return true if the layer is in edition
+	 * Returns an instance of {@link VectorialLayer}
 	 * 
 	 * @return
 	 */
-	boolean isEditing();
+	VectorialLayer getVectorial();
+
+	/**
+	 * Obtains an array of all layers that all match the filter condition. This
+	 * layer and all the descendant are tested
+	 * 
+	 * @param filter
+	 * @return
+	 */
+	Layer[] filter(LayerFilter filter);
 
 }

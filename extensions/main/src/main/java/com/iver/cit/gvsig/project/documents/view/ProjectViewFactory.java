@@ -82,9 +82,9 @@ public class ProjectViewFactory extends ProjectDocumentFactory {
 		InjectorSingleton.getInjector().getInstance(ProjectView.class);
 		ProjectView v = new ProjectView();
 		MapContext viewMapContext = v.getMapContext();
-		viewMapContext.setBackColor(View.getDefaultBackColor());
+		viewMapContext.setBackgroundColor(View.getDefaultBackColor());
 		viewMapContext.setDistanceUnits(Project.getDefaultDistanceUnits());
-		viewMapContext.setDistanceArea(Project.getDefaultDistanceArea());
+		viewMapContext.setAreaUnits(Project.getDefaultDistanceArea());
 		viewMapContext.setMapUnits(Project.getDefaultMapUnits());
 
 		/*

@@ -39,7 +39,7 @@ import org.opengis.referencing.NoSuchAuthorityCodeException;
 public class CSSelectionDialogPanel extends DefaultDialogPanel {
 	final private static long serialVersionUID = -3370601314380922368L;
 
-	public CSSelectionDialogPanel() throws NoSuchAuthorityCodeException, FactoryException {
+	public CSSelectionDialogPanel() {
 		super();
 		init();
 	}

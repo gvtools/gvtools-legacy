@@ -48,9 +48,7 @@ import java.io.Serializable;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -64,15 +62,13 @@ import org.geotools.referencing.CRS;
 import org.gvsig.exceptions.DriverException;
 import org.gvsig.layer.Layer;
 import org.gvsig.layer.Source;
-import org.gvsig.layer.SourceFactory;
 import org.gvsig.layer.SourceManager;
 import org.gvsig.persistence.generated.DataSourceType;
 import org.gvsig.persistence.generated.DocumentType;
 import org.gvsig.persistence.generated.LabeledExtentType;
 import org.gvsig.persistence.generated.StringPropertyType;
 import org.gvsig.tools.file.PathGenerator;
-import org.gvsig.units.AreaUnit;
-import org.gvsig.units.DistanceUnit;
+import org.gvsig.units.Unit;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.NoSuchAuthorityCodeException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
@@ -90,7 +86,6 @@ import com.iver.cit.gvsig.project.documents.exceptions.SaveException;
 import com.iver.cit.gvsig.project.documents.gui.WindowData;
 import com.iver.cit.gvsig.project.documents.view.ProjectView;
 import com.iver.cit.gvsig.project.documents.view.ProjectViewFactory;
-import com.iver.utiles.IPersistence;
 import com.iver.utiles.PostProcessSupport;
 import com.iver.utiles.StringUtilities;
 import com.iver.utiles.XMLEntity;
@@ -130,11 +125,11 @@ public class Project implements Serializable, PropertyChangeListener {
 	 */
 	static private Color defaultSelectionColor = Color.YELLOW;
 
-	private static DistanceUnit defaultMapUnits = null;
+	private static Unit defaultMapUnits = null;
 
-	private static DistanceUnit defaultDistanceUnits = null;
+	private static Unit defaultDistanceUnits = null;
 
-	private static AreaUnit defaultDistanceArea = null;
+	private static Unit defaultDistanceArea = null;
 
 	private PropertyChangeSupport change;
 
@@ -1040,16 +1035,16 @@ public class Project implements Serializable, PropertyChangeListener {
 	 * Returns the user's default map units. This is the cartography data
 	 * distance units.
 	 */
-	public static DistanceUnit getDefaultMapUnits() {
+	public static Unit getDefaultMapUnits() {
 		if (defaultMapUnits == null) {
 			XMLEntity xml = PluginServices.getPluginServices(
 					"com.iver.cit.gvsig").getPersistentXML();
 			if (xml.contains("DefaultMapUnits")) {
-				defaultMapUnits = DistanceUnit.fromName(xml
+				defaultMapUnits = Unit.fromName(xml
 						.getStringProperty("DefaultMapUnits"));
 			}
 			if (defaultMapUnits == null) {
-				defaultMapUnits = DistanceUnit.M;
+				defaultMapUnits = Unit.M;
 			}
 		}
 		return defaultMapUnits;
@@ -1060,16 +1055,16 @@ public class Project implements Serializable, PropertyChangeListener {
 	 * the units that the user will see in the status bar of the view.
 	 * 
 	 */
-	public static DistanceUnit getDefaultDistanceUnits() {
+	public static Unit getDefaultDistanceUnits() {
 		if (defaultDistanceUnits == null) {
 			XMLEntity xml = PluginServices.getPluginServices(
 					"com.iver.cit.gvsig").getPersistentXML();
 			if (xml.contains("DefaultDistanceUnits")) {
-				defaultDistanceUnits = DistanceUnit.fromName(xml
+				defaultDistanceUnits = Unit.fromName(xml
 						.getStringProperty("DefaultDistanceUnits"));
 			}
 			if (defaultDistanceUnits == null) {
-				defaultDistanceUnits = DistanceUnit.M;
+				defaultDistanceUnits = Unit.M;
 			}
 		}
 		return defaultDistanceUnits;
@@ -1080,16 +1075,16 @@ public class Project implements Serializable, PropertyChangeListener {
 	 * units that the user will see in the status bar of the view.
 	 * 
 	 */
-	public static AreaUnit getDefaultDistanceArea() {
+	public static Unit getDefaultDistanceArea() {
 		if (defaultDistanceArea == null) {
 			XMLEntity xml = PluginServices.getPluginServices(
 					"com.iver.cit.gvsig").getPersistentXML();
 			if (xml.contains("DefaultDistanceArea")) {
-				defaultDistanceArea = AreaUnit.fromName(xml
+				defaultDistanceArea = Unit.fromName(xml
 						.getStringProperty("DefaultDistanceArea"));
 			}
 			if (defaultDistanceArea == null) {
-				defaultDistanceArea = AreaUnit.M2;
+				defaultDistanceArea = Unit.M;
 			}
 		}
 		return defaultDistanceArea;
@@ -1100,7 +1095,7 @@ public class Project implements Serializable, PropertyChangeListener {
 	 * 
 	 * @param mapUnits
 	 */
-	public static void setDefaultMapUnits(DistanceUnit mapUnits) {
+	public static void setDefaultMapUnits(Unit mapUnits) {
 		defaultMapUnits = mapUnits;
 	}
 
@@ -1109,7 +1104,7 @@ public class Project implements Serializable, PropertyChangeListener {
 	 * 
 	 * @param distanceUnits
 	 */
-	public static void setDefaultDistanceUnits(DistanceUnit distanceUnits) {
+	public static void setDefaultDistanceUnits(Unit distanceUnits) {
 		defaultDistanceUnits = distanceUnits;
 	}
 
@@ -1118,7 +1113,7 @@ public class Project implements Serializable, PropertyChangeListener {
 	 * 
 	 * @param distanceUnits
 	 */
-	public static void setDefaultDistanceArea(AreaUnit distanceArea) {
+	public static void setDefaultDistanceArea(Unit distanceArea) {
 		defaultDistanceArea = distanceArea;
 	}
 

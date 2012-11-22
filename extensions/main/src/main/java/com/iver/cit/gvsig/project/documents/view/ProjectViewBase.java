@@ -163,7 +163,7 @@ public abstract class ProjectViewBase extends ProjectDocument implements
 	public void setBackColor(Color c) {
 		// getMapContext().getViewPort().addViewPortListener(getMapContext()
 		// .getEventBuffer());
-		getMapContext().setBackColor(c);
+		getMapContext().setBackgroundColor(c);
 		// getMapContext().getViewPort().removeViewPortListener(getMapContext()
 		// .getEventBuffer());
 	}
@@ -192,7 +192,7 @@ public abstract class ProjectViewBase extends ProjectDocument implements
 			return true;
 		Layer[] layers = getMapContext().getRootLayer().getAllLayers();
 		for (Layer layer : layers) {
-			if (layer.isEditing()) {
+			if (layer.getVectorial().isEditing()) {
 				return true;
 			}
 		}

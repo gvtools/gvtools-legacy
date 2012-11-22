@@ -5,8 +5,7 @@ import java.util.List;
 
 import org.gvsig.layer.Layer;
 import org.gvsig.persistence.generated.MapType;
-import org.gvsig.units.AreaUnit;
-import org.gvsig.units.DistanceUnit;
+import org.gvsig.units.Unit;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 public interface MapContext {
@@ -36,16 +35,24 @@ public interface MapContext {
 	 */
 	void setCRS(CoordinateReferenceSystem crs);
 
-	void setBackColor(Color c);
+	void setBackgroundColor(Color c);
+
+	Color getBackgroundColor();
 
 	MapType getXML();
 
 	void setXML(MapType mainMap);
 
-	void setDistanceUnits(DistanceUnit unit);
+	void setDistanceUnits(Unit unit);
 
-	void setDistanceArea(AreaUnit unit);
+	void setAreaUnits(Unit unit);
 
-	void setMapUnits(DistanceUnit unit);
+	void setMapUnits(Unit unit);
+
+	Unit getMapUnits();
+
+	Unit getDistanceUnits();
+
+	Unit getAreaUnits();
 
 }

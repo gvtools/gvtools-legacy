@@ -33,8 +33,6 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import org.cresques.Messages;
-import org.opengis.referencing.FactoryException;
-import org.opengis.referencing.NoSuchAuthorityCodeException;
 
 /**
  * @author Luis W. Sevilla (sevilla_lui@gva.es)
@@ -56,20 +54,16 @@ public class DefaultDialogPanel extends JPanel implements ComponentListener {
 	 * Constructor
 	 * 
 	 * @param init
-	 * @throws FactoryException 
-	 * @throws NoSuchAuthorityCodeException 
 	 */
-	public DefaultDialogPanel(boolean init) throws NoSuchAuthorityCodeException, FactoryException {
+	public DefaultDialogPanel(boolean init) {
 		if (init)
 			initialize();
 	}
 
 	/**
 	 * Constructor
-	 * @throws FactoryException 
-	 * @throws NoSuchAuthorityCodeException 
 	 */
-	public DefaultDialogPanel() throws NoSuchAuthorityCodeException, FactoryException {
+	public DefaultDialogPanel() {
 		super();
 		this.initialize();
 	}
@@ -78,10 +72,8 @@ public class DefaultDialogPanel extends JPanel implements ComponentListener {
 	 * This method initializes this
 	 * 
 	 * @return void
-	 * @throws FactoryException 
-	 * @throws NoSuchAuthorityCodeException 
 	 */
-	public void initialize() throws NoSuchAuthorityCodeException, FactoryException {
+	public void initialize() {
 		// setBounds(0,0,321,230);
 		// javax.swing.BoxLayout(jContentPane, javax.swing.BoxLayout.Y_AXIS);
 		// jContentPane.setLayout(new java.awt.GridLayout(2,1));
@@ -108,10 +100,8 @@ public class DefaultDialogPanel extends JPanel implements ComponentListener {
 	 * Obtiene el panel general
 	 * 
 	 * @return
-	 * @throws FactoryException 
-	 * @throws NoSuchAuthorityCodeException 
 	 */
-	protected JPanel getContentPanel() throws NoSuchAuthorityCodeException, FactoryException {
+	protected JPanel getContentPanel() {
 		if (contentPane == null) {
 			contentPane = new JPanel();
 			contentPane.setLayout(new GridBagLayout());
@@ -122,7 +112,7 @@ public class DefaultDialogPanel extends JPanel implements ComponentListener {
 		return contentPane;
 	}
 
-	public JPanel getTabPanel() throws NoSuchAuthorityCodeException, FactoryException {
+	public JPanel getTabPanel() {
 		if (tabPane == null) {
 			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 			gridBagConstraints2.insets = new java.awt.Insets(5, 0, 0, 0);

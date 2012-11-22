@@ -38,92 +38,92 @@
  *   +34 963163400
  *   dac@iver.es
  */
-package com.iver.cit.gvsig.project.documents.view.toolListeners;
+package com.iver.cit.gvsig.tools;
 
 import java.awt.Cursor;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.Toolkit;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 
-import org.apache.log4j.Logger;
+import javax.swing.ImageIcon;
 
-import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.map.MapControl;
-import com.iver.cit.gvsig.tools.behavior.BehaviorException;
-import com.iver.cit.gvsig.tools.events.PointEvent;
-import com.iver.cit.gvsig.tools.listeners.PointListener;
+import com.iver.cit.gvsig.map.ViewPort;
+import com.iver.cit.gvsig.tools.events.MoveEvent;
+import com.iver.cit.gvsig.tools.listeners.PanListener;
 
 /**
  * <p>
- * Listener that gets, if exists, the associated link at the feature that's at
- * the position selection of an active, selected and vector layer of the
- * associated <code>MapControl</code>; and displays that linked data (image,
- * text, ...) on a dialog.
+ * Listener for moving the extent of the associated {@link MapControl
+ * MapControl} object according the movement between the initial and final
+ * points of line determined by the movement dragging with the third button of
+ * the mouse.
  * </p>
  * 
  * <p>
- * Listens a single click of any mouse's button.
+ * Updates the extent of its <code>ViewPort</code> with the new position.
  * </p>
  * 
  * @author Vicente Caballero Navarro
  */
-public class LinkListener implements PointListener {
-	/**
-	 * Object used to log messages for this listener.
-	 */
-	private static Logger logger = Logger.getLogger(LinkListener.class
-			.getName());
-
+public class PanListenerImpl implements PanListener {
 	/**
 	 * The image to display when the cursor is active.
 	 */
-	private final Image img = PluginServices.getIconTheme()
-			.get("cursor-hiperlink").getImage();
+	private final Image ipan = new ImageIcon(
+			MapControl.class.getResource("images/Hand.gif")).getImage();
 
 	/**
 	 * The cursor used to work with this tool listener.
 	 * 
 	 * @see #getCursor()
 	 */
-	private Cursor cur = Toolkit.getDefaultToolkit().createCustomCursor(img,
+	private Cursor cur = Toolkit.getDefaultToolkit().createCustomCursor(ipan,
 			new Point(16, 16), "");
 
 	/**
 	 * Reference to the <code>MapControl</code> object that uses.
 	 */
-	private MapControl mapCtrl;
-
-	/**
-	 * Identifies the link as an image.
-	 */
-	public static final int TYPELINKIMAGE = 0;
-
-	/**
-	 * Identifies the link as text.
-	 */
-	public static final int TYPELINKTEXT = 1;
+	private MapControl mapControl;
 
 	/**
 	 * <p>
-	 * Creates a new <code>LinkListener</code> object.
+	 * Creates a new listener for changing the position of the extent of the
+	 * associated {@link MapControl MapControl} object.
 	 * </p>
 	 * 
-	 * @param mc
+	 * @param mapControl
 	 *            the <code>MapControl</code> where will be applied the changes
 	 */
-	public LinkListener(MapControl mc) {
-		this.mapCtrl = mc;
+	public PanListenerImpl(MapControl mapControl) {
+		this.mapControl = mapControl;
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * com.iver.cit.gvsig.fmap.tools.Listeners.PointListener#point(com.iver.
-	 * cit.gvsig.fmap.tools.Events.PointEvent)
+	 * com.iver.cit.gvsig.fmap.tools.Listeners.PanListener#move(com.iver.cit
+	 * .gvsig.fmap.tools.Events.MoveEvent)
 	 */
-	public void point(PointEvent event) throws BehaviorException {
-		assert false;
+	public void move(MoveEvent event) {
+		ViewPort vp = mapControl.getViewPort();
+
+		// System.out.println(vp);
+		Point2D from = vp.toMapPoint(event.getFrom());
+		Point2D to = vp.toMapPoint(event.getTo());
+
+		Rectangle2D.Double r = new Rectangle2D.Double();
+		Rectangle2D extent = vp.getExtent();
+		r.x = extent.getX() - (to.getX() - from.getX());
+		r.y = extent.getY() - (to.getY() - from.getY());
+		r.width = extent.getWidth();
+		r.height = extent.getHeight();
+		vp.setExtent(r);
+		// mapControl.getMapContext().clearAllCachingImageDrawnLayers();
+		// mapControl.drawMap();
 	}
 
 	/*
@@ -141,16 +141,6 @@ public class LinkListener implements PointListener {
 	 * @see com.iver.cit.gvsig.fmap.tools.Listeners.ToolListener#cancelDrawing()
 	 */
 	public boolean cancelDrawing() {
-		return false;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.iver.cit.gvsig.fmap.tools.Listeners.PointListener#pointDoubleClick
-	 * (com.iver.cit.gvsig.fmap.tools.Events.PointEvent)
-	 */
-	public void pointDoubleClick(PointEvent event) throws BehaviorException {
+		return true;
 	}
 }

@@ -1,4 +1,4 @@
-/* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
+/* gvSIG. Sistema de Informaciï¿½n Geogrï¿½fica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
  *
@@ -20,7 +20,7 @@
  *
  *  Generalitat Valenciana
  *   Conselleria d'Infraestructures i Transport
- *   Av. Blasco Ibáñez, 50
+ *   Av. Blasco Ibï¿½ï¿½ez, 50
  *   46010 VALENCIA
  *   SPAIN
  *
@@ -54,12 +54,10 @@ import com.iver.andami.ui.mdiManager.IWindowListener;
 import com.iver.andami.ui.mdiManager.IWindowTransform;
 import com.iver.andami.ui.mdiManager.SingletonWindow;
 import com.iver.andami.ui.mdiManager.WindowInfo;
-import com.iver.cit.gvsig.fmap.MapControl;
+import com.iver.cit.gvsig.map.MapControl;
 import com.iver.cit.gvsig.project.documents.gui.IDocumentWindow;
 import com.iver.cit.gvsig.project.documents.gui.WindowData;
 import com.iver.cit.gvsig.project.documents.view.IProjectView;
-import com.iver.cit.gvsig.project.documents.view.MapOverview;
-import com.iver.cit.gvsig.project.documents.view.toc.gui.TOC;
 import com.iver.utiles.exceptionHandling.ExceptionListener;
 
 //import javax.swing.JSplitPane;

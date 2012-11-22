@@ -1,4 +1,4 @@
-/* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
+/* gvSIG. Sistema de Informaciï¿½n Geogrï¿½fica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
  *
@@ -20,7 +20,7 @@
  *
  *  Generalitat Valenciana
  *   Conselleria d'Infraestructures i Transport
- *   Av. Blasco Ibáñez, 50
+ *   Av. Blasco Ibï¿½ï¿½ez, 50
  *   46010 VALENCIA
  *   SPAIN
  *
@@ -53,9 +53,9 @@ import javax.swing.plaf.basic.BasicComboBoxEditor;
 /**
  * ComboBox autocompletable
  * 
- * @author Fernando González Cortés
+ * @author Fernando Gonzï¿½lez Cortï¿½s
  */
-public class JComboBox extends javax.swing.JComboBox {
+public class JComboBox<T> extends javax.swing.JComboBox<T> {
 	/**
 	 * Construye un combobox
 	 */
@@ -69,7 +69,7 @@ public class JComboBox extends javax.swing.JComboBox {
 	 * 
 	 * @param arg0
 	 */
-	public JComboBox(Object[] arg0) {
+	public JComboBox(T[] arg0) {
 		super(arg0);
 		init();
 	}
@@ -109,7 +109,7 @@ public class JComboBox extends javax.swing.JComboBox {
 	/**
 	 * Manejador de los eventos Key para hacer el autocompletado
 	 * 
-	 * @author Fernando González Cortés
+	 * @author Fernando Gonzï¿½lez Cortï¿½s
 	 */
 	public class MyKeyListener implements KeyListener {
 		private int lastCaretPosition = 0;

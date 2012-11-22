@@ -1,4 +1,4 @@
-/* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
+/* gvSIG. Sistema de Informaciï¿½n Geogrï¿½fica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
  *
@@ -20,7 +20,7 @@
  *
  *  Generalitat Valenciana
  *   Conselleria d'Infraestructures i Transport
- *   Av. Blasco Ibáñez, 50
+ *   Av. Blasco Ibï¿½ï¿½ez, 50
  *   46010 VALENCIA
  *   SPAIN
  *
@@ -55,6 +55,7 @@ import javax.swing.JPanel;
 
 import org.gvsig.gui.beans.AcceptCancelPanel;
 import org.gvsig.gui.beans.swing.JButton;
+import org.gvsig.units.Unit;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.crs.ProjectedCRS;
 
@@ -62,19 +63,17 @@ import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiManager.SingletonWindow;
 import com.iver.andami.ui.mdiManager.WindowInfo;
 import com.iver.cit.gvsig.ProjectExtension;
-import com.iver.cit.gvsig.fmap.MapContext;
 import com.iver.cit.gvsig.gui.JComboBoxUnits;
 import com.iver.cit.gvsig.gui.panels.CRSSelectPanel;
 import com.iver.cit.gvsig.project.Project;
 import com.iver.cit.gvsig.project.documents.ProjectDocument;
-import com.iver.cit.gvsig.project.documents.layout.Attributes;
 import com.iver.cit.gvsig.project.documents.view.ProjectView;
 import com.iver.cit.gvsig.project.documents.view.ProjectViewFactory;
 
 /**
  * Dialogo donde se muestran las propiedades de una vista
  * 
- * @author Fernando González Cortés
+ * @author Fernando Gonzï¿½lez Cortï¿½s
  */
 public class ViewProperties extends JPanel implements SingletonWindow {
 	/*
@@ -89,9 +88,9 @@ public class ViewProperties extends JPanel implements SingletonWindow {
 	private javax.swing.JLabel jLabel2 = null;
 	private javax.swing.JTextField txtOwner = null;
 	private javax.swing.JLabel jLabel4 = null;
-	private javax.swing.JComboBox cmbMapUnits = null;
+	private javax.swing.JComboBox<String> cmbMapUnits = null;
 	private javax.swing.JLabel jLabel5 = null;
-	private javax.swing.JComboBox cmbDistanceUnits = null;
+	private javax.swing.JComboBox<String> cmbDistanceUnits = null;
 	private javax.swing.JLabel jLabel6 = null;
 	private javax.swing.JTextArea txtComments = null;
 	private javax.swing.JLabel jLabel7 = null;
@@ -117,7 +116,7 @@ public class ViewProperties extends JPanel implements SingletonWindow {
 	private AcceptCancelPanel okCancelPanel = null;
 	private boolean isAcceppted = false;
 	private JLabel jLabel8 = null;
-	private JComboBox cmbDistanceArea = null;
+	private JComboBox<String> cmbDistanceArea = null;
 
 	/**
 	 * This is the default constructor
@@ -144,7 +143,7 @@ public class ViewProperties extends JPanel implements SingletonWindow {
 		 * jLblProjName = new JLabel(); jLblProj = new JLabel();
 		 * jLblProj.setText(view.getProjection().getAbrev());
 		 * jLblProj.setPreferredSize(new java.awt.Dimension(180,20));
-		 * jLblProjName.setText("Proyección actual:");
+		 * jLblProjName.setText("Proyecciï¿½n actual:");
 		 * jLblProjName.setPreferredSize(new java.awt.Dimension(95,15));
 		 */
 		this.setPreferredSize(new java.awt.Dimension(365, 463));
@@ -167,16 +166,14 @@ public class ViewProperties extends JPanel implements SingletonWindow {
 		txtDate.setText(view.getCreationDate());
 		txtOwner.setText(view.getOwner());
 
-		cmbMapUnits.setSelectedIndex(view.getMapContext().getViewPort()
-				.getMapUnits());
-		cmbDistanceUnits.setSelectedIndex(view.getMapContext().getViewPort()
-				.getDistanceUnits());
-		cmbDistanceArea.setSelectedIndex(view.getMapContext().getViewPort()
-				.getDistanceArea());
+		cmbMapUnits.setSelectedItem(view.getMapContext().getMapUnits().name);
+		cmbDistanceUnits.setSelectedItem(view.getMapContext()
+				.getDistanceUnits().name);
+		cmbDistanceArea
+				.setSelectedItem(view.getMapContext().getAreaUnits().name);
 		txtComments.setText(view.getComment());
 
-		lblColor.setBackground(view.getMapContext().getViewPort()
-				.getBackColor());
+		lblColor.setBackground(view.getMapContext().getBackgroundColor());
 	}
 
 	/**
@@ -293,12 +290,9 @@ public class ViewProperties extends JPanel implements SingletonWindow {
 	 * 
 	 * @return javax.swing.JComboBox
 	 */
-	private javax.swing.JComboBox getCmbMapUnits() {
-		if (cmbMapUnits == null
-				|| MapContext.getDistanceNames().length > cmbMapUnits
-						.getItemCount()) {
-			boolean includePixels;
-			cmbMapUnits = new JComboBoxUnits(includePixels = false);
+	private javax.swing.JComboBox<String> getCmbMapUnits() {
+		if (cmbMapUnits == null) {
+			cmbMapUnits = new JComboBoxUnits(false);
 
 			// cmbMapUnits = new javax.swing.JComboBox(getUnitsNames());
 			cmbMapUnits.setPreferredSize(new java.awt.Dimension(200, 20));
@@ -312,14 +306,13 @@ public class ViewProperties extends JPanel implements SingletonWindow {
 						"Grados")); // deegree
 				cmbMapUnits.setEnabled(false);
 			} else {
-				if (!(cmbMapUnits.getItemCount() == MapContext
-						.getDistanceNames().length)) {
+				if (!(cmbMapUnits.getItemCount() == Unit.getDistanceNames().length)) {
 					cmbMapUnits.removeItem(PluginServices.getText(this,
 							"Grados")); // deegree
-					view.getMapContext().getViewPort().setMapUnits(1);
+					view.getMapContext().setMapUnits(Unit.M);
 				}
-				cmbMapUnits.setSelectedIndex(view.getMapContext().getViewPort()
-						.getMapUnits());
+				cmbMapUnits
+						.setSelectedItem(view.getMapContext().getMapUnits().name);
 				cmbMapUnits.setEnabled(true);
 			}
 			// cmbMapUnits.setSelectedIndex(view.getMapContext().getViewPort().getMapUnits());
@@ -357,12 +350,11 @@ public class ViewProperties extends JPanel implements SingletonWindow {
 	 * 
 	 * @return javax.swing.JComboBox
 	 */
-	private javax.swing.JComboBox getCmbDistanceUnits() {
+	private javax.swing.JComboBox<String> getCmbDistanceUnits() {
 		if (cmbDistanceUnits == null
-				|| MapContext.getDistanceNames().length > cmbDistanceUnits
+				|| Unit.getDistanceNames().length > cmbDistanceUnits
 						.getItemCount()) {
-			boolean includePixels;
-			cmbDistanceUnits = new JComboBoxUnits(includePixels = false);
+			cmbDistanceUnits = new JComboBoxUnits(false);
 			// cmbDistanceUnits = new javax.swing.JComboBox(getUnitsNames());
 			cmbDistanceUnits.setPreferredSize(new java.awt.Dimension(200, 20));
 			// cmbDistanceUnits.setEditable(false);
@@ -436,7 +428,7 @@ public class ViewProperties extends JPanel implements SingletonWindow {
 			lblColor = new javax.swing.JLabel();
 			lblColor.setText("");
 			lblColor.setPreferredSize(new java.awt.Dimension(30, 16));
-			Color theColor = view.getMapContext().getViewPort().getBackColor();
+			Color theColor = view.getMapContext().getBackgroundColor();
 			backColor = theColor;
 			if (theColor == null)
 				theColor = Color.WHITE;
@@ -656,23 +648,21 @@ public class ViewProperties extends JPanel implements SingletonWindow {
 							// getCmbMapUnits().addItem(PluginServices.getText(this,
 							// Attributes.DEGREES));
 							// }
-							getCmbMapUnits().setSelectedItem(
-									PluginServices.getText(this,
-											Attributes.DEGREES));
-							getCmbMapUnits().setEnabled(false);
-						} else {
-							if (getCmbMapUnits().getSelectedItem().equals(
-									PluginServices.getText(this,
-											Attributes.DEGREES))) {
-								getCmbMapUnits().setSelectedIndex(1);
-							}
-							getCmbMapUnits().setEnabled(true);
-							// if
-							// (!(getCmbMapUnits().getItemCount()==MapContext.NAMES.length))
-							// {
-							// getCmbMapUnits().removeItem(PluginServices.getText(this,
+							assert false;
+							// gtrefactor
+							// getCmbMapUnits().setSelectedItem(
+							// PluginServices.getText(this,
 							// Attributes.DEGREES));
+							// getCmbMapUnits().setEnabled(false);
+						} else {
+							assert false;
+							// gtrefactor
+							// if (getCmbMapUnits().getSelectedItem().equals(
+							// PluginServices.getText(this,
+							// Attributes.DEGREES))) {
+							// getCmbMapUnits().setSelectedIndex(1);
 							// }
+							// getCmbMapUnits().setEnabled(true);
 						}
 						view.setCrs(jPanelProj.getCurrentCrs());
 					}
@@ -731,15 +721,15 @@ public class ViewProperties extends JPanel implements SingletonWindow {
 					view.setCreationDate(txtDate.getText());
 					view.setOwner(txtOwner.getText());
 					view.setComment(txtComments.getText());
-					view.getMapContext().getViewPort()
-							.setMapUnits(cmbMapUnits.getSelectedIndex());
-					view.getMapContext()
-							.getViewPort()
-							.setDistanceUnits(
-									cmbDistanceUnits.getSelectedIndex());
-					view.getMapContext()
-							.getViewPort()
-							.setDistanceArea(cmbDistanceArea.getSelectedIndex());
+					view.getMapContext().setMapUnits(
+							Unit.fromName((String) cmbMapUnits
+									.getSelectedItem()));
+					view.getMapContext().setDistanceUnits(
+							Unit.fromName((String) cmbDistanceUnits
+									.getSelectedItem()));
+					view.getMapContext().setAreaUnits(
+							Unit.fromName((String) cmbDistanceArea
+									.getSelectedItem()));
 					view.setBackColor(backColor);
 					isAcceppted = true;
 					PluginServices.getMDIManager().closeWindow(
@@ -783,25 +773,19 @@ public class ViewProperties extends JPanel implements SingletonWindow {
 	 * 
 	 * @return javax.swing.JComboBox
 	 */
-	private JComboBox getCmbDistanceArea() {
-		String[] names = MapContext.getAreaNames();
+	private JComboBox<String> getCmbDistanceArea() {
+		String[] names = Unit.getDistanceNames();
 		if (cmbDistanceArea == null
 				|| names.length > cmbDistanceArea.getItemCount()) {
 			for (int i = 0; i < names.length; i++) {
 				names[i] = PluginServices.getText(this, names[i])
-						+ MapContext.getOfLinear(i);
+						+ Unit.fromName(names[i]).getSquareSuffix();
 			}
-			cmbDistanceArea = new javax.swing.JComboBox(names);
+			cmbDistanceArea = new javax.swing.JComboBox<String>(names);
 			cmbDistanceArea.setPreferredSize(new java.awt.Dimension(200, 20));
 			cmbDistanceArea.setEditable(false);
-			cmbDistanceArea.setSelectedIndex(view.getMapContext().getViewPort()
-					.getDistanceArea());
 			cmbDistanceArea
-					.addActionListener(new java.awt.event.ActionListener() {
-						public void actionPerformed(java.awt.event.ActionEvent e) {
-							// view.getMapContext().getViewPort().setDistanceUnits(cmbDistanceUnits.getSelectedIndex());
-						}
-					});
+					.setSelectedItem(view.getMapContext().getAreaUnits().name);
 		}
 
 		return cmbDistanceArea;

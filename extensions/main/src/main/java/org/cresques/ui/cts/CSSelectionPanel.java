@@ -242,8 +242,7 @@ public class CSSelectionPanel extends JPanel {
 		return huseComboBox;
 	}
 
-	public CoordinateReferenceSystem getCrs()
-			throws NoSuchAuthorityCodeException, FactoryException {
+	public CoordinateReferenceSystem getCrs() {
 		return model.getCrs();
 	}
 }

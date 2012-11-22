@@ -4,8 +4,6 @@
 package com.iver.cit.gvsig.project.documents.view.info.gui;
 
 import org.cresques.ui.cts.CSSelectionDialogPanel;
-import org.opengis.referencing.FactoryException;
-import org.opengis.referencing.NoSuchAuthorityCodeException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.iver.andami.PluginServices;
@@ -21,13 +19,7 @@ public class CSSelectionDialog extends CSSelectionDialogPanel implements
 	private boolean okPressed = false;
 	private CoordinateReferenceSystem lastCrs = null;
 
-	/**
-	 * @throws FactoryException
-	 * @throws NoSuchAuthorityCodeException
-	 * 
-	 */
-	public CSSelectionDialog() throws NoSuchAuthorityCodeException,
-			FactoryException {
+	public CSSelectionDialog() {
 		super();
 		this.init();
 	}
@@ -77,11 +69,8 @@ public class CSSelectionDialog extends CSSelectionDialogPanel implements
 
 	/**
 	 * @return
-	 * @throws FactoryException
-	 * @throws NoSuchAuthorityCodeException
 	 */
-	public CoordinateReferenceSystem getCrs()
-			throws NoSuchAuthorityCodeException, FactoryException {
+	public CoordinateReferenceSystem getCrs() {
 		return getProjPanel().getCrs();
 	}
 

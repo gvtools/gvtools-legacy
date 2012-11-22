@@ -1,4 +1,4 @@
-/* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
+/* gvSIG. Sistema de Informaciï¿½n Geogrï¿½fica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
  *
@@ -20,7 +20,7 @@
  *
  *  Generalitat Valenciana
  *   Conselleria d'Infraestructures i Transport
- *   Av. Blasco Ibáñez, 50
+ *   Av. Blasco Ibï¿½ï¿½ez, 50
  *   46010 VALENCIA
  *   SPAIN
  *
@@ -50,42 +50,25 @@ import java.util.Iterator;
 
 import javax.swing.JSplitPane;
 
-import org.cresques.cts.ProjectionUtils;
+import org.geotools.referencing.CRS;
+import org.gvsig.layer.Layer;
+import org.gvsig.layer.LayerFilter;
+import org.gvsig.map.MapContext;
 
 import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiManager.WindowInfo;
-import com.iver.cit.gvsig.fmap.ColorEvent;
-import com.iver.cit.gvsig.fmap.ExtentEvent;
-import com.iver.cit.gvsig.fmap.MapContext;
-import com.iver.cit.gvsig.fmap.MapControl;
-import com.iver.cit.gvsig.fmap.ProjectionEvent;
-import com.iver.cit.gvsig.fmap.ViewPortListener;
-import com.iver.cit.gvsig.fmap.layers.FLayer;
-import com.iver.cit.gvsig.fmap.layers.FLayers;
-import com.iver.cit.gvsig.fmap.layers.FLyrVect;
-import com.iver.cit.gvsig.fmap.tools.ZoomOutRightButtonListener;
-import com.iver.cit.gvsig.fmap.tools.Behavior.Behavior;
-import com.iver.cit.gvsig.fmap.tools.Behavior.MouseMovementBehavior;
-import com.iver.cit.gvsig.fmap.tools.Behavior.MoveBehavior;
-import com.iver.cit.gvsig.fmap.tools.Behavior.PointBehavior;
-import com.iver.cit.gvsig.fmap.tools.Behavior.PolygonBehavior;
-import com.iver.cit.gvsig.fmap.tools.Behavior.PolylineBehavior;
-import com.iver.cit.gvsig.fmap.tools.Behavior.RectangleBehavior;
-import com.iver.cit.gvsig.project.documents.view.MapOverview;
+import com.iver.cit.gvsig.map.ColorEvent;
+import com.iver.cit.gvsig.map.ExtentEvent;
+import com.iver.cit.gvsig.map.MapControl;
+import com.iver.cit.gvsig.map.ProjectionEvent;
+import com.iver.cit.gvsig.map.ViewPortListener;
 import com.iver.cit.gvsig.project.documents.view.ProjectViewBase;
-import com.iver.cit.gvsig.project.documents.view.toc.gui.TOC;
-import com.iver.cit.gvsig.project.documents.view.toolListeners.AreaListener;
-import com.iver.cit.gvsig.project.documents.view.toolListeners.InfoListener;
-import com.iver.cit.gvsig.project.documents.view.toolListeners.LinkListener;
-import com.iver.cit.gvsig.project.documents.view.toolListeners.MeasureListener;
 import com.iver.cit.gvsig.project.documents.view.toolListeners.PanListener;
-import com.iver.cit.gvsig.project.documents.view.toolListeners.PointSelectListener;
-import com.iver.cit.gvsig.project.documents.view.toolListeners.PolygonSelectListener;
-import com.iver.cit.gvsig.project.documents.view.toolListeners.RectangleSelectListener;
-import com.iver.cit.gvsig.project.documents.view.toolListeners.SelectImageListener;
-import com.iver.cit.gvsig.project.documents.view.toolListeners.StatusBarListener;
 import com.iver.cit.gvsig.project.documents.view.toolListeners.ZoomInListener;
 import com.iver.cit.gvsig.project.documents.view.toolListeners.ZoomOutListener;
+import com.iver.cit.gvsig.tools.behavior.Behavior;
+import com.iver.cit.gvsig.tools.behavior.MouseMovementBehavior;
+import com.iver.cit.gvsig.tools.behavior.PointBehavior;
 import com.iver.utiles.StringUtilities;
 import com.iver.utiles.XMLEntity;
 import com.iver.utiles.console.JConsole;
@@ -168,18 +151,16 @@ public class View extends BaseView {
 		// Se registra como listener de cambios en FMap
 		MapContext fmap = modelo.getMapContext();
 
-		FLayers layers = fmap.getLayers();
-		for (int i = 0; i < layers.getLayersCount(); i++) {
-			if (layers.getLayer(i).isEditing()
-					&& layers.getLayer(i) instanceof FLyrVect) {
-				this.showConsole();
-			}
+		Layer root = fmap.getRootLayer();
+		Layer[] vectorialInEdition = root.filter(LayerFilter.VECTORIAL_EDITING);
+
+		if (vectorialInEdition.length > 0) {
+			this.showConsole();
 		}
 
 		// Se configura el mapControl
 		m_MapControl.setMapContext(fmap);
 		m_TOC.setMapContext(fmap);
-		m_MapControl.getMapContext().getLayers().addLegendListener(m_TOC);
 
 		m_MapControl.setBackground(new Color(255, 255, 255));
 		if (modelo.getMapOverViewContext() != null) {
@@ -203,15 +184,14 @@ public class View extends BaseView {
 								.setControlValue(
 										"scale",
 										String.valueOf(m_MapControl
-												.getMapContext().getScaleView()));
+												.getViewPort().getScaleView()));
 						PluginServices
 								.getMainFrame()
 								.getStatusBar()
 								.setMessage(
 										"projection",
-										ProjectionUtils
-												.getAbrev(getMapControl()
-														.getViewPort().getCrs()));
+										CRS.toSRS(getMapControl().getViewPort()
+												.getCrs()));
 					}
 				}
 
@@ -229,7 +209,7 @@ public class View extends BaseView {
 	public JConsole getConsolePanel() {
 		if (console == null) {
 			console = new JConsole();
-			// Para distinguir cuando se está escribiendo sobre la consola y
+			// Para distinguir cuando se estï¿½ escribiendo sobre la consola y
 			// cuando no.
 			console.setJTextName("CADConsole");
 		}
@@ -426,13 +406,6 @@ public class View extends BaseView {
 			}
 		}
 
-		// Listener de eventos de movimiento que pone las coordenadas del ratón
-		// en la barra de estado
-		StatusBarListener sbl = new StatusBarListener(m_MapControl);
-
-		// Zoom out (pinchas y el mapa se centra y te muestra más).
-		// No es dibujando un rectángulo, es solo pinchando.
-
 		ZoomOutListener zol = new ZoomOutListener(m_MapControl);
 		m_MapControl.addMapTool("zoomOut", new Behavior[] {
 				new PointBehavior(zol), new MouseMovementBehavior(sbl) });
@@ -443,64 +416,13 @@ public class View extends BaseView {
 		m_MapControl.addMapTool("pan", new Behavior[] { new MoveBehavior(pl),
 				new MouseMovementBehavior(sbl) });
 
-		// Medir
-
-		MeasureListener mli = new MeasureListener(m_MapControl);
-		m_MapControl.addMapTool("medicion", new Behavior[] {
-				new PolylineBehavior(mli), new MouseMovementBehavior(sbl) });
-
-		// Area
-
-		AreaListener ali = new AreaListener(m_MapControl);
-		m_MapControl.addMapTool("area", new Behavior[] {
-				new PolygonBehavior(ali), new MouseMovementBehavior(sbl) });
-
-		// Seleccion por punto
-		PointSelectListener psl = new PointSelectListener(m_MapControl);
-		m_MapControl.addMapTool("pointSelection", new Behavior[] {
-				new PointBehavior(psl), new MouseMovementBehavior(sbl) });
-
-		// Info por punto
-		InfoListener il = new InfoListener(m_MapControl);
-		m_MapControl.addMapTool("info", new Behavior[] { new PointBehavior(il),
-				new MouseMovementBehavior(sbl) });
-
-		// Link por punto
-		LinkListener ll = new LinkListener(m_MapControl);
-		m_MapControl.addMapTool("link", new Behavior[] { new PointBehavior(ll),
-				new MouseMovementBehavior(sbl) });
-
-		// Selección por rectángulo
-		RectangleSelectListener rsl = new RectangleSelectListener(m_MapControl);
-		m_MapControl.addMapTool("rectSelection", new Behavior[] {
-				new RectangleBehavior(rsl), new MouseMovementBehavior(sbl) });
-
-		// Selección por polígono
-		PolygonSelectListener poligSel = new PolygonSelectListener(m_MapControl);
-		m_MapControl
-				.addMapTool("polSelection", new Behavior[] {
-						new PolygonBehavior(poligSel),
-						new MouseMovementBehavior(sbl) });
-
-		// Zoom por rectángulo
-		ZoomOutRightButtonListener zoil = new ZoomOutRightButtonListener(
-				m_MapControl);
+		// Zoom por rectï¿½ngulo
 		ZoomInListener zil = new ZoomInListener(m_MapControl);
 		m_MapControl.addMapTool("zoomIn", new Behavior[] {
 				new RectangleBehavior(zil), new PointBehavior(zoil),
 				new MouseMovementBehavior(sbl) });
 
-		SelectImageListener sil = new SelectImageListener(m_MapControl);
-		m_MapControl.addMapTool("selectImage", new Behavior[] {
-				new PointBehavior(sil), new MouseMovementBehavior(sbl) });
-
-		// ZoomPixelCursorListener zp = new
-		// ZoomPixelCursorListener(m_MapControl);
-		// m_MapControl.addMapTool("zoom_pixel_cursor", new Behavior[]{new
-		// PointBehavior(zp), new MouseMovementBehavior(sbl)});
-
 		m_MapControl.setTool("zoomIn"); // Por defecto
-		// m_MapControl.setPaintEnabled(true);
 	}
 
 	/**
@@ -525,24 +447,20 @@ public class View extends BaseView {
 				.getStatusBar()
 				.setMessage(
 						"units",
-						PluginServices.getText(this,
-								MapContext.getDistanceNames()[getMapControl()
-										.getMapContext().getViewPort()
-										.getDistanceUnits()]));
+						PluginServices.getText(this, getMapControl()
+								.getViewPort().getDistanceUnits().name));
 		PluginServices
 				.getMainFrame()
 				.getStatusBar()
 				.setControlValue(
 						"scale",
-						String.valueOf(m_MapControl.getMapContext()
+						String.valueOf(m_MapControl.getViewPort()
 								.getScaleView()));
 		PluginServices
 				.getMainFrame()
 				.getStatusBar()
-				.setMessage(
-						"projection",
-						ProjectionUtils.getAbrev(getMapControl().getViewPort()
-								.getCrs()));
+				.setMessage("projection",
+						CRS.toSRS(getMapControl().getViewPort().getCrs()));
 	}
 
 	/**

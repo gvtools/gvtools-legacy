@@ -2,7 +2,7 @@ package org.gvsig.units;
 
 import java.util.ArrayList;
 
-public enum DistanceUnit {
+public enum Unit {
 	KM("Kilometros", "Km", 1000), M("Metros", "m", 1), CM("Centimetros", "cm",
 			0.01), MM("Milimetros", "mm", 0.001), MI("Millas", "mi", 1609.344), YA(
 			"Yardas", "Ya", 0.9144), FT("Pies", "ft", 0.3048), INCHE(
@@ -10,17 +10,27 @@ public enum DistanceUnit {
 
 	public String name;
 	public String symbol;
-	public double toMeter;
+	private double toMeter;
+	private double toSquareMeter;
 
-	DistanceUnit(String name, String symbol, double toMeter) {
+	Unit(String name, String symbol, double toMeter) {
 		this.name = name;
 		this.symbol = symbol;
 		this.toMeter = toMeter;
+		this.toSquareMeter = Math.pow(toMeter, 2);
+	}
+
+	public double toMeter() {
+		return toMeter;
+	}
+
+	public double toSquareMeter() {
+		return toSquareMeter;
 	}
 
 	public static String[] getDistanceNames() {
 		ArrayList<String> ret = new ArrayList<String>();
-		for (DistanceUnit unit : DistanceUnit.values()) {
+		for (Unit unit : Unit.values()) {
 			ret.add(unit.name);
 		}
 
@@ -29,7 +39,7 @@ public enum DistanceUnit {
 
 	public static String[] getDistanceSymbols() {
 		ArrayList<String> ret = new ArrayList<String>();
-		for (DistanceUnit unit : DistanceUnit.values()) {
+		for (Unit unit : Unit.values()) {
 			ret.add(unit.symbol);
 		}
 
@@ -42,14 +52,20 @@ public enum DistanceUnit {
 	 * @throws IllegalArgumentException
 	 *             If there is no unit with the specified name
 	 */
-	public static DistanceUnit fromName(String name)
-			throws IllegalArgumentException {
-		for (DistanceUnit unit : values()) {
+	public static Unit fromName(String name) throws IllegalArgumentException {
+		for (Unit unit : values()) {
 			if (unit.name.equals(name)) {
 				return unit;
 			}
 		}
 
 		throw new IllegalArgumentException("No such unit: " + name);
+	}
+
+	public String getSquareSuffix() {
+		/*
+		 * All units are linear
+		 */
+		return String.valueOf((char) 178);
 	}
 }

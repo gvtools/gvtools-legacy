@@ -53,7 +53,7 @@ import java.util.prefs.Preferences;
 
 import org.geotools.referencing.CRS;
 import org.gvsig.map.MapContext;
-import org.gvsig.units.DistanceUnit;
+import org.gvsig.units.Unit;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.crs.ProjectedCRS;
 
@@ -275,7 +275,7 @@ public class ViewPort {
 	 * @see #getDistanceUnits()
 	 * @see #setDistanceUnits(int)
 	 */
-	private int distanceUnits = 1;
+	private Unit distanceUnits = Unit.M;
 	/**
 	 * <p>
 	 * Measurement unit used for measuring areas and displaying information.
@@ -284,7 +284,7 @@ public class ViewPort {
 	 * @see #getDistanceArea()
 	 * @see #setDistanceArea(int)
 	 */
-	private int distanceArea = 1;
+	private Unit distanceArea = Unit.M;
 	/**
 	 * <p>
 	 * Measurement unit used by this view port for the map.
@@ -293,7 +293,7 @@ public class ViewPort {
 	 * @see #getMapUnits()
 	 * @see #setMapUnits(int)
 	 */
-	private DistanceUnit mapUnits = DistanceUnit.M;
+	private Unit mapUnits = Unit.M;
 
 	/**
 	 * <p>
@@ -706,7 +706,7 @@ public class ViewPort {
 			// crs.toGeo(pt2));
 			return dist;
 		}
-		return (dist * getMapUnits().toMeter);
+		return (dist * getMapUnits().toMeter());
 	}
 
 	/**
@@ -1179,7 +1179,7 @@ public class ViewPort {
 	 * 
 	 * @see #setDistanceUnits(int)
 	 */
-	public int getDistanceUnits() {
+	public Unit getDistanceUnits() {
 		return distanceUnits;
 	}
 
@@ -1194,7 +1194,7 @@ public class ViewPort {
 	 * 
 	 * @see #setDistanceUnits(int)
 	 */
-	public int getDistanceArea() {
+	public Unit getDistanceArea() {
 		return distanceArea;
 	}
 
@@ -1210,7 +1210,7 @@ public class ViewPort {
 	 * 
 	 * @see #getDistanceUnits()
 	 */
-	public void setDistanceUnits(int distanceUnits) {
+	public void setDistanceUnits(Unit distanceUnits) {
 		this.distanceUnits = distanceUnits;
 	}
 
@@ -1226,7 +1226,7 @@ public class ViewPort {
 	 * 
 	 * @see #getDistanceUnits()
 	 */
-	public void setDistanceArea(int distanceArea) {
+	public void setDistanceArea(Unit distanceArea) {
 		this.distanceArea = distanceArea;
 	}
 
@@ -1239,7 +1239,7 @@ public class ViewPort {
 	 * 
 	 * @see #setMapUnits(int)
 	 */
-	public DistanceUnit getMapUnits() {
+	public Unit getMapUnits() {
 		return mapUnits;
 	}
 
@@ -1253,7 +1253,7 @@ public class ViewPort {
 	 * 
 	 * @see #getMapUnits()
 	 */
-	public void setMapUnits(DistanceUnit mapUnits) {
+	public void setMapUnits(Unit mapUnits) {
 		this.mapUnits = mapUnits;
 	}
 
@@ -1597,11 +1597,14 @@ public class ViewPort {
 
 		vp.setDist1pixel(xml.getDoubleProperty("dist1pixel"));
 		vp.setDist3pixel(xml.getDoubleProperty("dist3pixel"));
-		vp.setDistanceUnits(xml.getIntProperty("distanceUnits"));
+		vp.setDistanceUnits(Unit.fromName(xml
+				.getStringProperty("distanceUnits")));
 		if (xml.contains("distanceArea")) {
-			vp.setDistanceArea(xml.getIntProperty("distanceArea"));
+			vp.setDistanceArea(Unit.fromName(xml
+					.getStringProperty("distanceArea")));
 		} else {
-			vp.setDistanceArea(xml.getIntProperty("distanceUnits"));
+			vp.setDistanceArea(Unit.fromName(xml
+					.getStringProperty("distanceUnits")));
 		}
 		vp.extents = ExtentHistory.createFromXML(xml.getChild(0));
 
@@ -1619,7 +1622,7 @@ public class ViewPort {
 			// vp.callExtentListeners(vp.adjustedExtent);
 		}
 
-		vp.setMapUnits(DistanceUnit.fromName(xml.getStringProperty("mapUnits")));
+		vp.setMapUnits(Unit.fromName(xml.getStringProperty("mapUnits")));
 		vp.setOffset(new Point2D.Double(xml.getDoubleProperty("offsetX"), xml
 				.getDoubleProperty("offsetY")));
 
@@ -1741,12 +1744,13 @@ public class ViewPort {
 		}
 		if (crs == null) {
 			double w = ((getImageSize().getWidth() / dpi) * 2.54);
-			return (long) (getAdjustedExtent().getWidth() / w * getMapUnits().toMeter);
+			return (long) (getAdjustedExtent().getWidth() / w * getMapUnits()
+					.toMeter());
 		}
 
 		return (long) ProjectionUtils.getScale(crs, (getAdjustedExtent()
-				.getMinX() * getMapUnits().toMeter), (getAdjustedExtent()
-				.getMaxX() * getMapUnits().toMeter), getImageSize()
+				.getMinX() * getMapUnits().toMeter()), (getAdjustedExtent()
+				.getMaxX() * getMapUnits().toMeter()), getImageSize()
 				.getWidth(), dpi);
 	}
 

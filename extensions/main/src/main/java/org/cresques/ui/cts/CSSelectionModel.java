@@ -267,182 +267,189 @@ public class CSSelectionModel {
 		}
 	}
 
-	public CoordinateReferenceSystem getCrs()
-			throws NoSuchAuthorityCodeException, FactoryException {
-		CoordinateReferenceSystem crs = null;
-		String datum = "326";
+	public CoordinateReferenceSystem getCrs() {
+		try {
+			CoordinateReferenceSystem crs = null;
+			String datum = "326";
 
-		if (selectedDatum == 0) {
-			datum = "326";
-			if (selectedProj == 0)
-				return CRS.decode("EPSG:4" + datum);
-			else if (selectedProj == 1) {
-				String zone = Integer.toString(selectedZone + 1);
-				if (selectedZone < 9)
-					zone = "0" + zone;
-				return CRS.decode("EPSG:" + datum + zone);
-			} else if (selectedProj == 2)
+			if (selectedDatum == 0) {
+				datum = "326";
+				if (selectedProj == 0)
+					return CRS.decode("EPSG:4" + datum);
+				else if (selectedProj == 1) {
+					String zone = Integer.toString(selectedZone + 1);
+					if (selectedZone < 9)
+						zone = "0" + zone;
+					return CRS.decode("EPSG:" + datum + zone);
+				} else if (selectedProj == 2)
+					return CRS.decode("EPSG:42101");
+				else if (selectedProj == 3)
+					return CRS.decode("EPSG:9804");
+
+			} else if (selectedDatum == 1) {
+				datum = "230";
+				if (selectedProj == 0)
+					return CRS.decode("EPSG:4" + datum);
+				else if (selectedProj == 1) {
+					String zone = Integer.toString(selectedZone + 1);
+					if (selectedZone < 9)
+						zone = "0" + zone;
+					return CRS.decode("EPSG:" + datum + zone);
+				}
+
+			} else if (selectedDatum == 2) { // Lisboa 73
+				datum = "274";
+				if (selectedProj == 0)
+					return CRS.decode("EPSG:4" + datum);
+				else if (selectedProj == 1)
+					return CRS.decode("EPSG:" + datum + "92");
+
+			} else if (selectedDatum == 3) {
+				datum = "267";
+				if (selectedProj == 0)
+					return CRS.decode("EPSG:4" + datum);
+				else if (selectedProj == 1) {
+					String zone = Integer.toString(selectedZone + 3);
+					if (selectedZone + 3 <= 9)
+						zone = "0" + zone;
+					return CRS.decode("EPSG:" + datum + zone);
+				}
+
+			} else if (selectedDatum == 4) {
+				datum = "269";
+				if (selectedProj == 0)
+					return CRS.decode("EPSG:4" + datum);
+				else if (selectedProj == 1) {
+					String zone = Integer.toString(selectedZone + 3);
+					if (selectedZone + 3 <= 9)
+						zone = "0" + zone;
+					return CRS.decode("EPSG:" + datum + zone);
+				} else if (selectedProj == 2)
+					return CRS.decode("EPSG:42304");
+
+			} else if (selectedDatum == 5) {
+				datum = "247";
+				if (selectedProj == 0)
+					return CRS.decode("EPSG:4" + datum);
+				else if (selectedProj == 1) {
+					String zone = Integer.toString(selectedZone + 18);
+					return CRS.decode("EPSG:" + datum + zone);
+				}
+
+			} else if (selectedDatum == 6) {
+				datum = "807";
+				if (selectedProj == 0)
+					return CRS.decode("EPSG:4" + datum);
+				else if (selectedProj == 1)
+					return CRS.decode("EPSG:27582");
+
+			} else if (selectedDatum == 7) {
+				datum = "258";
+				if (selectedProj == 0)
+					return CRS.decode("EPSG:4" + datum);
+				else if (selectedProj == 1) {
+					String zone = Integer.toString(selectedZone + 28);
+					return CRS.decode("EPSG:" + datum + zone);
+				}
+
+			} else if (selectedDatum == 8) {
+				datum = "30100";
+				return CRS.decode("IAU2000:" + datum);
+
+			} else if (selectedDatum == 9) {
+				datum = "49900";
+				return CRS.decode("IAU2000:" + datum);
+
+			} else if (selectedDatum == 10) {
+				datum = "221";
+				if (selectedProj == 0)
+					return CRS.decode("EPSG:4" + datum);
+				else if (selectedProj == 1) {
+					String zone = Integer.toString(selectedZone + 1);
+					return CRS.decode("EPSG:" + datum + "9" + zone);
+				}
+
+			} else if (selectedDatum == 11) {
+				if (selectedProj == 0)
+					return CRS.decode("EPSG:4171");
+				else if (selectedProj == 1)
+					return CRS.decode("EPSG:2154");
+			}
+
+			if (selectedProj == 2) {
+				return CRS.decode("EPSG:27492");
+			} else if (selectedProj == 3) {
 				return CRS.decode("EPSG:42101");
-			else if (selectedProj == 3)
-				return CRS.decode("EPSG:9804");
-
-		} else if (selectedDatum == 1) {
-			datum = "230";
-			if (selectedProj == 0)
-				return CRS.decode("EPSG:4" + datum);
-			else if (selectedProj == 1) {
-				String zone = Integer.toString(selectedZone + 1);
-				if (selectedZone < 9)
-					zone = "0" + zone;
-				return CRS.decode("EPSG:" + datum + zone);
-			}
-
-		} else if (selectedDatum == 2) { // Lisboa 73
-			datum = "274";
-			if (selectedProj == 0)
-				return CRS.decode("EPSG:4" + datum);
-			else if (selectedProj == 1)
-				return CRS.decode("EPSG:" + datum + "92");
-
-		} else if (selectedDatum == 3) {
-			datum = "267";
-			if (selectedProj == 0)
-				return CRS.decode("EPSG:4" + datum);
-			else if (selectedProj == 1) {
-				String zone = Integer.toString(selectedZone + 3);
-				if (selectedZone + 3 <= 9)
-					zone = "0" + zone;
-				return CRS.decode("EPSG:" + datum + zone);
-			}
-
-		} else if (selectedDatum == 4) {
-			datum = "269";
-			if (selectedProj == 0)
-				return CRS.decode("EPSG:4" + datum);
-			else if (selectedProj == 1) {
-				String zone = Integer.toString(selectedZone + 3);
-				if (selectedZone + 3 <= 9)
-					zone = "0" + zone;
-				return CRS.decode("EPSG:" + datum + zone);
-			} else if (selectedProj == 2)
+			} else if (selectedProj == 4) {
 				return CRS.decode("EPSG:42304");
-
-		} else if (selectedDatum == 5) {
-			datum = "247";
-			if (selectedProj == 0)
-				return CRS.decode("EPSG:4" + datum);
-			else if (selectedProj == 1) {
-				String zone = Integer.toString(selectedZone + 18);
-				return CRS.decode("EPSG:" + datum + zone);
-			}
-
-		} else if (selectedDatum == 6) {
-			datum = "807";
-			if (selectedProj == 0)
-				return CRS.decode("EPSG:4" + datum);
-			else if (selectedProj == 1)
+			} else if (selectedProj == 5) {
 				return CRS.decode("EPSG:27582");
-
-		} else if (selectedDatum == 7) {
-			datum = "258";
-			if (selectedProj == 0)
-				return CRS.decode("EPSG:4" + datum);
-			else if (selectedProj == 1) {
-				String zone = Integer.toString(selectedZone + 28);
+			} else if (selectedProj == 6) {
+				return CRS.decode("EPSG:2154");
+			} else if (selectedProj == 7) {
+				return CRS.decode("EPSG:9804");
+			} else if (selectedProj == 8) {
+				datum = "221";
+				String zone = "9";
+				// if (selectedDatum == 10) {
+				if (selectedZone < 1) {
+					zone += "1";
+				} else if (selectedZone > 7) {
+					zone += "7";
+				} else
+					zone += (selectedZone + 1) + "";
+				// }
 				return CRS.decode("EPSG:" + datum + zone);
 			}
 
-		} else if (selectedDatum == 8) {
-			datum = "30100";
-			return CRS.decode("IAU2000:" + datum);
-
-		} else if (selectedDatum == 9) {
-			datum = "49900";
-			return CRS.decode("IAU2000:" + datum);
-
-		} else if (selectedDatum == 10) {
-			datum = "221";
-			if (selectedProj == 0)
+			if (selectedProj == 0) {
 				return CRS.decode("EPSG:4" + datum);
-			else if (selectedProj == 1) {
-				String zone = Integer.toString(selectedZone + 1);
-				return CRS.decode("EPSG:" + datum + "9" + zone);
+			} else if (selectedProj == 1) {
+				String Zone = Integer.toString(selectedZone + 1);
+
+				if (selectedZone < 9) {
+					Zone = "0" + Zone;
+				}
+
+				if ((selectedDatum == 2) || (selectedDatum == 3)) {
+					if (selectedZone < 3) {
+						Zone = "03";
+					}
+
+					if (selectedZone > 23) {
+						Zone = "23";
+					}
+				}
+
+				if (selectedDatum == 5) {
+					if (selectedZone < 18) {
+						Zone = "18";
+					}
+
+					if (selectedZone > 22) {
+						Zone = "22";
+					}
+				}
+
+				if (selectedDatum == 7) {
+					if (selectedZone < 28) {
+						Zone = "28";
+					}
+
+					if (selectedZone > 38) {
+						Zone = "38";
+					}
+				}
+				return CRS.decode("EPSG:" + datum + Zone);
 			}
 
-		} else if (selectedDatum == 11) {
-			if (selectedProj == 0)
-				return CRS.decode("EPSG:4171");
-			else if (selectedProj == 1)
-				return CRS.decode("EPSG:2154");
+			return crs;
+		} catch (NoSuchAuthorityCodeException e) {
+			// Ey you!, it's time to refactor the code above, come on
+			throw new RuntimeException("Bug", e);
+		} catch (FactoryException e) {
+			// Ey you!, it's time to refactor the code above, come on
+			throw new RuntimeException("Bug", e);
 		}
-
-		if (selectedProj == 2) {
-			return CRS.decode("EPSG:27492");
-		} else if (selectedProj == 3) {
-			return CRS.decode("EPSG:42101");
-		} else if (selectedProj == 4) {
-			return CRS.decode("EPSG:42304");
-		} else if (selectedProj == 5) {
-			return CRS.decode("EPSG:27582");
-		} else if (selectedProj == 6) {
-			return CRS.decode("EPSG:2154");
-		} else if (selectedProj == 7) {
-			return CRS.decode("EPSG:9804");
-		} else if (selectedProj == 8) {
-			datum = "221";
-			String zone = "9";
-			// if (selectedDatum == 10) {
-			if (selectedZone < 1) {
-				zone += "1";
-			} else if (selectedZone > 7) {
-				zone += "7";
-			} else
-				zone += (selectedZone + 1) + "";
-			// }
-			return CRS.decode("EPSG:" + datum + zone);
-		}
-
-		if (selectedProj == 0) {
-			return CRS.decode("EPSG:4" + datum);
-		} else if (selectedProj == 1) {
-			String Zone = Integer.toString(selectedZone + 1);
-
-			if (selectedZone < 9) {
-				Zone = "0" + Zone;
-			}
-
-			if ((selectedDatum == 2) || (selectedDatum == 3)) {
-				if (selectedZone < 3) {
-					Zone = "03";
-				}
-
-				if (selectedZone > 23) {
-					Zone = "23";
-				}
-			}
-
-			if (selectedDatum == 5) {
-				if (selectedZone < 18) {
-					Zone = "18";
-				}
-
-				if (selectedZone > 22) {
-					Zone = "22";
-				}
-			}
-
-			if (selectedDatum == 7) {
-				if (selectedZone < 28) {
-					Zone = "28";
-				}
-
-				if (selectedZone > 38) {
-					Zone = "38";
-				}
-			}
-			return CRS.decode("EPSG:" + datum + Zone);
-		}
-
-		return crs;
 	}
 }
