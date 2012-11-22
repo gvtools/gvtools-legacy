@@ -406,6 +406,8 @@ public class View extends BaseView {
 			}
 		}
 
+		StatusBarListener sbl = new StatusBarListener(m_MapControl);
+
 		ZoomOutListener zol = new ZoomOutListener(m_MapControl);
 		m_MapControl.addMapTool("zoomOut", new Behavior[] {
 				new PointBehavior(zol), new MouseMovementBehavior(sbl) });

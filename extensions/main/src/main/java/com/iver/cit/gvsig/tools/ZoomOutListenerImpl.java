@@ -94,6 +94,18 @@ import com.iver.cit.gvsig.tools.listeners.PointListener;
  */
 public class ZoomOutListenerImpl implements PointListener {
 	/**
+	 * <p>
+	 * Default <i>zoom out</i> factor.
+	 * </p>
+	 * <p>
+	 * Doing a <i>zoom out</i> operation, increases the focal distance and
+	 * decreases the eyesight angle to the surface. This allows view a bigger
+	 * area but with the items smaller.
+	 * </p>
+	 */
+	public static double ZOOMOUTFACTOR = 0.5;
+
+	/**
 	 * The image to display when the cursor is active.
 	 */
 	private final Image izoomout = new ImageIcon(
@@ -138,7 +150,7 @@ public class ZoomOutListenerImpl implements PointListener {
 
 		double nuevoX;
 		double nuevoY;
-		double factor = 1 / MapContext.ZOOMOUTFACTOR;
+		double factor = 1 / ZOOMOUTFACTOR;
 		Rectangle2D.Double r = new Rectangle2D.Double();
 
 		nuevoX = p2.getX() - ((vp.getExtent().getWidth() * factor) / 2.0);
