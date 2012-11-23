@@ -51,8 +51,7 @@ public class ProjectViewFactory extends ProjectDocumentFactory {
 	public ProjectDocument create(Project project) {
 		String viewName = "";
 		String aux = PluginServices.getText(this, "untitled");
-		int numViews = ((Integer) ProjectDocument.NUMS.get(registerName))
-				.intValue();
+		int numViews = ProjectDocument.NUMS.get(registerName);
 
 		viewName = aux + " - " + numViews++;
 

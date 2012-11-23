@@ -136,8 +136,7 @@ public abstract class ProjectDocumentFactory implements IExtensionBuilder {
 				.getInstance();
 		extensionPoints.add("Documents", registerName, obj);
 		ProjectDocument.NUMS.put(registerName, new Integer(0));
-		ExtensionPoint extPoint = ((ExtensionPoint) extensionPoints
-				.get("Documents"));
+		ExtensionPoint extPoint = extensionPoints.get("Documents");
 
 		try {
 			extPoint.addAlias(registerName, alias);

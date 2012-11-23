@@ -847,9 +847,7 @@ public class ViewPort {
 	 */
 	protected void callExtentChanged(Rectangle2D newRect) {
 		ExtentEvent ev = ExtentEvent.createExtentEvent(newRect);
-
-		for (int i = 0; i < listeners.size(); i++) {
-			ViewPortListener listener = (ViewPortListener) listeners.get(i);
+		for (ViewPortListener listener : listeners) {
 			listener.extentChanged(ev);
 		}
 	}
@@ -870,8 +868,7 @@ public class ViewPort {
 	private void callColorChanged(Color c) {
 		ColorEvent ce = ColorEvent.createColorEvent(c);
 
-		for (int i = 0; i < listeners.size(); i++) {
-			ViewPortListener listener = (ViewPortListener) listeners.get(i);
+		for (ViewPortListener listener : listeners) {
 			listener.backColorChanged(ce);
 		}
 	}
@@ -891,9 +888,7 @@ public class ViewPort {
 	 */
 	private void callCRSChanged(CoordinateReferenceSystem crs) {
 		ProjectionEvent ev = ProjectionEvent.createCrsEvent(crs);
-
-		for (int i = 0; i < listeners.size(); i++) {
-			ViewPortListener listener = (ViewPortListener) listeners.get(i);
+		for (ViewPortListener listener : listeners) {
 			listener.projectionChanged(ev);
 		}
 	}

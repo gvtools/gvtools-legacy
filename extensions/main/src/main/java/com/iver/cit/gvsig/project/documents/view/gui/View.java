@@ -332,8 +332,8 @@ public class View extends BaseView {
 			}
 
 			if (nameSpace) {
-				ResponseListener listener = (ResponseListener) spaceListener
-						.get(response.substring(0, n));
+				ResponseListener listener = spaceListener.get(response
+						.substring(0, n));
 				if (listener != null)
 					listener.acceptResponse(response.substring(n + 1));
 			} else {

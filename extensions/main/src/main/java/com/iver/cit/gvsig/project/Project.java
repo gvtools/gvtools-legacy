@@ -309,10 +309,8 @@ public class Project implements Serializable, PropertyChangeListener {
 	public void setModified(boolean b) {
 		modified = b;
 		if (modified == false) {
-			ProjectDocument[] documents = (ProjectDocument[]) getDocuments()
-					.toArray(new ProjectDocument[0]);
-			for (int i = 0; i < documents.length; i++) {
-				documents[i].setModified(false);
+			for (ProjectDocument doc : getDocuments()) {
+				doc.setModified(false);
 			}
 		}
 	}
@@ -404,7 +402,7 @@ public class Project implements Serializable, PropertyChangeListener {
 	 * @return DOCUMENT ME!
 	 */
 	public ProjectExtent[] getExtents() {
-		return (ProjectExtent[]) extents.toArray(new ProjectExtent[0]);
+		return extents.toArray(new ProjectExtent[0]);
 	}
 
 	/**
@@ -440,7 +438,7 @@ public class Project implements Serializable, PropertyChangeListener {
 	 * @return lista de objetos de tipo camera
 	 */
 	public Object[] getCameras() {
-		return (Object[]) this.cameras.toArray(new Object[0]);
+		return this.cameras.toArray();
 	}
 
 	/**
@@ -524,8 +522,7 @@ public class Project implements Serializable, PropertyChangeListener {
 						if (pd == null)
 							continue;
 						IWindow win = null;
-						if (pd instanceof ProjectDocument
-								&& child.getChildrenCount() > 0
+						if (child.getChildrenCount() > 0
 								&& child.getChild(0).getName()
 										.equals("windowData")) {
 							// this will be generalized to all ProjectDocuments
@@ -533,7 +530,7 @@ public class Project implements Serializable, PropertyChangeListener {
 							WindowData windowData = new WindowData();
 							windowData.setXMLEntity(child.getChild(0));
 							pd.storeWindowData(windowData);
-							win = ((ProjectDocument) pd).createWindow();
+							win = pd.createWindow();
 						} else {
 							win = pd.createWindow();
 						}
@@ -764,8 +761,7 @@ public class Project implements Serializable, PropertyChangeListener {
 	public ProjectDocument getProjectDocumentByName(String name, String type) {
 		ArrayList<ProjectDocument> docs = getDocumentsByType(type);
 		for (Iterator<ProjectDocument> iter = docs.iterator(); iter.hasNext();) {
-			ProjectDocument elem = (ProjectDocument) iter.next();
-
+			ProjectDocument elem = iter.next();
 			if (elem.getName().equals(name)) {
 				return elem;
 			}
@@ -881,7 +877,7 @@ public class Project implements Serializable, PropertyChangeListener {
 		Map<String, Object> properties = di.getPersistentProperties();
 		Iterator<String> keyIterator = properties.keySet().iterator();
 		while (keyIterator.hasNext()) {
-			String persistencePropertyKey = (String) keyIterator.next();
+			String persistencePropertyKey = keyIterator.next();
 			Object persistencePropertyValue = properties
 					.get(persistencePropertyKey);
 			StringPropertyType property = new StringPropertyType();
@@ -905,8 +901,7 @@ public class Project implements Serializable, PropertyChangeListener {
 	public ArrayList<ProjectDocument> getDocumentsByType(String registerName) {
 		ArrayList<ProjectDocument> docuArray = new ArrayList<ProjectDocument>();
 		for (int i = 0; i < documents.size(); i++) {
-			ProjectDocument projectDocument = (ProjectDocument) documents
-					.get(i);
+			ProjectDocument projectDocument = documents.get(i);
 			ProjectDocumentFactory pdf = projectDocument
 					.getProjectDocumentFactory();
 			if (pdf == null)
@@ -926,9 +921,7 @@ public class Project implements Serializable, PropertyChangeListener {
 	public ArrayList<ProjectDocument> getDocuments() {
 		ArrayList<ProjectDocument> docuArray = new ArrayList<ProjectDocument>();
 		for (int i = 0; i < documents.size(); i++) {
-			ProjectDocument projectDocument = (ProjectDocument) documents
-					.get(i);
-			docuArray.add(projectDocument);
+			docuArray.add(documents.get(i));
 		}
 		return docuArray;
 	}
@@ -1140,8 +1133,7 @@ public class Project implements Serializable, PropertyChangeListener {
 		try {
 			ExtensionPoints extensionPoints = ExtensionPointsSingleton
 					.getInstance();
-			ExtensionPoint extPoint = ((ExtensionPoint) extensionPoints
-					.get("Documents"));
+			ExtensionPoint extPoint = extensionPoints.get("Documents");
 			try {
 				pde = (ProjectDocumentFactory) extPoint.create(type);
 			} catch (InstantiationException e) {

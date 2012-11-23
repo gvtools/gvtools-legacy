@@ -229,8 +229,7 @@ public abstract class ProjectDocument implements Serializable {
 		ProjectDocumentFactory pde = null;
 		ExtensionPoints extensionPoints = ExtensionPointsSingleton
 				.getInstance();
-		ExtensionPoint extPoint = ((ExtensionPoint) extensionPoints
-				.get("Documents"));
+		ExtensionPoint extPoint = extensionPoints.get("Documents");
 		try {
 			pde = (ProjectDocumentFactory) extPoint.create(className);
 		} catch (InstantiationException e) {
@@ -383,8 +382,7 @@ public abstract class ProjectDocument implements Serializable {
 		NUMS.clear();
 		ExtensionPoints extensionPoints = ExtensionPointsSingleton
 				.getInstance();
-		ExtensionPoint extensionPoint = (ExtensionPoint) extensionPoints
-				.get("Documents");
+		ExtensionPoint extensionPoint = extensionPoints.get("Documents");
 		Iterator<String> iterator = extensionPoint.keySet().iterator();
 		while (iterator.hasNext()) {
 			try {

@@ -25,7 +25,7 @@ public class WindowData {
 	}
 
 	public String get(String key) {
-		return (String) data.get(key);
+		return data.get(key);
 	}
 
 	public XMLEntity getXMLEntity() {

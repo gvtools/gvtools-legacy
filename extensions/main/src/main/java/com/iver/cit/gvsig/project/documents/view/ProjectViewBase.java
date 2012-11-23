@@ -77,7 +77,7 @@ public abstract class ProjectViewBase extends ProjectDocument implements
 			String layersError = "";
 			for (int i = 0; i < mapContext.getLayersError().size(); i++) {
 				layersError = layersError + "\n"
-						+ (String) mapContext.getLayersError().get(i);
+						+ mapContext.getLayersError().get(i);
 			}
 			JOptionPane.showMessageDialog(
 					(Component) PluginServices.getMainFrame(),

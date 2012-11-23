@@ -40,8 +40,8 @@ public class DocumentContextMenu extends JPopupMenu {
 		this.option = option;
 		this.item = item;
 		this.seleteds = seleteds;
-		this.extensionPoint = (ExtensionPoint) ExtensionPointsSingleton
-				.getInstance().get("DocumentActions_" + this.option);
+		this.extensionPoint = ExtensionPointsSingleton.getInstance().get(
+				"DocumentActions_" + this.option);
 		if (this.extensionPoint == null) {
 			// FIXME: que hacemos aqui?
 			return;

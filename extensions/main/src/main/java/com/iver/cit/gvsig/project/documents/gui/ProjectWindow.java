@@ -305,8 +305,7 @@ public class ProjectWindow extends JPanel implements PropertyChangeListener,
 		ExtensionPoints extensionPoints = ExtensionPointsSingleton
 				.getInstance();
 
-		ExtensionPoint extensionPoint = (ExtensionPoint) extensionPoints
-				.get("Documents");
+		ExtensionPoint extensionPoint = extensionPoints.get("Documents");
 		Iterator<String> iterator = extensionPoint.keySet().iterator();
 		while (iterator.hasNext()) {
 			try {
@@ -409,8 +408,8 @@ public class ProjectWindow extends JPanel implements PropertyChangeListener,
 		for (int i = 0; i < lstDocs.getModel().getSize(); i++) {
 			if (i == index)
 				continue;
-			if (((ProjectDocument) lstDocs.getModel().getElementAt(i))
-					.getName().equals(nuevoNombre)) {
+			if (lstDocs.getModel().getElementAt(i).getName()
+					.equals(nuevoNombre)) {
 				JOptionPane.showMessageDialog(
 						(Component) PluginServices.getMainFrame(),
 						PluginServices.getText(this, "elemento_ya_existe"));
@@ -518,8 +517,7 @@ public class ProjectWindow extends JPanel implements PropertyChangeListener,
 			ExtensionPoints extensionPoints = ExtensionPointsSingleton
 					.getInstance();
 
-			ExtensionPoint extensionPoint = (ExtensionPoint) extensionPoints
-					.get("Documents");
+			ExtensionPoint extensionPoint = extensionPoints.get("Documents");
 			ArrayList<JRadioButton> btns = new ArrayList<JRadioButton>();
 			ArrayList<Integer> priorities = new ArrayList<Integer>();
 			Iterator<String> iterator = extensionPoint.keySet().iterator();
@@ -544,7 +542,7 @@ public class ProjectWindow extends JPanel implements PropertyChangeListener,
 					int priority = documentFactory.getListPriority();
 					int pos;
 					for (pos = 0; pos < btns.size(); pos++) {
-						if (((Integer) (priorities.get(pos))).intValue() > priority) {
+						if (priorities.get(pos) > priority) {
 							priorities.add(pos, new Integer(priority));
 							btns.add(pos, rb);
 							break;
@@ -564,8 +562,7 @@ public class ProjectWindow extends JPanel implements PropertyChangeListener,
 				}
 			}
 
-			btnsDocuments = (JRadioButton[]) btns.toArray(new JRadioButton[0]);
-
+			btnsDocuments = btns.toArray(new JRadioButton[0]);
 		}
 
 		return btnsDocuments;
@@ -646,18 +643,13 @@ public class ProjectWindow extends JPanel implements PropertyChangeListener,
 
 				public void mouseClicked(java.awt.event.MouseEvent e) {
 					if (e.getButton() == java.awt.event.MouseEvent.BUTTON3) {
-						/*
-						 * getDocumentSelected();//ProjectView
-						 * getDocumentSelectedName();//Vista
-						 */
 						String docType = getDocumentSelected();
 						ProjectDocument[] selecteds = this.getSelecteds();
 
 						if (selecteds == null)
 							return;
 						DocumentContextMenu menu = new DocumentContextMenu(
-								docType, this.getItem(e),
-								(ProjectDocument[]) selecteds);
+								docType, this.getItem(e), selecteds);
 						if (menu.getActionsVisibles() < 1)
 							return;
 						lstDocs.add(menu);

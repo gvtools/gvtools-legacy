@@ -697,8 +697,7 @@ public class ViewProperties extends JPanel implements SingletonWindow {
 						if (view.equals(views.get(i))) {
 							continue;
 						}
-						if (((ProjectDocument) views.get(i)).getName().equals(
-								name)) {
+						if (views.get(i).getName().equals(name)) {
 							JOptionPane.showMessageDialog(
 									(Component) PluginServices.getMainFrame(),
 									PluginServices.getText(this,

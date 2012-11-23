@@ -184,7 +184,7 @@ public class CompoundBehavior extends Behavior {
 	 *         .
 	 */
 	public boolean isDrawnBehavior(int index) {
-		return ((Boolean) draws.get(index)).booleanValue();
+		return draws.get(index);
 	}
 
 	/**
@@ -226,7 +226,7 @@ public class CompoundBehavior extends Behavior {
 	 */
 	public Cursor getCursor() {
 		if (behaviors.size() > 0) {
-			return ((Behavior) behaviors.get(0)).getCursor();
+			return behaviors.get(0).getCursor();
 		} else {
 			return null;
 		}
@@ -369,9 +369,9 @@ public class CompoundBehavior extends Behavior {
 	 */
 	public void paintComponent(Graphics g) {
 		for (int i = 0; i < behaviors.size(); i++) {
-			Behavior mapTool = (Behavior) behaviors.get(i);
+			Behavior mapTool = behaviors.get(i);
 
-			if (((Boolean) draws.get(i)).booleanValue())
+			if (draws.get(i))
 				mapTool.paintComponent(g);
 		}
 	}

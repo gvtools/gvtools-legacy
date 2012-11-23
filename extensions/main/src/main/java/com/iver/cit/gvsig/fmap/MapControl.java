@@ -43,7 +43,6 @@ package com.iver.cit.gvsig.fmap;
 import geomatico.events.EventBus;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -757,7 +756,7 @@ public class MapControl extends JComponent implements ComponentListener {
 	 * @see #hasTool(String)
 	 */
 	public Behavior getMapTool(String name) {
-		return (Behavior) namesMapTools.get(name);
+		return namesMapTools.get(name);
 	}
 
 	/**
@@ -819,7 +818,7 @@ public class MapControl extends JComponent implements ComponentListener {
 	 */
 	public void setTool(String toolName) {
 		prevTool = getCurrentTool();
-		Behavior mapTool = (Behavior) namesMapTools.get(toolName);
+		Behavior mapTool = namesMapTools.get(toolName);
 		currentMapTool = mapTool;
 		currentTool = toolName;
 
@@ -2042,14 +2041,14 @@ public class MapControl extends JComponent implements ComponentListener {
 	 */
 	public void zoomIn() {
 		// getMapContext().clearAllCachingImageDrawnLayers();
-		Behavior mapTool = (Behavior) namesMapTools.get("zoomIn");
+		Behavior mapTool = namesMapTools.get("zoomIn");
 		ViewPort vp = getViewPort();
 		Rectangle2D r = getViewPort().getAdjustedExtent();
 		Point2D pCenter = vp.fromMapPoint(r.getCenterX(), r.getCenterY());
-		MouseEvent e = new MouseEvent((Component) this,
-				MouseEvent.MOUSE_RELEASED, MouseEvent.ACTION_EVENT_MASK,
-				MouseEvent.BUTTON1, (int) pCenter.getX(), (int) pCenter.getY(),
-				1, true, MouseEvent.BUTTON1);
+		MouseEvent e = new MouseEvent(this, MouseEvent.MOUSE_RELEASED,
+				MouseEvent.ACTION_EVENT_MASK, MouseEvent.BUTTON1,
+				(int) pCenter.getX(), (int) pCenter.getY(), 1, true,
+				MouseEvent.BUTTON1);
 		try {
 			mapTool.mousePressed(e);
 			mapTool.mouseReleased(e);
@@ -2077,14 +2076,14 @@ public class MapControl extends JComponent implements ComponentListener {
 	 */
 	public void zoomOut() {
 		// getMapContext().clearAllCachingImageDrawnLayers();
-		Behavior mapTool = (Behavior) namesMapTools.get("zoomOut");
+		Behavior mapTool = namesMapTools.get("zoomOut");
 		ViewPort vp = getViewPort();
 		Rectangle2D r = getViewPort().getAdjustedExtent();
 		Point2D pCenter = vp.fromMapPoint(r.getCenterX(), r.getCenterY());
-		MouseEvent e = new MouseEvent((Component) this,
-				MouseEvent.MOUSE_RELEASED, MouseEvent.ACTION_EVENT_MASK,
-				MouseEvent.BUTTON1, (int) pCenter.getX(), (int) pCenter.getY(),
-				1, true, MouseEvent.BUTTON1);
+		MouseEvent e = new MouseEvent(this, MouseEvent.MOUSE_RELEASED,
+				MouseEvent.ACTION_EVENT_MASK, MouseEvent.BUTTON1,
+				(int) pCenter.getX(), (int) pCenter.getY(), 1, true,
+				MouseEvent.BUTTON1);
 		try {
 			mapTool.mousePressed(e);
 			mapTool.mouseReleased(e);

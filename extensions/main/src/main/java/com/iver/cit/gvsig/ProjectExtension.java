@@ -927,8 +927,7 @@ public class ProjectExtension extends Extension implements IExtensionStatus {
 			return;
 		}
 
-		ExtensionPoints ePs = ((ExtensionPoints) ExtensionPointsSingleton
-				.getInstance());
+		ExtensionPoints ePs = ExtensionPointsSingleton.getInstance();
 
 		if (ePs.get(BEFORE_SAVING_ID) == null) {
 			List<BeforeSavingListener> aL = new ArrayList<BeforeSavingListener>();
@@ -962,8 +961,7 @@ public class ProjectExtension extends Extension implements IExtensionStatus {
 			return;
 		}
 
-		ExtensionPoints ePs = ((ExtensionPoints) ExtensionPointsSingleton
-				.getInstance());
+		ExtensionPoints ePs = ExtensionPointsSingleton.getInstance();
 
 		if (ePs.get(AFTER_SAVING_ID) == null) {
 			List<AfterSavingListener> aL = new ArrayList<AfterSavingListener>();
@@ -991,8 +989,8 @@ public class ProjectExtension extends Extension implements IExtensionStatus {
 	 * @see #removeBeforeSavingListener(BeforeSavingListener)
 	 */
 	public synchronized BeforeSavingListener[] getBeforeSavingListeners() {
-		ExtensionPoint eP = (ExtensionPoint) ((ExtensionPoints) ExtensionPointsSingleton
-				.getInstance()).get(BEFORE_SAVING_ID);
+		ExtensionPoint eP = ExtensionPointsSingleton.getInstance().get(
+				BEFORE_SAVING_ID);
 
 		if (eP == null)
 			return null;
@@ -1016,8 +1014,8 @@ public class ProjectExtension extends Extension implements IExtensionStatus {
 	 * @see #removeAfterSavingListener
 	 */
 	public synchronized AfterSavingListener[] getAfterSavingListeners() {
-		ExtensionPoint eP = (ExtensionPoint) ((ExtensionPoints) ExtensionPointsSingleton
-				.getInstance()).get(AFTER_SAVING_ID);
+		ExtensionPoint eP = ExtensionPointsSingleton.getInstance().get(
+				AFTER_SAVING_ID);
 
 		if (eP == null)
 			return null;
@@ -1050,8 +1048,8 @@ public class ProjectExtension extends Extension implements IExtensionStatus {
 			return;
 		}
 
-		ExtensionPoint eP = (ExtensionPoint) ((ExtensionPoints) ExtensionPointsSingleton
-				.getInstance()).get(BEFORE_SAVING_ID);
+		ExtensionPoint eP = ExtensionPointsSingleton.getInstance().get(
+				BEFORE_SAVING_ID);
 
 		if (eP != null) {
 			((ArrayList<BeforeSavingListener>) eP.get("")).remove(l);
@@ -1079,8 +1077,8 @@ public class ProjectExtension extends Extension implements IExtensionStatus {
 			return;
 		}
 
-		ExtensionPoint eP = (ExtensionPoint) ((ExtensionPoints) ExtensionPointsSingleton
-				.getInstance()).get(AFTER_SAVING_ID);
+		ExtensionPoint eP = ExtensionPointsSingleton.getInstance().get(
+				AFTER_SAVING_ID);
 
 		if (eP != null) {
 			((ArrayList<AfterSavingListener>) eP.get("")).remove(l);
@@ -1100,8 +1098,8 @@ public class ProjectExtension extends Extension implements IExtensionStatus {
 			return;
 		}
 
-		ExtensionPoint eP = (ExtensionPoint) ((ExtensionPoints) ExtensionPointsSingleton
-				.getInstance()).get(BEFORE_SAVING_ID);
+		ExtensionPoint eP = ExtensionPointsSingleton.getInstance().get(
+				BEFORE_SAVING_ID);
 
 		if (eP != null) {
 			ArrayList<BeforeSavingListener> listeners = ((ArrayList<BeforeSavingListener>) eP
@@ -1125,8 +1123,8 @@ public class ProjectExtension extends Extension implements IExtensionStatus {
 			return;
 		}
 
-		ExtensionPoint eP = (ExtensionPoint) ((ExtensionPoints) ExtensionPointsSingleton
-				.getInstance()).get(AFTER_SAVING_ID);
+		ExtensionPoint eP = ExtensionPointsSingleton.getInstance().get(
+				AFTER_SAVING_ID);
 
 		if (eP != null) {
 			ArrayList<AfterSavingListener> listeners = ((ArrayList<AfterSavingListener>) eP

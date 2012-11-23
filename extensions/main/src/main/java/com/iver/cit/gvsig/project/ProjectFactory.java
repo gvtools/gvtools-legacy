@@ -100,8 +100,7 @@ public class ProjectFactory {
 	public static ProjectView createView(String viewName) {
 		ExtensionPoints extensionPoints = ExtensionPointsSingleton
 				.getInstance();
-		ExtensionPoint extPoint = ((ExtensionPoint) extensionPoints
-				.get("Documents"));
+		ExtensionPoint extPoint = extensionPoints.get("Documents");
 		ProjectDocumentFactory pdf = null;
 		try {
 			pdf = (ProjectDocumentFactory) extPoint
