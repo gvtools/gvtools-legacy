@@ -65,6 +65,7 @@ import com.iver.cit.gvsig.fmap.MapControl;
 import com.iver.cit.gvsig.fmap.ProjectionEvent;
 import com.iver.cit.gvsig.fmap.ViewPort;
 import com.iver.cit.gvsig.fmap.ViewPortListener;
+import com.iver.cit.gvsig.fmap.tools.ZoomOutRightButtonListener;
 import com.iver.cit.gvsig.fmap.tools.Behavior.Behavior;
 import com.iver.cit.gvsig.fmap.tools.Behavior.MouseMovementBehavior;
 import com.iver.cit.gvsig.fmap.tools.Behavior.MoveBehavior;
@@ -425,6 +426,8 @@ public class View extends BaseView {
 				new MouseMovementBehavior(sbl) });
 
 		// Zoom por rect�ngulo
+		ZoomOutRightButtonListener zoil = new ZoomOutRightButtonListener(
+				m_MapControl);
 		ZoomInListener zil = new ZoomInListener(m_MapControl);
 		m_MapControl.addMapTool("zoomIn", new Behavior[] {
 				new RectangleBehavior(zil), new PointBehavior(zoil),
