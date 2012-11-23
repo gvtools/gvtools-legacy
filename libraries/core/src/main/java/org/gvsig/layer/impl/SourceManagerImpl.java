@@ -1,5 +1,7 @@
 package org.gvsig.layer.impl;
 
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 
 import org.geotools.data.simple.SimpleFeatureSource;
@@ -8,6 +10,8 @@ import org.gvsig.layer.SourceManager;
 import org.gvsig.persistence.generated.DataSourceType;
 
 public class SourceManagerImpl implements SourceManager {
+
+	private HashMap<String, Source> idSource = new HashMap<String, Source>();
 
 	// private HashMap<Source, DataStore> urlSource = new HashMap<Source,
 	// DataStore>();
@@ -43,21 +47,19 @@ public class SourceManagerImpl implements SourceManager {
 
 	@Override
 	public Source[] getSources() {
-		// TODO Auto-generated method stub
-		return null;
+		Collection<Source> ret = idSource.values();
+		return ret.toArray(new Source[ret.size()]);
 	}
 
 	@Override
 	public Source getSource(String id) {
-		// TODO Auto-generated method stub
-		return null;
+		return idSource.get(id);
 	}
 
 	@Override
 	public void register(String id, Source source)
 			throws IllegalArgumentException {
-		// TODO Auto-generated method stub
-
+		idSource.put(id, source);
 	}
 
 	@Override

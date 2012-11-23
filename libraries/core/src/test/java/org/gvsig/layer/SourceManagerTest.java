@@ -27,4 +27,8 @@ public class SourceManagerTest extends GVSIGTestCase {
 	public void testGetUnexistingSource() throws Exception {
 		fail();
 	}
+
+	public void testThinkMoreTests() throws Exception {
+		fail();
+	}
 }
