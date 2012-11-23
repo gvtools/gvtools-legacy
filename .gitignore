@@ -14,3 +14,5 @@ frameworks/_fwAndami/gvSIG/
 libraries/libFMap/dist/
 libraries/libInternationalization/bin-utils/
 target
+libraries/persistence/src/main/java/org/gvsig/persistence/generated/
+libraries/persistence/src/main/java/META-INF/sun-jaxb.episode
