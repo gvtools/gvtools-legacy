@@ -51,11 +51,16 @@ import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.prefs.Preferences;
 
+import org.apache.log4j.Logger;
+import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.referencing.CRS;
-import org.gvsig.map.MapContext;
+import org.geotools.referencing.GeodeticCalculator;
+import org.geotools.renderer.lite.RendererUtilities;
 import org.gvsig.units.Unit;
+import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.crs.ProjectedCRS;
+import org.opengis.referencing.operation.TransformException;
 
 import com.iver.utiles.StringUtilities;
 import com.iver.utiles.XMLEntity;
@@ -107,71 +112,7 @@ import com.iver.utiles.XMLEntity;
  * @author Vicente Caballero Navarro
  */
 public class ViewPort {
-	// /**
-	// * <p>Metric unit or length equal to 1000 meters.</p>
-	// */
-	// public static int KILOMETROS = 0;
-	//
-	// /**
-	// * <p>The base unit of length in the International System of Units that is
-	// equal to the distance
-	// * traveled by light in a vacuum in {frac;1;299,792,458} second or to
-	// about 39.37 inches.</p>
-	// */
-	// public static int METROS = 1;
-	//
-	// /**
-	// * <p>Metric unit or length equal to 0'01 meters.</p>
-	// */
-	// public static int CENTIMETRO = 2;
-	//
-	// /**
-	// * <p>Metric unit or length equal to 0'001 meters.</p>
-	// */
-	// public static int MILIMETRO = 3;
-	//
-	// /**
-	// * <p>The international statute mile by international agreement. It is
-	// defined to be precisely
-	// * 1,760 international yards (by definition, 0.9144 m each) and is
-	// therefore exactly 1,609.344
-	// * metres (1.609344 km).</p>
-	// */
-	// public static int MILLAS = 4;
-	//
-	// /**
-	// * <p>Unit of length equal in the United States to 0.9144 meter.</p>
-	// */
-	// public static int YARDAS = 5;
-	//
-	// /**
-	// * <p>Any of various units of length based on the length of the human
-	// foot; especially :
-	// * a unit equal to 1/3 yard and comprising 12 inches.</p>
-	// */
-	// public static int PIES = 6;
-	//
-	// /**
-	// * <p>Unit of length equal to 1/36 yard.</p>
-	// */
-	// public static int PULGADAS = 7;
-	//
-	// /**
-	// * <p>Grades according the current projection.</p>
-	// */
-	// public static int GRADOS = 8;
-
-	/**
-	 * <p>
-	 * Screen resolution in <i>dots-per-inch</i>. Useful to calculate the
-	 * geographic scale of the view.
-	 * </p>
-	 * 
-	 * @see Toolkit#getScreenResolution()
-	 * @see #getScale()
-	 */
-	private static int dpi = java.awt.Toolkit.getDefaultToolkit()
-			.getScreenResolution();
+	private static final Logger logger = Logger.getLogger(ViewPort.class);
 
 	/**
 	 * <p>
@@ -304,7 +245,7 @@ public class ViewPort {
 	 * @see #addViewPortListener(ViewPortListener)
 	 * @see #removeViewPortListener(ViewPortListener)
 	 */
-	private ArrayList listeners = new ArrayList();
+	private ArrayList<ViewPortListener> listeners = new ArrayList<ViewPortListener>();
 
 	/**
 	 * <p>
@@ -472,16 +413,16 @@ public class ViewPort {
 	 * if weren't.
 	 * </p>
 	 * 
-	 * @param arg0
+	 * @param listener
 	 *            the listener to add
 	 * 
 	 * @return <code>true</code> if has been added successfully
 	 * 
 	 * @see #removeViewPortListener(ViewPortListener)
 	 */
-	public boolean addViewPortListener(ViewPortListener arg0) {
-		if (!listeners.contains(arg0))
-			return listeners.add(arg0);
+	public boolean addViewPortListener(ViewPortListener listener) {
+		if (!listeners.contains(listener))
+			return listeners.add(listener);
 		return false;
 	}
 
@@ -693,20 +634,21 @@ public class ViewPort {
 	 *            another 2D point in <i>map coordinates</i>
 	 * 
 	 * @return the distance in meters between the two points 2D
+	 * @throws TransformException
+	 *             if the distance cannot be computed
 	 * 
 	 * @see GeoCalc#distanceVincenty(Point2D, Point2D)
 	 */
-	public double distanceWorld(Point2D pt1, Point2D pt2) {
-		double dist = -1;
-		dist = pt1.distance(pt2);
-
+	public double distanceWorld(Point2D pt1, Point2D pt2)
+			throws TransformException {
 		if (crs != null && !(crs instanceof ProjectedCRS)) {
-			// TODO gt: should not it be fromGeo instead of toGeo?
-			// dist = new GeoCalc(crs).distanceVincenty(crs.toGeo(pt1),
-			// crs.toGeo(pt2));
-			return dist;
+			GeodeticCalculator calculator = new GeodeticCalculator(crs);
+			calculator.setStartingGeographicPoint(pt1);
+			calculator.setDestinationGeographicPoint(pt2);
+			return calculator.getOrthodromicDistance();
+		} else {
+			return (pt1.distance(pt2) * getMapUnits().toMeter());
 		}
-		return (dist * getMapUnits().toMeter());
 	}
 
 	/**
@@ -839,22 +781,6 @@ public class ViewPort {
 
 		// Lanzamos los eventos de extent cambiado
 		callExtentChanged(getAdjustedExtent());
-	}
-
-	/**
-	 * <p>
-	 * Calculates and returns using the current projection of this view port,
-	 * the scale that is the extent in <i>screen coordinates</i> from the image
-	 * in <i>map coordinates</i>.
-	 * </p>
-	 * 
-	 * @return the scale <i>extent / image size</i> projected by this view port
-	 * 
-	 * @deprecated since 07/09/07, use {@linkplain MapContext#getScaleView()}
-	 */
-	public double getScale() {
-		return ProjectionUtils.getScale(crs, extent.getMinX(),
-				extent.getMaxX(), imageSize.getWidth(), dpi);
 	}
 
 	/**
@@ -1421,34 +1347,6 @@ public class ViewPort {
 		}
 	}
 
-	// -----------------------------------------------------------------------------------------------------------
-	// NOTA PARA DESARROLLADORES SOBRE EL M�TODO
-	// "public void setAffineTransform(AffineTransform at)"
-	// ==============================================================================================
-	// Only used for print, should be removed, redefining the {@link
-	// RasterAdapter RasterAdapter} interface,
-	// allowing it to receive a {@link ViewPortData ViewPortData} .
-	// -----------------------------------------------------------------------------------------------------------
-
-	/**
-	 * <p>
-	 * Sets only the affine transform to this view port, without updating
-	 * dependent attributes.
-	 * </p>
-	 * <p>
-	 * <b><i>This method could be problematic!</i></b>
-	 * </p>
-	 * 
-	 * @param at
-	 *            the affine transform to set
-	 * 
-	 * @see #getAffineTransform()
-	 * @see #calculateAffineTransform()
-	 */
-	public void setAffineTransform(AffineTransform at) {
-		this.trans = at;
-	}
-
 	/**
 	 * <p>
 	 * Returns an XML entity that represents this view port instance:<br>
@@ -1627,7 +1525,12 @@ public class ViewPort {
 				.getDoubleProperty("offsetY")));
 
 		if (xml.contains("proj")) {
-			vp.crs = CRS.decode(xml.getStringProperty("proj"));
+			String code = xml.getStringProperty("proj");
+			try {
+				vp.crs = CRS.decode(code);
+			} catch (FactoryException e) {
+				logger.warn("Cannot decode projection: " + code, e);
+			}
 		}
 
 		if (xml.contains("zoomFactor")) {
@@ -1725,33 +1628,32 @@ public class ViewPort {
 	 *         <li>the scale of the adjusted extent scale of the view in the
 	 *         screen
 	 *         <li><code>-1</code> if there is no image
-	 *         <li><code>0</code> if there is no extent defined for the image
+	 *         <li><code>0</code> if there is no extent defined for the image or
+	 *         any error occurs
 	 *         </ul>
+	 * @throws FactoryException
+	 *             if the scale cannot be obtained
+	 * @throws TransformException
+	 *             if the scale cannot be obtained
 	 * 
 	 * @see #setScaleView(long)
 	 * @see ViewPort#getAdjustedExtent()
 	 * @see IProjection#getScale(double, double, double, double)
 	 */
-	public long getScaleView() {
-		double dpi = getScreenDPI();
-		CoordinateReferenceSystem crs = getCrs();
-
-		if (getImageSize() == null)
+	public long getScaleView() throws TransformException, FactoryException {
+		Dimension size = getImageSize();
+		if (size == null) {
 			return -1;
+		}
 
-		if (getAdjustedExtent() == null) {
+		Rectangle2D ext = getAdjustedExtent();
+		if (ext == null) {
 			return 0;
 		}
-		if (crs == null) {
-			double w = ((getImageSize().getWidth() / dpi) * 2.54);
-			return (long) (getAdjustedExtent().getWidth() / w * getMapUnits()
-					.toMeter());
-		}
 
-		return (long) ProjectionUtils.getScale(crs, (getAdjustedExtent()
-				.getMinX() * getMapUnits().toMeter()), (getAdjustedExtent()
-				.getMaxX() * getMapUnits().toMeter()), getImageSize()
-				.getWidth(), dpi);
+		ReferencedEnvelope envelope = new ReferencedEnvelope(ext, getCrs());
+		return (long) RendererUtilities.calculateScale(envelope, size.width,
+				size.height, getScreenDPI());
 	}
 
 	/**
@@ -1768,33 +1670,6 @@ public class ViewPort {
 		Toolkit kit = Toolkit.getDefaultToolkit();
 		double dpi = prefsResolution.getInt("dpi", kit.getScreenResolution());
 		return dpi;
-	}
-
-	/**
-	 * <p>
-	 * Recalculates the current <code>{@linkplain #extent}</code> using an
-	 * scale. It's necessary execute {@linkplain #refreshExtent()} after.
-	 * </p>
-	 * 
-	 * @param s
-	 *            the scale to set
-	 * 
-	 * @deprecated since 07/09/07, use
-	 *             {@linkplain MapContext#setScaleView(long)}
-	 */
-	public void setScale(long s) {
-		double x = extent.getX();
-		double y = extent.getY();
-		double escalaX = imageSize.getWidth() / extent.getWidth();
-		double w = imageSize.getWidth() / s;
-		double h = imageSize.getHeight() / s;
-		double difw = escalaX / s;
-
-		double x1 = (-x * difw) - x + extent.getWidth() / 2;
-		double y1 = (-y * difw) - y + extent.getHeight() / 2;
-		double w1 = extent.getWidth() * difw;
-		double h1 = extent.getHeight() * difw;
-		extent.setRect(-x1, -y1, w1, h1);
 	}
 
 	public long getDrawVersion() {
@@ -1814,5 +1689,4 @@ public class ViewPort {
 	public void setZoomFactor(double z) {
 		this.zoomFactor = z;
 	}
-
 }

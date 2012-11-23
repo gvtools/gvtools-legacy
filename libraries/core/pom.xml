@@ -43,5 +43,10 @@
 			<artifactId>gt-shapefile</artifactId>
 			<version>8.0</version>
 		</dependency>
+		<dependency>
+			<groupId>org.geotools</groupId>
+			<artifactId>gt-render</artifactId>
+			<version>8.0</version>
+		</dependency>
 	</dependencies>
 </project>
