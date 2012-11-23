@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
@@ -45,14 +46,15 @@ public class DocumentContextMenu extends JPopupMenu {
 			// FIXME: que hacemos aqui?
 			return;
 		}
-		ArrayList actionArrayList = new ArrayList();
-		Iterator iter = this.extensionPoint.keySet().iterator();
+
+		List<IContextMenuAction> actionArrayList = new ArrayList<IContextMenuAction>();
+		Iterator<String> iter = this.extensionPoint.keySet().iterator();
 		IContextMenuAction action;
 		while (iter.hasNext()) {
 			action = null;
 			try {
-				action = (IContextMenuAction) this.extensionPoint
-						.create((String) iter.next());
+				action = (IContextMenuAction) this.extensionPoint.create(iter
+						.next());
 			} catch (InstantiationException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -98,12 +100,7 @@ public class DocumentContextMenu extends JPopupMenu {
 		return this.actions.length;
 	}
 
-	public class CompareAction implements Comparator {
-		public int compare(Object o1, Object o2) {
-			return this.compare((IContextMenuAction) o1,
-					(IContextMenuAction) o2);
-		}
-
+	public class CompareAction implements Comparator<IContextMenuAction> {
 		public int compare(IContextMenuAction o1, IContextMenuAction o2) {
 			// FIXME: flata formatear los enteros!!!!
 			NumberFormat formater = NumberFormat.getInstance();

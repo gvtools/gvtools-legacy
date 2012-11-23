@@ -1,4 +1,4 @@
-/* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
+/* gvSIG. Sistema de Informaciï¿½n Geogrï¿½fica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
  *
@@ -20,7 +20,7 @@
  *
  *  Generalitat Valenciana
  *   Conselleria d'Infraestructures i Transport
- *   Av. Blasco Ibáñez, 50
+ *   Av. Blasco Ibï¿½ï¿½ez, 50
  *   46010 VALENCIA
  *   SPAIN
  *
@@ -60,11 +60,10 @@ import com.iver.cit.gvsig.project.Project;
 /**
  * Propiedades del proyecto
  * 
- * @author Fernando González Cortés
+ * @author Fernando Gonzï¿½lez Cortï¿½s
  */
 public class ProjectProperties extends JPanel implements IWindow {
 	private Project project = null;
-	private javax.swing.JPanel pane = null;
 	private javax.swing.JPanel jPanel = null;
 	private javax.swing.JLabel jLabel = null;
 	private javax.swing.JLabel jLabel1 = null;
@@ -78,22 +77,19 @@ public class ProjectProperties extends JPanel implements IWindow {
 	private javax.swing.JTextField txtOwner = null;
 	private javax.swing.JLabel jLabel5 = null;
 	private javax.swing.JTextArea txtComments = null;
-	private javax.swing.JButton btnOk = null;
-	private javax.swing.JButton btnCancel = null;
 	private javax.swing.JLabel jLabel6 = null;
 	private javax.swing.JLabel lblColor = null;
 	private javax.swing.JButton btnColor = null;
 	private javax.swing.JScrollPane jScrollPane = null;
-	private WindowInfo m_viewinfo = null;
 	private JRadioButton rbAbsolutePath = null;
 
 	/**
 	 * This is the default constructor
 	 * 
 	 * @param owner
-	 *            Frame padre del diálogo
+	 *            Frame padre del diï¿½logo
 	 * @param p
-	 *            Proyecto cuyos datos se muestran en el diálogo
+	 *            Proyecto cuyos datos se muestran en el diï¿½logo
 	 */
 	public ProjectProperties(Project p) {
 		project = p;

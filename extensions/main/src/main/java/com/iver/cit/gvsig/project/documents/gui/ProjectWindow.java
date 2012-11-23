@@ -1,4 +1,4 @@
-/* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
+/* gvSIG. Sistema de Informaciï¿½n Geogrï¿½fica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
  *
@@ -20,7 +20,7 @@
  *
  *  Generalitat Valenciana
  *   Conselleria d'Infraestructures i Transport
- *   Av. Blasco Ibáñez, 50
+ *   Av. Blasco Ibï¿½ï¿½ez, 50
  *   46010 VALENCIA
  *   SPAIN
  *
@@ -54,6 +54,7 @@ import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JComponent;
@@ -97,7 +98,7 @@ public class ProjectWindow extends JPanel implements PropertyChangeListener,
 	private JRadioButton[] btnsDocuments = null;
 	private ButtonGroup grupo = new ButtonGroup();
 	private JPanel jPanel1 = null;
-	private JList lstDocs = null;
+	private JList<ProjectDocument> lstDocs = null;
 	private JPanel jPanel2 = null;
 	private JButton btnNuevo = null;
 	private JButton btnPropiedades = null;
@@ -147,7 +148,7 @@ public class ProjectWindow extends JPanel implements PropertyChangeListener,
 	 * Asigna el proyecto a la ventana
 	 * 
 	 * @param p
-	 *            Proyecto con el que se operará a través de este diálogo
+	 *            Proyecto con el que se operarï¿½ a travï¿½s de este diï¿½logo
 	 */
 	public void setProject(Project p) {
 		this.p = p;
@@ -156,8 +157,8 @@ public class ProjectWindow extends JPanel implements PropertyChangeListener,
 	}
 
 	/**
-	 * Activa los botones de la botonera del medio o los desactiva en función de
-	 * que esté seleccionado o no un elemento de proyecto en la lista del medio
+	 * Activa los botones de la botonera del medio o los desactiva en funciï¿½n de
+	 * que estï¿½ seleccionado o no un elemento de proyecto en la lista del medio
 	 */
 	private void activarBotones() {
 		if (lstDocs.getSelectedIndex() != -1) {
@@ -180,7 +181,7 @@ public class ProjectWindow extends JPanel implements PropertyChangeListener,
 
 	/**
 	 * Refresca la lista de elementos de proyecto con vistas, mapas o tablas,
-	 * según la opción activada
+	 * segï¿½n la opciï¿½n activada
 	 */
 	private void refreshList() {
 		if (p != null) {
@@ -232,7 +233,7 @@ public class ProjectWindow extends JPanel implements PropertyChangeListener,
 	}
 
 	/**
-	 * Refresca las etiquetas con la información del proyecto
+	 * Refresca las etiquetas con la informaciï¿½n del proyecto
 	 */
 	private void refreshProperties() {
 		if (p != null) {
@@ -249,7 +250,7 @@ public class ProjectWindow extends JPanel implements PropertyChangeListener,
 	}
 
 	/**
-	 * Refresca todo el diálogo
+	 * Refresca todo el diï¿½logo
 	 */
 	public void refreshControls() {
 		refreshList();
@@ -306,11 +307,11 @@ public class ProjectWindow extends JPanel implements PropertyChangeListener,
 
 		ExtensionPoint extensionPoint = (ExtensionPoint) extensionPoints
 				.get("Documents");
-		Iterator iterator = extensionPoint.keySet().iterator();
+		Iterator<String> iterator = extensionPoint.keySet().iterator();
 		while (iterator.hasNext()) {
 			try {
 				ProjectDocumentFactory documentFactory = (ProjectDocumentFactory) extensionPoint
-						.create((String) iterator.next());
+						.create(iterator.next());
 				if (documentFactory.getRegisterName().equals(s)) {
 					ProjectDocument document = documentFactory.createFromGUI(p);
 					if (document == null)
@@ -356,8 +357,7 @@ public class ProjectWindow extends JPanel implements PropertyChangeListener,
 				return;
 			}
 			String s = getDocumentSelected();
-			ArrayList documents = p.getDocumentsByType(s);
-			ProjectDocument doc = (ProjectDocument) documents.get(index);
+			ProjectDocument doc = p.getDocumentsByType(s).get(index);
 			IWindow window = doc.createWindow();
 			if (window == null) {
 				JOptionPane.showMessageDialog((Component) PluginServices
@@ -380,8 +380,7 @@ public class ProjectWindow extends JPanel implements PropertyChangeListener,
 			return;
 		}
 		String s = getDocumentSelected();
-		ArrayList documents = p.getDocumentsByType(s);
-		ProjectDocument doc = (ProjectDocument) documents.get(index);
+		ProjectDocument doc = p.getDocumentsByType(s).get(index);
 
 		if (doc.isLocked()) {
 			JOptionPane.showMessageDialog(this, PluginServices.getText(this,
@@ -399,7 +398,7 @@ public class ProjectWindow extends JPanel implements PropertyChangeListener,
 				(Component) PluginServices.getMainFrame(),
 				PluginServices.getText(this, "renombrar"));
 		dlg.setModal(true);
-		dlg.show();
+		dlg.setVisible(true);
 
 		String nuevoNombre = pane.getInputValue().toString().trim();
 
@@ -440,8 +439,7 @@ public class ProjectWindow extends JPanel implements PropertyChangeListener,
 			for (int i = indexes.length - 1; i >= 0; i--) {
 				int index = indexes[i];
 				String s = getDocumentSelected();
-				ArrayList documents = p.getDocumentsByType(s);
-				ProjectDocument doc = (ProjectDocument) documents.get(index);
+				ProjectDocument doc = p.getDocumentsByType(s).get(index);
 				if (doc.isLocked()) {
 					JOptionPane.showMessageDialog(this, PluginServices.getText(
 							this, "locked_element_it_cannot_be_deleted"));
@@ -456,7 +454,7 @@ public class ProjectWindow extends JPanel implements PropertyChangeListener,
 	}
 
 	/**
-	 * Muestra el diálogo de propiedades de un project element
+	 * Muestra el diï¿½logo de propiedades de un project element
 	 */
 	private void propiedades() {
 		int index = lstDocs.getSelectedIndex();
@@ -467,8 +465,7 @@ public class ProjectWindow extends JPanel implements PropertyChangeListener,
 
 		IWindow dlg = null;
 		String s = getDocumentSelected();
-		ArrayList documents = p.getDocumentsByType(s);
-		ProjectDocument doc = (ProjectDocument) documents.get(index);
+		ProjectDocument doc = p.getDocumentsByType(s).get(index);
 		if (doc.isLocked()) {
 			JOptionPane.showMessageDialog(this,
 					PluginServices.getText(this, "locked_element"));
@@ -523,13 +520,13 @@ public class ProjectWindow extends JPanel implements PropertyChangeListener,
 
 			ExtensionPoint extensionPoint = (ExtensionPoint) extensionPoints
 					.get("Documents");
-			ArrayList btns = new ArrayList();
-			ArrayList priorities = new ArrayList();
-			Iterator iterator = extensionPoint.keySet().iterator();
+			ArrayList<JRadioButton> btns = new ArrayList<JRadioButton>();
+			ArrayList<Integer> priorities = new ArrayList<Integer>();
+			Iterator<String> iterator = extensionPoint.keySet().iterator();
 			while (iterator.hasNext()) {
 				try {
 					ProjectDocumentFactory documentFactory = (ProjectDocumentFactory) extensionPoint
-							.create((String) iterator.next());
+							.create(iterator.next());
 					JRadioButton rb = new JRadioButton();
 
 					rb.setIcon(documentFactory.getButtonIcon());
@@ -623,18 +620,20 @@ public class ProjectWindow extends JPanel implements PropertyChangeListener,
 	 * 
 	 * @return JList
 	 */
-	private JList getLstDocs() {
+	private JList<ProjectDocument> getLstDocs() {
 		if (lstDocs == null) {
-			lstDocs = new JList();
+			lstDocs = new JList<ProjectDocument>();
 			lstDocs.addMouseListener(new java.awt.event.MouseAdapter() {
 				public ProjectDocument[] getSelecteds() {
 					if (lstDocs.getSelectedIndex() < 0) {
 						return new ProjectDocument[0];
 					}
-					Object[] seleteds = lstDocs.getSelectedValues();
-					ProjectDocument[] returnValue = new ProjectDocument[seleteds.length];
-					System.arraycopy(seleteds, 0, returnValue, 0,
-							seleteds.length);
+					List<ProjectDocument> selected = lstDocs
+							.getSelectedValuesList();
+					ProjectDocument[] returnValue = new ProjectDocument[selected
+							.size()];
+					System.arraycopy(selected.toArray(new ProjectDocument[0]),
+							0, returnValue, 0, selected.size());
 					return returnValue;
 				}
 
@@ -642,8 +641,6 @@ public class ProjectWindow extends JPanel implements PropertyChangeListener,
 					if (lstDocs.getSelectedIndex() < 0) {
 						return null;
 					}
-					Component c = lstDocs.getComponentAt(e.getPoint());
-
 					return null;
 				}
 

@@ -1,4 +1,4 @@
-/* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
+/* gvSIG. Sistema de Informaciï¿½n Geogrï¿½fica de la Generalitat Valenciana
  *
  * Copyright (C) 2006 IVER T.I. and Generalitat Valenciana.
  *
@@ -20,7 +20,7 @@
  *
  *  Generalitat Valenciana
  *   Conselleria d'Infraestructures i Transport
- *   Av. Blasco Ibáñez, 50
+ *   Av. Blasco Ibï¿½ï¿½ez, 50
  *   46010 VALENCIA
  *   SPAIN
  *
@@ -59,23 +59,23 @@ import com.iver.cit.gvsig.gui.panels.crs.ISelectCRSButton;
  * @author Luis W. Sevilla <sevilla_lui@gva.es>
  */
 public abstract class CRSSelectPanel extends JPanel implements ISelectCRSButton {
-	private static Class panelClass = ProjChooserPanel.class;
-	private static Class uiFactory = CrsUIFactory.class;
+	private static Class<?> panelClass = ProjChooserPanel.class;
+	private static Class<?> uiFactory = CrsUIFactory.class;
 	private boolean transPanelActive = false;
 
 	protected ActionListener actionListener = null;
 
-	public static void registerPanelClass(Class panelClass) {
+	public static void registerPanelClass(Class<?> panelClass) {
 		CRSSelectPanel.panelClass = panelClass;
 	}
 
-	public static void registerUIFactory(Class uiFactory) {
+	public static void registerUIFactory(Class<?> uiFactory) {
 		CRSSelectPanel.uiFactory = uiFactory;
 	}
 
 	public static CRSSelectPanel getPanel(CoordinateReferenceSystem crs) {
 		CRSSelectPanel panel = null;
-		Class[] args = { CoordinateReferenceSystem.class };
+		Class<?>[] args = { CoordinateReferenceSystem.class };
 		Object[] params = { crs };
 		try {
 			panel = (CRSSelectPanel) panelClass.getConstructor(args)

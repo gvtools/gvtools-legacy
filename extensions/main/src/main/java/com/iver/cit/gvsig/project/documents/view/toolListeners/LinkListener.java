@@ -45,8 +45,6 @@ import java.awt.Image;
 import java.awt.Point;
 import java.awt.Toolkit;
 
-import org.apache.log4j.Logger;
-
 import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.fmap.MapControl;
 import com.iver.cit.gvsig.fmap.tools.BehaviorException;
@@ -69,12 +67,6 @@ import com.iver.cit.gvsig.fmap.tools.Listeners.PointListener;
  */
 public class LinkListener implements PointListener {
 	/**
-	 * Object used to log messages for this listener.
-	 */
-	private static Logger logger = Logger.getLogger(LinkListener.class
-			.getName());
-
-	/**
 	 * The image to display when the cursor is active.
 	 */
 	private final Image img = PluginServices.getIconTheme()
@@ -87,11 +79,6 @@ public class LinkListener implements PointListener {
 	 */
 	private Cursor cur = Toolkit.getDefaultToolkit().createCustomCursor(img,
 			new Point(16, 16), "");
-
-	/**
-	 * Reference to the <code>MapControl</code> object that uses.
-	 */
-	private MapControl mapCtrl;
 
 	/**
 	 * Identifies the link as an image.
@@ -112,7 +99,6 @@ public class LinkListener implements PointListener {
 	 *            the <code>MapControl</code> where will be applied the changes
 	 */
 	public LinkListener(MapControl mc) {
-		this.mapCtrl = mc;
 	}
 
 	/*

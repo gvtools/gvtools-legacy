@@ -6,7 +6,6 @@ package com.iver.cit.gvsig.gui.panels;
 import java.awt.FlowLayout;
 
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 
 import org.geotools.referencing.CRS;
 import org.gvsig.gui.beans.swing.JButton;
@@ -23,7 +22,6 @@ public class ProjChooserPanel extends CRSSelectPanel {
 	private JLabel jLblProj = null;
 	private JLabel jLblProjName = null;
 	private JButton jBtnChangeProj = null;
-	private JPanel jPanelProj = null;
 	private boolean okPressed = false;
 
 	/**

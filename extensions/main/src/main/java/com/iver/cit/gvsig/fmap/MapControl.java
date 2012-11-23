@@ -1983,7 +1983,7 @@ public class MapControl extends JComponent implements ComponentListener {
 	 * @see #getMapToolsKeySet()
 	 * @see #hasTool(String)
 	 */
-	public HashMap getNamesMapTools() {
+	public HashMap<String, Behavior> getNamesMapTools() {
 		return namesMapTools;
 	}
 

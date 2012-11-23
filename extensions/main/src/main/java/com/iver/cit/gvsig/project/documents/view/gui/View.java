@@ -313,7 +313,7 @@ public class View extends BaseView {
 
 	private class ResponseAdapter implements ResponseListener {
 
-		private HashMap spaceListener = new HashMap();
+		private HashMap<String, ResponseListener> spaceListener = new HashMap<String, ResponseListener>();
 
 		public void putSpaceListener(String namespace, ResponseListener listener) {
 			spaceListener.put(namespace, listener);
@@ -337,10 +337,10 @@ public class View extends BaseView {
 				if (listener != null)
 					listener.acceptResponse(response.substring(n + 1));
 			} else {
-				Iterator i = spaceListener.values().iterator();
+				Iterator<ResponseListener> i = spaceListener.values()
+						.iterator();
 				while (i.hasNext()) {
-					ResponseListener listener = (ResponseListener) i.next();
-					listener.acceptResponse(response);
+					i.next().acceptResponse(response);
 				}
 			}
 		}
@@ -349,11 +349,10 @@ public class View extends BaseView {
 		 * @param listener
 		 */
 		public void deleteListener(ResponseListener listener) {
-			Iterator i = spaceListener.keySet().iterator();
+			Iterator<String> i = spaceListener.keySet().iterator();
 			while (i.hasNext()) {
-				String namespace = (String) i.next();
-				ResponseListener l = (ResponseListener) spaceListener
-						.get(namespace);
+				String namespace = i.next();
+				ResponseListener l = spaceListener.get(namespace);
 				if (l == listener) {
 					spaceListener.remove(namespace);
 				}

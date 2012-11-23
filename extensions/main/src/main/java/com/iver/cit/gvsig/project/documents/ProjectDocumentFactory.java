@@ -1,8 +1,6 @@
 package com.iver.cit.gvsig.project.documents;
 
 import java.security.KeyException;
-import java.util.ArrayList;
-import java.util.Hashtable;
 import java.util.Map;
 
 import javax.swing.ImageIcon;
@@ -10,7 +8,6 @@ import javax.swing.ImageIcon;
 import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.project.Project;
 import com.iver.cit.gvsig.project.documents.contextMenu.AbstractDocumentContextMenuAction;
-import com.iver.utiles.XMLEntity;
 import com.iver.utiles.extensionPoints.ExtensionPoint;
 import com.iver.utiles.extensionPoints.ExtensionPoints;
 import com.iver.utiles.extensionPoints.ExtensionPointsSingleton;
@@ -120,7 +117,7 @@ public abstract class ProjectDocumentFactory implements IExtensionBuilder {
 	 * 
 	 * @return ProjectDocumentFactory.
 	 */
-	public Object create(Map args) {
+	public Object create(Map<Object, Object> args) {
 		return this;
 	}
 
@@ -192,12 +189,8 @@ public abstract class ProjectDocumentFactory implements IExtensionBuilder {
 	 * @return True if the name exists.
 	 */
 	public boolean existName(Project project, String documentName) {
-		ArrayList documentList = project.getDocumentsByType(getRegisterName());
-
-		for (int i = 0; i < documentList.size(); i++) {
-			ProjectDocument pd = (ProjectDocument) documentList.get(i);
+		for (ProjectDocument pd : project.getDocumentsByType(getRegisterName())) {
 			String title = pd.getName();
-
 			if (title.compareTo(documentName) == 0) {
 				return true;
 			}

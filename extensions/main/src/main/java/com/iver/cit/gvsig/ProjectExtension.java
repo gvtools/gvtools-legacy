@@ -58,6 +58,7 @@ import java.net.URL;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.prefs.Preferences;
 
 import javax.swing.ImageIcon;
@@ -114,9 +115,7 @@ public class ProjectExtension extends Extension implements IExtensionStatus {
 	// private ProjectWindow projectFrame;
 	private ProjectWindow projectFrame;
 	private Project p;
-	private String lastPath;
 	private String lastSavePath;
-	private String templatesPath;
 	private WindowInfo seedProjectWindow;
 	public static final String LAYOUT_TEMPLATE_FILECHOOSER_ID = "LAYOUT_TEMPLATE_FILECHOOSER_ID";
 	public static final String PROJECT_FILE_CHOOSER_ID = "PROJECT_FILECHOOSER_ID";
@@ -151,9 +150,9 @@ public class ProjectExtension extends Extension implements IExtensionStatus {
 	 * @see com.iver.mdiApp.plugins.IExtension#initialize()
 	 */
 	public void initialize() {
-		
+
 		InjectorSingleton.setInjector(Guice.createInjector(new Module()));
-		
+
 		try {
 			Class.forName("javax.media.jai.EnumeratedParameter");
 		} catch (ClassNotFoundException e) {
@@ -383,7 +382,6 @@ public class ProjectExtension extends Extension implements IExtensionStatus {
 				File projectFile = jfc.getSelectedFile();
 				Project o = readProject(projectFile);
 				setPath(projectFile.getAbsolutePath());
-				lastPath = getPath();
 				if (o != null) {
 					setProject(o);
 				}
@@ -567,7 +565,7 @@ public class ProjectExtension extends Extension implements IExtensionStatus {
 				} catch (UnsupportedEncodingException e) {
 					reader = new BufferedReader(new InputStreamReader(is));
 					try {
-						Project p = readProject(reader, false);
+						readProject(reader, false);
 					} catch (UnsupportedEncodingException e1) {
 						JOptionPane.showMessageDialog(
 								(Component) PluginServices.getMainFrame(),
@@ -933,15 +931,16 @@ public class ProjectExtension extends Extension implements IExtensionStatus {
 				.getInstance());
 
 		if (ePs.get(BEFORE_SAVING_ID) == null) {
-			ArrayList aL = new ArrayList();
+			List<BeforeSavingListener> aL = new ArrayList<BeforeSavingListener>();
 			aL.add(l);
 
 			ePs.add(BEFORE_SAVING_ID, "", aL);
 			return;
 		}
 
-		((ArrayList) ((ExtensionPoint) ePs.get(BEFORE_SAVING_ID)).get(""))
-				.add(l);
+		ArrayList<BeforeSavingListener> list = (ArrayList<BeforeSavingListener>) (ePs
+				.get(BEFORE_SAVING_ID)).get("");
+		list.add(l);
 	}
 
 	/**
@@ -967,15 +966,16 @@ public class ProjectExtension extends Extension implements IExtensionStatus {
 				.getInstance());
 
 		if (ePs.get(AFTER_SAVING_ID) == null) {
-			ArrayList aL = new ArrayList();
+			List<AfterSavingListener> aL = new ArrayList<AfterSavingListener>();
 			aL.add(l);
 
 			ePs.add(AFTER_SAVING_ID, "", aL);
 			return;
 		}
 
-		((ArrayList) ((ExtensionPoint) ePs.get(AFTER_SAVING_ID)).get(""))
-				.add(l);
+		ArrayList<AfterSavingListener> arrayList = (ArrayList<AfterSavingListener>) (ePs
+				.get(AFTER_SAVING_ID)).get("");
+		arrayList.add(l);
 	}
 
 	/**
@@ -997,9 +997,10 @@ public class ProjectExtension extends Extension implements IExtensionStatus {
 		if (eP == null)
 			return null;
 
-		return eP.get("") == null ? null
-				: (BeforeSavingListener[]) ((ArrayList) eP.get(""))
-						.toArray(new BeforeSavingListener[0]);
+		ArrayList<BeforeSavingListener> list = (ArrayList<BeforeSavingListener>) eP
+				.get("");
+		return eP.get("") == null ? null : list
+				.toArray(new BeforeSavingListener[0]);
 	}
 
 	/**
@@ -1021,9 +1022,10 @@ public class ProjectExtension extends Extension implements IExtensionStatus {
 		if (eP == null)
 			return null;
 
-		return eP.get("") == null ? null
-				: (AfterSavingListener[]) ((ArrayList) eP.get(""))
-						.toArray(new AfterSavingListener[0]);
+		ArrayList<AfterSavingListener> list = (ArrayList<AfterSavingListener>) eP
+				.get("");
+		return eP.get("") == null ? null : list
+				.toArray(new AfterSavingListener[0]);
 	}
 
 	/**
@@ -1052,7 +1054,7 @@ public class ProjectExtension extends Extension implements IExtensionStatus {
 				.getInstance()).get(BEFORE_SAVING_ID);
 
 		if (eP != null) {
-			((ArrayList) eP.get("")).remove(l);
+			((ArrayList<BeforeSavingListener>) eP.get("")).remove(l);
 		}
 	}
 
@@ -1081,7 +1083,7 @@ public class ProjectExtension extends Extension implements IExtensionStatus {
 				.getInstance()).get(AFTER_SAVING_ID);
 
 		if (eP != null) {
-			((ArrayList) eP.get("")).remove(l);
+			((ArrayList<AfterSavingListener>) eP.get("")).remove(l);
 		}
 	}
 
@@ -1102,10 +1104,11 @@ public class ProjectExtension extends Extension implements IExtensionStatus {
 				.getInstance()).get(BEFORE_SAVING_ID);
 
 		if (eP != null) {
-			ArrayList listeners = ((ArrayList) eP.get(""));
-
-			for (int i = 0; i < listeners.size(); i++)
-				((BeforeSavingListener) listeners.get(i)).beforeSaving(evt);
+			ArrayList<BeforeSavingListener> listeners = ((ArrayList<BeforeSavingListener>) eP
+					.get(""));
+			for (BeforeSavingListener listener : listeners) {
+				listener.beforeSaving(evt);
+			}
 		}
 	}
 
@@ -1126,10 +1129,11 @@ public class ProjectExtension extends Extension implements IExtensionStatus {
 				.getInstance()).get(AFTER_SAVING_ID);
 
 		if (eP != null) {
-			ArrayList listeners = ((ArrayList) eP.get(""));
-
-			for (int i = 0; i < listeners.size(); i++)
-				((AfterSavingListener) listeners.get(i)).afterSaving(evt);
+			ArrayList<AfterSavingListener> listeners = ((ArrayList<AfterSavingListener>) eP
+					.get(""));
+			for (AfterSavingListener listener : listeners) {
+				listener.afterSaving(evt);
+			}
 		}
 	}
 }

@@ -1,4 +1,4 @@
-/* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
+/* gvSIG. Sistema de Informaciï¿½n Geogrï¿½fica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
  *
@@ -20,7 +20,7 @@
  *
  *  Generalitat Valenciana
  *   Conselleria d'Infraestructures i Transport
- *   Av. Blasco Ibáñez, 50
+ *   Av. Blasco Ibï¿½ï¿½ez, 50
  *   46010 VALENCIA
  *   SPAIN
  *
@@ -49,11 +49,9 @@ import com.iver.andami.messages.NotificationManager;
 
 public class OpenException extends BaseException {
 	private Exception e;
-	private String c;
 
 	public OpenException(Exception e, String c) {
 		this.e = e;
-		this.c = c;
 	}
 
 	public void showError() {
@@ -71,7 +69,7 @@ public class OpenException extends BaseException {
 				PluginServices.getText(this, "abrir_proyecto"), e);
 	}
 
-	protected Map values() {
+	protected Map<String, String> values() {
 		// TODO Auto-generated method stub
 		return null;
 	}

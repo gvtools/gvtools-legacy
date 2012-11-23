@@ -1,4 +1,4 @@
-/* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
+/* gvSIG. Sistema de Informaciï¿½n Geogrï¿½fica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
  *
@@ -20,7 +20,7 @@
  *
  *  Generalitat Valenciana
  *   Conselleria d'Infraestructures i Transport
- *   Av. Blasco Ibáñez, 50
+ *   Av. Blasco Ibï¿½ï¿½ez, 50
  *   46010 VALENCIA
  *   SPAIN
  *
@@ -72,7 +72,7 @@ public class SaveException extends BaseException {
 		NotificationManager.addWarning("Guardando el Proyecto en : " + c, e);
 	}
 
-	protected Map values() {
+	protected Map<String, String> values() {
 		// TODO Auto-generated method stub
 		return null;
 	}

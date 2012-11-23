@@ -28,7 +28,7 @@ import javax.swing.JComboBox;
 /**
  * @author "Luis W. Sevilla" (sevilla_lui@gva.es)
  */
-public class LoadableComboBox extends JComboBox {
+public class LoadableComboBox extends JComboBox<String> {
 	final private static long serialVersionUID = -3370601314380922368L;
 
 	public LoadableComboBox() {
@@ -49,7 +49,7 @@ public class LoadableComboBox extends JComboBox {
 	}
 
 	/**
-	 * Carga el vector de strings data con los valores pasados por parámetro
+	 * Carga el vector de strings data con los valores pasados por parï¿½metro
 	 * 
 	 * @param data
 	 *            vector de strings con los valores

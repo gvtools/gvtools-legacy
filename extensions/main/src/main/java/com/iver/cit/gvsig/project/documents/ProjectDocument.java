@@ -58,7 +58,6 @@ import com.iver.cit.gvsig.project.Project;
 import com.iver.cit.gvsig.project.documents.exceptions.OpenException;
 import com.iver.cit.gvsig.project.documents.exceptions.SaveException;
 import com.iver.cit.gvsig.project.documents.gui.WindowData;
-import com.iver.utiles.XMLEntity;
 import com.iver.utiles.extensionPoints.ExtensionPoint;
 import com.iver.utiles.extensionPoints.ExtensionPoints;
 import com.iver.utiles.extensionPoints.ExtensionPointsSingleton;
@@ -202,7 +201,7 @@ public abstract class ProjectDocument implements Serializable {
 		document.setName(name);
 		document.setOwner(owner);
 	}
-	
+
 	protected void read(DocumentType document) {
 		this.comment = document.getComment();
 		this.creationDate = document.getCreationDate();
@@ -247,9 +246,7 @@ public abstract class ProjectDocument implements Serializable {
 		}
 		if (pde == null) {
 			Exception e = new Exception(PluginServices.getText(p,
-					"documento_no_reconocido")
-					+ ": "
-					+ className);
+					"documento_no_reconocido") + ": " + className);
 			NotificationManager.showMessageWarning(
 					PluginServices.getText(p, "documento_no_reconocido") + ": "
 							+ className, e);
@@ -261,7 +258,8 @@ public abstract class ProjectDocument implements Serializable {
 
 	}
 
-	public abstract void setXMLEntity(DocumentType document) throws OpenException ;
+	public abstract void setXMLEntity(DocumentType document)
+			throws OpenException;
 
 	/**
 	 * DOCUMENT ME!
@@ -387,11 +385,11 @@ public abstract class ProjectDocument implements Serializable {
 				.getInstance();
 		ExtensionPoint extensionPoint = (ExtensionPoint) extensionPoints
 				.get("Documents");
-		Iterator iterator = extensionPoint.keySet().iterator();
+		Iterator<String> iterator = extensionPoint.keySet().iterator();
 		while (iterator.hasNext()) {
 			try {
 				ProjectDocumentFactory documentFactory = (ProjectDocumentFactory) extensionPoint
-						.create((String) iterator.next());
+						.create(iterator.next());
 				NUMS.put(documentFactory.getRegisterName(), new Integer(0));
 			} catch (InstantiationException e) {
 				e.printStackTrace();

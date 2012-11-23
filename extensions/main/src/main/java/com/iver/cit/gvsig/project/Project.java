@@ -52,7 +52,6 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 import javax.inject.Inject;
 
@@ -159,12 +158,11 @@ public class Project implements Serializable, PropertyChangeListener {
 
 	// Lista de objetos del tipo camera. Necesarios para almacenar la posicion
 	// del usuario haciendo uso de los marcadores
-	private List cameras = new ArrayList();
+	private List<Object> cameras = new ArrayList<Object>();
 
 	/**
 	 * this is a runtime-calculated value, do NOT persist it!
 	 */
-	private long signatureAtStartup;
 	private CoordinateReferenceSystem crs;
 
 	/**
@@ -172,9 +170,7 @@ public class Project implements Serializable, PropertyChangeListener {
 	 * the project is loaded. It's an ordered iterator of XMLEntity objects,
 	 * each containing a XML version of a WindowInfo object.
 	 */
-	private Iterator initialWindowProperties = null;
-
-	private static PathGenerator pathGenerator = PathGenerator.getInstance();
+	private Iterator<XMLEntity> initialWindowProperties = null;
 
 	/**
 	 * Creates a new Project object.
@@ -493,43 +489,6 @@ public class Project implements Serializable, PropertyChangeListener {
 	}
 
 	/**
-	 * Store the initial window properties, to later restore the window sizes
-	 * and positions
-	 */
-	private void storeInitialWindowProperties(XMLEntity xml) {
-		XMLEntity child;
-		int childNumb;
-
-		// order the window properties before restoring them, so that we also
-		// restore the zPosition
-		TreeMap orderedProperties = new TreeMap();
-		int maximum = 1;
-		for (childNumb = xml.getChildrenCount() - 1; childNumb >= 0; childNumb--) {
-			child = xml.getChild(childNumb);
-			if (child.contains("zPosition")) {
-				orderedProperties.put(
-						new Integer(-child.getIntProperty("zPosition")), child); // reverse
-																					// the
-				// order, so
-				// that we add
-				// the back
-				// windows first
-			} else {
-				orderedProperties.put(new Integer(maximum++), child); // the
-				// windows
-				// without
-				// zPosition
-				// will
-				// be on
-				// the
-				// fore
-			}
-		}
-
-		this.initialWindowProperties = orderedProperties.values().iterator();
-	}
-
-	/**
 	 * Restores the size, position and order of the windows, according to
 	 * variable initialWindowProperties. If this variable is null, the method
 	 * just opens the project manager window.
@@ -539,12 +498,12 @@ public class Project implements Serializable, PropertyChangeListener {
 		boolean projectWindowRestored = false;
 		XMLEntity child;
 
-		Iterator propertiesIterator = this.initialWindowProperties;
+		Iterator<XMLEntity> propertiesIterator = this.initialWindowProperties;
 		if (propertiesIterator != null) {
 			this.initialWindowProperties = null;
 
 			while (propertiesIterator.hasNext()) {
-				child = (XMLEntity) propertiesIterator.next();
+				child = propertiesIterator.next();
 				if (child.contains("name") // restore the position of the
 						// document windows
 						&& child.getStringProperty("name").equals(
@@ -637,8 +596,6 @@ public class Project implements Serializable, PropertyChangeListener {
 	 */
 	public static Project createFromXML(
 			org.gvsig.persistence.generated.Project xml) throws OpenException {
-
-		int childNumber = 0;
 
 		try {
 			Project p = new Project();
@@ -1164,13 +1121,6 @@ public class Project implements Serializable, PropertyChangeListener {
 		return true;
 	}
 
-	private XMLEntity newExportXMLRootNode() {
-		XMLEntity xml = new XMLEntity();
-		xml.putProperty("applicationName", "gvSIG");
-		xml.putProperty("version", Version.format());
-		return xml;
-	}
-
 	public XMLEntity getExportXMLTypeRootNode(XMLEntity root, String type) {
 		XMLEntity typeRoot = root.firstChild("type", type);
 		if (typeRoot == null) {
@@ -1220,7 +1170,6 @@ public class Project implements Serializable, PropertyChangeListener {
 	}
 
 	public void setSignature(long hash) {
-		signatureAtStartup = hash;
 	}
 
 	public boolean isAbsolutePath() {

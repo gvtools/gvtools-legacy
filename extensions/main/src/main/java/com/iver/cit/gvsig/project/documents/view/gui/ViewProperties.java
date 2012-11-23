@@ -76,11 +76,6 @@ import com.iver.cit.gvsig.project.documents.view.ProjectViewFactory;
  * @author Fernando Gonz�lez Cort�s
  */
 public class ViewProperties extends JPanel implements SingletonWindow {
-	/*
-	 * private String[] units = new String[] { PluginServices.getText(this,
-	 * "metros"), PluginServices.getText(this, "kilometros"), };
-	 */
-	private static String[] unitsNames = null;
 	private javax.swing.JLabel jLabel = null;
 	private javax.swing.JTextField txtName = null;
 	private javax.swing.JLabel jLabel1 = null;
@@ -108,10 +103,6 @@ public class ViewProperties extends JPanel implements SingletonWindow {
 
 	private javax.swing.JLabel jLabel3 = null;
 	private javax.swing.JLabel jLabelSep1 = null;
-	private WindowInfo m_viewinfo = null;
-	// private JLabel jLblProj = null;
-	// private JLabel jLblProjName = null;
-	// private JButton jBtnChangeProj = null;
 	protected CRSSelectPanel jPanelProj = null;
 	private AcceptCancelPanel okCancelPanel = null;
 	private boolean isAcceppted = false;

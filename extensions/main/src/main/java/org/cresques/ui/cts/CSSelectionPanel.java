@@ -28,8 +28,6 @@ import javax.swing.JPanel;
 
 import org.cresques.Messages;
 import org.cresques.ui.LoadableComboBox;
-import org.opengis.referencing.FactoryException;
-import org.opengis.referencing.NoSuchAuthorityCodeException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 //import es.gva.cit.geoexplorer.ui.LoadableComboBox;
@@ -47,7 +45,6 @@ public class CSSelectionPanel extends JPanel {
 	private JLabel jLabel = null;
 	private JLabel jLabel1 = null;
 	private JLabel jLabel2 = null;
-	private String tit;
 	private CSSelectionModel model;
 
 	/**
@@ -66,7 +63,6 @@ public class CSSelectionPanel extends JPanel {
 				tit = "Reference System";
 		}
 
-		this.tit = tit;
 		setModel(new CSSelectionModel());
 		initialize();
 	}

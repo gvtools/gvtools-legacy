@@ -14,10 +14,10 @@ import com.iver.utiles.XMLEntity;
  */
 public class WindowData {
 
-	HashMap data = null;
+	HashMap<String, String> data = null;
 
 	public WindowData() {
-		data = new HashMap();
+		data = new HashMap<String, String>();
 	}
 
 	public void set(String key, String value) {
@@ -31,9 +31,9 @@ public class WindowData {
 	public XMLEntity getXMLEntity() {
 		XMLEntity xml = new XMLEntity();
 		xml.setName("windowData");
-		Iterator keyList = data.keySet().iterator();
+		Iterator<String> keyList = data.keySet().iterator();
 		while (keyList.hasNext()) {
-			String key = (String) keyList.next();
+			String key = keyList.next();
 			xml.putProperty(key, get(key), false);
 		}
 		return xml;
