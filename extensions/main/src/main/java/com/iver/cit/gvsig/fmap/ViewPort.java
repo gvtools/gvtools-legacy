@@ -51,7 +51,6 @@ import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.prefs.Preferences;
 
-import org.apache.log4j.Logger;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.referencing.CRS;
 import org.geotools.referencing.GeodeticCalculator;
@@ -112,7 +111,6 @@ import com.iver.utiles.XMLEntity;
  * @author Vicente Caballero Navarro
  */
 public class ViewPort {
-	private static final Logger logger = Logger.getLogger(ViewPort.class);
 
 	/**
 	 * <p>
@@ -1524,10 +1522,10 @@ public class ViewPort {
 
 		if (xml.contains("proj")) {
 			String code = xml.getStringProperty("proj");
+			assert false : "New persistence code should propagate the exception";
 			try {
 				vp.crs = CRS.decode(code);
 			} catch (FactoryException e) {
-				logger.warn("Cannot decode projection: " + code, e);
 			}
 		}
 

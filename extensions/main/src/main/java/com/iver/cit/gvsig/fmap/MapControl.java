@@ -85,6 +85,7 @@ import org.gvsig.events.LayerVisibilityChangeHandler;
 import org.gvsig.layer.Layer;
 import org.gvsig.map.MapContext;
 import org.gvsig.map.MapContextFactory;
+import org.gvsig.util.ProcessContext;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.iver.cit.gvsig.fmap.tools.BehaviorException;
@@ -1143,6 +1144,11 @@ public class MapControl extends JComponent implements ComponentListener {
 		repaint();
 	}
 
+	private void drawGraphics(BufferedImage image, Graphics2D g,
+			CancelDraw canceldraw, long scaleView) {
+		assert false : "To do";
+	}
+
 	/**
 	 * @see java.awt.event.ComponentListener#componentHidden(java.awt.event.ComponentEvent)
 	 */
@@ -1307,7 +1313,7 @@ public class MapControl extends JComponent implements ComponentListener {
 
 					mapContext.draw(image, g, canceldraw,
 							viewPort.getScaleView());
-					if (!canceldraw.isCanceled()) {
+					if (!canceldraw.isCancelled()) {
 						status = ACTUALIZADO;
 					} else {
 						status = DESACTUALIZADO;
@@ -1316,8 +1322,7 @@ public class MapControl extends JComponent implements ComponentListener {
 
 				} else if (status == ONLY_GRAPHICS) {
 					status = ACTUALIZADO;
-					mapContext.drawGraphics(image, g, canceldraw,
-							viewPort.getScaleView());
+					drawGraphics(image, g, canceldraw, viewPort.getScaleView());
 
 				}
 
@@ -1643,8 +1648,7 @@ public class MapControl extends JComponent implements ComponentListener {
 					mapContext.draw(image, g, cancel, viewPort.getScaleView());
 				} else if (status == ONLY_GRAPHICS) {
 					status = ACTUALIZADO;
-					mapContext.drawGraphics(image, g, cancel,
-							viewPort.getScaleView());
+					drawGraphics(image, g, cancel, viewPort.getScaleView());
 				}
 
 				timer.stop();
@@ -1670,11 +1674,9 @@ public class MapControl extends JComponent implements ComponentListener {
 	 * receive a notification that, when they're been drawn, to be cancelled.
 	 * </p>
 	 * 
-	 * @see Cancellable
-	 * 
 	 * @author Fernando Gonz�lez Cort�s
 	 */
-	public class CancelDraw implements Cancellable {
+	public class CancelDraw implements ProcessContext {
 		/**
 		 * <p>
 		 * Determines if the drawing task must be canceled or not.
@@ -1705,7 +1707,7 @@ public class MapControl extends JComponent implements ComponentListener {
 		 * 
 		 * @see com.iver.utiles.swing.threads.Cancellable#isCanceled()
 		 */
-		public boolean isCanceled() {
+		public boolean isCancelled() {
 			return cancel;
 		}
 	}

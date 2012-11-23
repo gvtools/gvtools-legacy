@@ -1,11 +1,14 @@
 package org.gvsig.map;
 
 import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import java.util.List;
 
 import org.gvsig.layer.Layer;
 import org.gvsig.persistence.generated.MapType;
 import org.gvsig.units.Unit;
+import org.gvsig.util.ProcessContext;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 public interface MapContext {
@@ -55,4 +58,6 @@ public interface MapContext {
 
 	Unit getAreaUnits();
 
+	void draw(BufferedImage image, Graphics2D g, ProcessContext canceldraw,
+			long scaleDenominator);
 }
