@@ -38,44 +38,69 @@
  *   +34 963163400
  *   dac@iver.es
  */
-package com.iver.cit.gvsig.map;
+package com.iver.cit.gvsig.fmap;
+
+import java.awt.geom.Rectangle2D;
 
 /**
  * <p>
- * All events produced on a layer must be of a particular type.
+ * Event produced when the adjusted extent of the view port has changed.
  * </p>
  * 
- * <p>
- * <code>FMapEvent</code> defines the least information that can have an event
- * produced on a layer, its <i>type</i>.
- * </p>
+ * @author Vicente Caballero Navarro
  */
-public class FMapEvent {
+public class ExtentEvent extends FMapEvent {
 	/**
-	 * Kind of event type.
+	 * <p>
+	 * Reference to the new adjusted extent.
+	 * </p>
 	 */
-	private int eventType;
+	private Rectangle2D newExtent;
 
 	/**
 	 * <p>
-	 * Gets the type of this event.
+	 * Identifier of this kind of event.
+	 * </p>
+	 */
+	private static final int EXTENT_EVENT = 0;
+
+	/**
+	 * <p>
+	 * Returns a new extent event.
 	 * </p>
 	 * 
-	 * @return the type of this event
+	 * @param c
+	 *            the new adjusted extent
+	 * 
+	 * @return a new extent event
 	 */
-	public int getEventType() {
-		return eventType;
+	public static ExtentEvent createExtentEvent(Rectangle2D r) {
+		return new ExtentEvent(r, EXTENT_EVENT);
 	}
 
 	/**
 	 * <p>
-	 * Sets the type of the event.
+	 * Creates a new extent event.
 	 * </p>
 	 * 
+	 * @param c
+	 *            the new adjusted extent
 	 * @param eventType
-	 *            the number that identifies this event's type
+	 *            identifier of this kind of event
 	 */
-	public void setEventType(int eventType) {
-		this.eventType = eventType;
+	private ExtentEvent(Rectangle2D r, int eventType) {
+		setEventType(eventType);
+		newExtent = r;
+	}
+
+	/**
+	 * <p>
+	 * Gets the new adjusted event.
+	 * </p>
+	 * 
+	 * @return the new adjusted extent
+	 */
+	public Rectangle2D getNewExtent() {
+		return newExtent;
 	}
 }

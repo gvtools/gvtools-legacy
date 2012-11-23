@@ -1,4 +1,4 @@
-package com.iver.cit.gvsig.map;
+package com.iver.cit.gvsig.fmap;
 
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 

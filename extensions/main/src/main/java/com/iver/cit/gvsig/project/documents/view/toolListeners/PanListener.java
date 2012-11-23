@@ -41,9 +41,9 @@
 package com.iver.cit.gvsig.project.documents.view.toolListeners;
 
 import com.iver.andami.PluginServices;
-import com.iver.cit.gvsig.map.MapControl;
-import com.iver.cit.gvsig.tools.PanListenerImpl;
-import com.iver.cit.gvsig.tools.events.MoveEvent;
+import com.iver.cit.gvsig.fmap.MapControl;
+import com.iver.cit.gvsig.fmap.tools.PanListenerImpl;
+import com.iver.cit.gvsig.fmap.tools.Events.MoveEvent;
 
 /**
  * <p>

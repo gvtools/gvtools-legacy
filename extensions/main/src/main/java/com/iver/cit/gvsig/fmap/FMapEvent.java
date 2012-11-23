@@ -38,41 +38,44 @@
  *   +34 963163400
  *   dac@iver.es
  */
-package com.iver.cit.gvsig.map;
+package com.iver.cit.gvsig.fmap;
 
 /**
  * <p>
- * Defines the interface for an object that listens to changes in a view port.
+ * All events produced on a layer must be of a particular type.
+ * </p>
+ * 
+ * <p>
+ * <code>FMapEvent</code> defines the least information that can have an event
+ * produced on a layer, its <i>type</i>.
  * </p>
  */
-public interface ViewPortListener {
+public class FMapEvent {
 	/**
-	 * <p>
-	 * Called when the <i>extent</i> of the view port has changed.
-	 * </p>
-	 * 
-	 * @param e
-	 *            an extend event object
+	 * Kind of event type.
 	 */
-	void extentChanged(ExtentEvent e);
+	private int eventType;
 
 	/**
 	 * <p>
-	 * Called when the background color of the view port has changed.
+	 * Gets the type of this event.
 	 * </p>
 	 * 
-	 * @param e
-	 *            a color event object
+	 * @return the type of this event
 	 */
-	void backColorChanged(ColorEvent e);
+	public int getEventType() {
+		return eventType;
+	}
 
 	/**
 	 * <p>
-	 * Called when the projection of the view port has changed.
+	 * Sets the type of the event.
 	 * </p>
 	 * 
-	 * @param e
-	 *            a projection event object
+	 * @param eventType
+	 *            the number that identifies this event's type
 	 */
-	void projectionChanged(ProjectionEvent e);
+	public void setEventType(int eventType) {
+		this.eventType = eventType;
+	}
 }

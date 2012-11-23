@@ -38,7 +38,7 @@
  *   +34 963163400
  *   dac@iver.es
  */
-package com.iver.cit.gvsig.map;
+package com.iver.cit.gvsig.fmap;
 
 import java.awt.Color;
 import java.awt.Dimension;

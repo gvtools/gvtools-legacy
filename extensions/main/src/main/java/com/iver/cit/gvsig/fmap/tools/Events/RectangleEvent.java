@@ -38,79 +38,86 @@
  *   +34 963163400
  *   dac@iver.es
  */
-package com.iver.cit.gvsig.tools.events;
+package com.iver.cit.gvsig.fmap.tools.Events;
 
 import java.awt.event.MouseEvent;
-import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 
 /**
  * <p>
- * <code>MoveEvent</code> is used to notify a movement of the mouse between two
- * points 2D.
+ * <code>RectangleEvent</code> is used to notify a selection of a rectangular
+ * area in a view, with the mouse.
  * </p>
  * 
  * @author Vicente Caballero Navarro
  */
-public class MoveEvent {
+public class RectangleEvent {
 	/**
 	 * <p>
-	 * Initial position of the drag & drop movement.
+	 * Rectangle selected in world coordinates.
 	 * </p>
 	 */
-	private Point2D from;
+	private Rectangle2D rect;
 
 	/**
 	 * <p>
-	 * Final position of the drag & drop movement.
+	 * Rectangle selected in view (pixel) coordinates.
 	 * </p>
 	 */
-	private Point2D to;
+	private Rectangle2D pixRect;
 
 	/**
 	 * <p>
-	 * Mouse event that has been the cause of creating this one.
+	 * Mouse event that has been the cause of creating this event.
 	 * </p>
 	 */
 	private MouseEvent event;
 
 	/**
 	 * <p>
-	 * Creates a new <code>MoveEvent</code> with all necessary data.
+	 * Creates a new <code>RectangleEvent</code> with all necessary data.
 	 * </p>
 	 * 
-	 * @param from
-	 *            initial 2D position of the movement
-	 * @param to
-	 *            final 2D position of the movement
+	 * @param worldRect
+	 *            rectangle selected in world coordinates
+	 * @param pixelRect
+	 *            rectangle selected in view (pixel) coordinates
 	 * @param e
-	 *            mouse event that has been the cause of creating this one
+	 *            mouse event that has been the cause of creating this event
 	 */
-	public MoveEvent(Point2D from, Point2D to, MouseEvent e) {
-		this.from = from;
-		this.to = to;
+	public RectangleEvent(Rectangle2D worldRect, MouseEvent e,
+			Rectangle2D pixelRect) {
+		rect = worldRect;
 		event = e;
+		pixRect = pixelRect;
 	}
 
 	/**
 	 * <p>
-	 * Gets the initial 2D position of the movement.
+	 * Gets the rectangle selected in world coordinates.
 	 * </p>
 	 * 
-	 * @return initial 2D position of the movement
+	 * @return rectangle selected in world coordinates
 	 */
-	public Point2D getFrom() {
-		return from;
+	public Rectangle2D getWorldCoordRect() {
+		return rect;
 	}
 
 	/**
 	 * <p>
-	 * Gets the final 2D position of the movement.
+	 * Gets the rectangle selected in pixel coordinates.
 	 * </p>
 	 * 
-	 * @return final 2D position of the movement
+	 * <p>
+	 * This is useful for doing some verifications, like if rectangle is thinner
+	 * than 3 pixels of width and height, keeping the zoom instead of reducing
+	 * it.
+	 * </p>
+	 * 
+	 * @return rectangle selected in view (pixel) coordinates
 	 */
-	public Point2D getTo() {
-		return to;
+	public Rectangle2D getPixelCoordRect() {
+		return pixRect;
 	}
 
 	/**

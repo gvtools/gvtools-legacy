@@ -38,69 +38,50 @@
  *   +34 963163400
  *   dac@iver.es
  */
-package com.iver.cit.gvsig.map;
+package com.iver.cit.gvsig.fmap.tools.Listeners;
 
-import java.awt.Color;
+import com.iver.cit.gvsig.fmap.MapControl;
+import com.iver.cit.gvsig.fmap.tools.BehaviorException;
+import com.iver.cit.gvsig.fmap.tools.Events.PointEvent;
 
 /**
  * <p>
- * Event produced when changes the background color of the <i>view port</i>.
+ * Interface for all tools that reply for a {@link PointEvent PointEvent}
+ * produced in the associated {@link MapControl MapControl} object, produced by
+ * a simple or double click of a button of the mouse.
  * </p>
  * 
  * @author Vicente Caballero Navarro
  */
-public class ColorEvent extends FMapEvent {
+public interface PointListener extends ToolListener {
 	/**
 	 * <p>
-	 * Identifier of this kind of event.
+	 * Called when one click is pressed on the associated
+	 * <code>MapControl</code>, or the location of the cursor of the mouse has
+	 * changed on it.
 	 * </p>
+	 * 
+	 * @param event
+	 *            mouse event with the coordinates of the point selected on the
+	 *            associated <code>MapControl</code>
+	 * 
+	 * @throws BehaviorException
+	 *             will be thrown when fails the process of this tool
 	 */
-	private static final int COLOR_EVENT = 0;
+	public void point(PointEvent event) throws BehaviorException;
 
 	/**
 	 * <p>
-	 * Reference to the new color
-	 * </p>
-	 */
-	private Color color;
-
-	/**
-	 * <p>
-	 * Returns a new color event.
+	 * Called when a double click is pressed on the associated
+	 * <code>MapControl</code>.
 	 * </p>
 	 * 
-	 * @param c
-	 *            the new color
+	 * @param event
+	 *            mouse event and the coordinates of the point selected on the
+	 *            associated <code>MapControl</code>
 	 * 
-	 * @return a new color event
+	 * @throws BehaviorException
+	 *             will be thrown when fails the process of this tool
 	 */
-	public static ColorEvent createColorEvent(Color c) {
-		return new ColorEvent(c, COLOR_EVENT);
-	}
-
-	/**
-	 * <p>
-	 * Creates a new color event.
-	 * </p>
-	 * 
-	 * @param c
-	 *            the new color
-	 * @param eventType
-	 *            identifier of this kind of event
-	 */
-	private ColorEvent(Color c, int eventType) {
-		color = c;
-		setEventType(eventType);
-	}
-
-	/**
-	 * <p>
-	 * Gets the new color.
-	 * </p>
-	 * 
-	 * @return the new color
-	 */
-	public Color getNewColor() {
-		return color;
-	}
+	public void pointDoubleClick(PointEvent event) throws BehaviorException;
 }

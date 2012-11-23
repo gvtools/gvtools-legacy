@@ -38,40 +38,40 @@
  *   +34 963163400
  *   dac@iver.es
  */
-package com.iver.cit.gvsig.tools;
+package com.iver.cit.gvsig.fmap.tools;
 
 import java.awt.Cursor;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.Toolkit;
-import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
 import javax.swing.ImageIcon;
 
 import org.gvsig.map.MapContext;
 
-import com.iver.cit.gvsig.map.MapControl;
-import com.iver.cit.gvsig.map.ViewPort;
-import com.iver.cit.gvsig.tools.events.PointEvent;
-import com.iver.cit.gvsig.tools.listeners.PointListener;
+import com.iver.cit.gvsig.fmap.MapControl;
+import com.iver.cit.gvsig.fmap.ViewPort;
+import com.iver.cit.gvsig.fmap.tools.Events.RectangleEvent;
+import com.iver.cit.gvsig.fmap.tools.Listeners.RectangleListener;
 
 /**
  * <p>
- * Listener for doing a <i>zoom out</i> operation on the extent of the
+ * Listener for doing a <i>zoom in</i> operation of the extent of the
  * <code>ViewPort</code> of the associated {@link MapControl MapControl} object,
- * selecting a point of the <code>MapControl</code> by a single click of any
- * mouse's button.
+ * defining a rectangular area.
  * </p>
  * 
  * <p>
- * Calculates the new extent <i>r</i> with this equations: <code><br>
- *   ViewPort vp = mapControl.getMapContext().getViewPort();<br>
- *   Point2D p2 = vp.toMapPoint(event.getPoint());<br>
- *   double factor = 1/MapContext.ZOOMOUTFACTOR;<br>
+ * If the area defined is smaller than 3 pixels x 3 pixels holds the zoom,
+ * otherwise, calculates the new extent <i>r</i> with this equations: <code><br>
+ *   double factor = 1/MapContext.ZOOMINFACTOR;<br>
+ * 	 Rectangle2D rect = event.getWorldCoordRect();<br>
  *   Rectangle2D.Double r = new Rectangle2D.Double();<br>
- *   double nuevoX = p2.getX() - ((vp.getExtent().getWidth() * factor) / 2.0);<br>
- *   double nuevoY = p2.getY() - ((vp.getExtent().getHeight() * factor) / 2.0);<br>
+ *   ViewPort vp = mapCtrl.getMapContext().getViewPort();<br>
+ *   double nuevoX = rect.getMaxX() - ((vp.getExtent().getWidth() * factor) / 2.0);<br>
+ *   double nuevoY = rect.getMaxY() - ((vp.getExtent().getHeight() * factor) / 2.0);<br>
+ *   Rectangle2D.Double r; // This will be the new extent<br>
  *   r.x = nuevoX;<br>
  *   r.y = nuevoY;<br>
  *   r.width = vp.getExtent().getWidth() * factor;<br>
@@ -82,35 +82,35 @@ import com.iver.cit.gvsig.tools.listeners.PointListener;
  * 
  * <p>
  * The ultimately extent will be an adaptation from that, calculated by the
- * <code>ViewPort</code> bearing in mind the ratio of the available rectangle.
+ * <code>ViewPort</code> bearing in mind the ratio of the available rectangle
+ * where display the graphical information.
  * </p>
  * 
- * @see MapContext#ZOOMOUTFACTOR
+ * @see MapContext#ZOOMINFACTOR
  * @see ViewPort#setExtent(Rectangle2D)
- * @see ZoomInListenerImpl
+ * @see ZoomOutListenerImpl
  * @see ZoomOutRightButtonListener
  * 
  * @author Vicente Caballero Navarro
  */
-public class ZoomOutListenerImpl implements PointListener {
+public class ZoomInListenerImpl implements RectangleListener {
 	/**
 	 * <p>
-	 * Default <i>zoom out</i> factor.
+	 * Default <i>zoom in</i> factor.
 	 * </p>
 	 * <p>
-	 * Doing a <i>zoom out</i> operation, increases the focal distance and
-	 * decreases the eyesight angle to the surface. This allows view a bigger
-	 * area but with the items smaller.
+	 * Doing a <i>zoom in</i> operation, decreases the focal distance and
+	 * increases the eyesight angle to the surface. This allows view an smaller
+	 * area but with the items bigger.
 	 * </p>
 	 */
-	public static double ZOOMOUTFACTOR = 0.5;
+	public static double ZOOMINFACTOR = 2;
 
 	/**
 	 * The image to display when the cursor is active.
 	 */
-	private final Image izoomout = new ImageIcon(
-			MapControl.class.getResource("images/ZoomOutCursor.gif"))
-			.getImage();
+	private final Image izoomin = new ImageIcon(
+			MapControl.class.getResource("images/ZoomInCursor.gif")).getImage();
 
 	/**
 	 * The cursor used to work with this tool listener.
@@ -118,51 +118,57 @@ public class ZoomOutListenerImpl implements PointListener {
 	 * @see #getCursor()
 	 */
 	private Cursor cur = Toolkit.getDefaultToolkit().createCustomCursor(
-			izoomout, new Point(16, 16), "");
+			izoomin, new Point(16, 16), "");
 
 	/**
 	 * Reference to the <code>MapControl</code> object that uses.
 	 */
-	private MapControl mapControl;
+	private MapControl mapCtrl;
 
 	/**
 	 * <p>
-	 * Creates a new <code>ZoomOutListenerImpl</code> object.
+	 * Creates a new <code>ZoomInListenerImpl</code> object.
 	 * </p>
 	 * 
-	 * @param mapControl
-	 *            the <code>MapControl</code> where will be applied the changes
+	 * @param mapCtrl
+	 *            the <code>MapControl</code> where is defined the rectangle
 	 */
-	public ZoomOutListenerImpl(MapControl mapControl) {
-		this.mapControl = mapControl;
+	public ZoomInListenerImpl(MapControl mapCtrl) {
+		this.mapCtrl = mapCtrl;
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * com.iver.cit.gvsig.fmap.tools.Listeners.PointListener#point(com.iver.
-	 * cit.gvsig.fmap.tools.Events.PointEvent)
+	 * com.iver.cit.gvsig.fmap.tools.Listeners.RectangleListener#rectangle(com
+	 * .iver.cit.gvsig.fmap.tools.Events.RectangleEvent)
 	 */
-	public void point(PointEvent event) {
-		ViewPort vp = mapControl.getViewPort();
-		Point2D p2 = vp.toMapPoint(event.getPoint());
-
-		double nuevoX;
-		double nuevoY;
-		double factor = 1 / ZOOMOUTFACTOR;
+	public void rectangle(RectangleEvent event) {
+		Rectangle2D rect = event.getWorldCoordRect();
+		Rectangle2D pixelRect = event.getPixelCoordRect();
 		Rectangle2D.Double r = new Rectangle2D.Double();
 
-		nuevoX = p2.getX() - ((vp.getExtent().getWidth() * factor) / 2.0);
-		nuevoY = p2.getY() - ((vp.getExtent().getHeight() * factor) / 2.0);
-		r.x = nuevoX;
-		r.y = nuevoY;
-		r.width = vp.getExtent().getWidth() * factor;
-		r.height = vp.getExtent().getHeight() * factor;
+		ViewPort vp = mapCtrl.getViewPort();
 
-		vp.setExtent(r);
-		// mapControl.getMapContext().clearAllCachingImageDrawnLayers();
-		// mapControl.drawMap(false);
+		if ((pixelRect.getWidth() < 3) && (pixelRect.getHeight() < 3)) {
+			if (vp.getExtent() != null) {
+				double factor = 1 / ZOOMINFACTOR;
+				double nuevoX = rect.getMaxX()
+						- ((vp.getExtent().getWidth() * factor) / 2.0);
+				double nuevoY = rect.getMaxY()
+						- ((vp.getExtent().getHeight() * factor) / 2.0);
+				r.x = nuevoX;
+				r.y = nuevoY;
+				r.width = vp.getExtent().getWidth() * factor;
+				r.height = vp.getExtent().getHeight() * factor;
+				vp.setExtent(r);
+			}
+		} else {
+			vp.setExtent(event.getWorldCoordRect());
+		}
+		// mapCtrl.getMapContext().clearAllCachingImageDrawnLayers();
+		// mapCtrl.drawMap(false);
 	}
 
 	/*
@@ -182,16 +188,5 @@ public class ZoomOutListenerImpl implements PointListener {
 	public boolean cancelDrawing() {
 		System.out.println("cancelDrawing del ZoomOutListenerImpl");
 		return true;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.iver.cit.gvsig.fmap.tools.Listeners.PointListener#pointDoubleClick
-	 * (com.iver.cit.gvsig.fmap.tools.Events.PointEvent)
-	 */
-	public void pointDoubleClick(PointEvent event) {
-		// TODO Auto-generated method stub
 	}
 }

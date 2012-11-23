@@ -38,41 +38,39 @@
  *   +34 963163400
  *   dac@iver.es
  */
-package com.iver.cit.gvsig.tools.behavior;
+package com.iver.cit.gvsig.fmap.tools.Listeners;
 
-import com.iver.cit.gvsig.map.MapControl;
+import com.iver.cit.gvsig.fmap.MapControl;
+import com.iver.cit.gvsig.fmap.tools.BehaviorException;
+import com.iver.cit.gvsig.fmap.tools.Events.RectangleEvent;
 
 /**
  * <p>
- * Exception produced when fails the process that interacts with a
- * {@link MapControl MapControl} object, using some tool.
+ * Interface specialized for tools that reply for a {@link RectangleEvent
+ * RectangleEvent} produced in the associated {@link MapControl MapControl}
+ * object, as a consequence of a 2D rectangle drawn by the mouse.
  * </p>
  * 
  * @author Vicente Caballero Navarro
  */
-public class BehaviorException extends Exception {
-	private static final long serialVersionUID = 1L;
-
+public interface RectangleListener extends ToolListener {
 	/**
 	 * <p>
-	 * Creates a new behavior exception with the specified detail message.
+	 * Called when user executes a double click with the mouse, finishing the
+	 * drawn of the rectangle.
 	 * </p>
 	 * 
-	 * @see Exception#Exception(String)
-	 */
-	public BehaviorException(String message) {
-		super(message);
-	}
-
-	/**
 	 * <p>
-	 * Creates a new behavior exception with the specified detail message and
-	 * cause.
+	 * All features of the active and vector layers of the associated
+	 * <code>MapControl</code> object that their area intersect with the
+	 * polygonal area defined in the <i>event</i>, will be selected.
 	 * </p>
 	 * 
-	 * @see Exception#Exception(String, Throwable)
+	 * @param event
+	 *            mouse event and information about the rectangle defined
+	 * 
+	 * @throws BehaviorException
+	 *             will be thrown when fails the process of this tool
 	 */
-	public BehaviorException(String message, Throwable cause) {
-		super(message, cause);
-	}
+	public void rectangle(RectangleEvent event) throws BehaviorException;
 }

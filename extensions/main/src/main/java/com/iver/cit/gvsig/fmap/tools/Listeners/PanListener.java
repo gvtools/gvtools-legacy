@@ -38,46 +38,38 @@
  *   +34 963163400
  *   dac@iver.es
  */
-package com.iver.cit.gvsig.tools.listeners;
+package com.iver.cit.gvsig.fmap.tools.Listeners;
 
-import java.awt.Cursor;
+import com.iver.cit.gvsig.fmap.MapControl;
+import com.iver.cit.gvsig.fmap.tools.BehaviorException;
+import com.iver.cit.gvsig.fmap.tools.Events.MoveEvent;
 
 /**
  * <p>
- * User can interact with a {@link MapControl MapControl} instance, working with
- * a tool that applies changes on it processing the events produced by the
- * current {@link Behavior Behavior} of <code>MapControl</code>.
- * </p>
- * 
- * <p>
- * The process that the tool applies on the <code>MapControl</code> is a
- * consequence of the mouse actions that user has done on that area.
- * </p>
- * 
- * <p>
- * Only some tool listener can be cancelled.
+ * Interface for all tools that reply for a {@link MoveEvent MoveEvent} produced
+ * in the associated {@link MapControl MapControl} object, as a consequence of a
+ * 2D drag and drop movement of the mouse.
  * </p>
  * 
  * @author Vicente Caballero Navarro
  */
-public interface ToolListener {
+public interface PanListener extends ToolListener {
 	/**
 	 * <p>
-	 * Gets the <code>Cursor</code> associated to this tool.
+	 * Called when user drags the mouse on the view.
 	 * </p>
-	 * 
-	 * @return component with the bitmap associated to this tool
-	 */
-	public Cursor getCursor();
-
-	/**
 	 * <p>
-	 * Determines if the drawing process that this tool executes on the
-	 * <code>MapControl</code> instance could be canceled or not.
+	 * Updates the extent coordinates according to the direction of the movement
+	 * between the initial and final points of line determined by the move of
+	 * the mouse.
 	 * </p>
 	 * 
-	 * @return <code>true</code> if is cancellable; otherwise returns
-	 *         <code>false</code>
+	 * @param event
+	 *            mouse event information about the initial and final positions
+	 *            of the movement
+	 * 
+	 * @throws BehaviorException
+	 *             will be thrown when fails the process of this tool
 	 */
-	public boolean cancelDrawing();
+	public void move(MoveEvent event) throws BehaviorException;
 }

@@ -38,86 +38,70 @@
  *   +34 963163400
  *   dac@iver.es
  */
-package com.iver.cit.gvsig.tools.events;
+package com.iver.cit.gvsig.fmap.tools.Events;
 
 import java.awt.event.MouseEvent;
-import java.awt.geom.Rectangle2D;
+import java.awt.geom.Point2D;
 
 /**
  * <p>
- * <code>RectangleEvent</code> is used to notify a selection of a rectangular
- * area in a view, with the mouse.
+ * <code>PointEvent</code> is used to notify a selection of a point with the
+ * mouse.
  * </p>
  * 
  * @author Vicente Caballero Navarro
  */
-public class RectangleEvent {
+public class PointEvent {
 	/**
 	 * <p>
-	 * Rectangle selected in world coordinates.
+	 * The point 2D associated to this event.
 	 * </p>
 	 */
-	private Rectangle2D rect;
+	private Point2D p;
 
 	/**
 	 * <p>
-	 * Rectangle selected in view (pixel) coordinates.
+	 * The point 2D associated to this event.
 	 * </p>
 	 */
-	private Rectangle2D pixRect;
+	private MouseEvent e;
 
 	/**
 	 * <p>
-	 * Mouse event that has been the cause of creating this event.
-	 * </p>
-	 */
-	private MouseEvent event;
-
-	/**
-	 * <p>
-	 * Creates a new <code>RectangleEvent</code> with all necessary data.
+	 * Creates a new <code>PointEvent</code> with all necessary data.
 	 * </p>
 	 * 
-	 * @param worldRect
-	 *            rectangle selected in world coordinates
-	 * @param pixelRect
-	 *            rectangle selected in view (pixel) coordinates
+	 * @param p
+	 *            the point 2D associated to this event
 	 * @param e
-	 *            mouse event that has been the cause of creating this event
+	 *            event that has been the cause of creating this one
 	 */
-	public RectangleEvent(Rectangle2D worldRect, MouseEvent e,
-			Rectangle2D pixelRect) {
-		rect = worldRect;
-		event = e;
-		pixRect = pixelRect;
+	public PointEvent(Point2D p, MouseEvent e) {
+		this.p = p;
+		this.e = e;
 	}
 
 	/**
 	 * <p>
-	 * Gets the rectangle selected in world coordinates.
+	 * Gets the point 2D where this event was produced.
 	 * </p>
 	 * 
-	 * @return rectangle selected in world coordinates
+	 * @return the point 2D associated to this event
 	 */
-	public Rectangle2D getWorldCoordRect() {
-		return rect;
+	public Point2D getPoint() {
+		return p;
 	}
 
 	/**
 	 * <p>
-	 * Gets the rectangle selected in pixel coordinates.
+	 * Sets the point 2D where this event was produced.
 	 * </p>
 	 * 
-	 * <p>
-	 * This is useful for doing some verifications, like if rectangle is thinner
-	 * than 3 pixels of width and height, keeping the zoom instead of reducing
-	 * it.
-	 * </p>
-	 * 
-	 * @return rectangle selected in view (pixel) coordinates
+	 * @param the
+	 *            point 2D associated to this event
 	 */
-	public Rectangle2D getPixelCoordRect() {
-		return pixRect;
+	public void setPoint(Point2D p) {
+		this.p = p;
 	}
 
 	/**
@@ -128,6 +112,6 @@ public class RectangleEvent {
 	 * @return mouse event that has been the cause of creating this one
 	 */
 	public MouseEvent getEvent() {
-		return event;
+		return e;
 	}
 }

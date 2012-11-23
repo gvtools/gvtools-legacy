@@ -48,10 +48,10 @@ import java.awt.Toolkit;
 import org.apache.log4j.Logger;
 
 import com.iver.andami.PluginServices;
-import com.iver.cit.gvsig.map.MapControl;
-import com.iver.cit.gvsig.tools.behavior.BehaviorException;
-import com.iver.cit.gvsig.tools.events.PointEvent;
-import com.iver.cit.gvsig.tools.listeners.PointListener;
+import com.iver.cit.gvsig.fmap.MapControl;
+import com.iver.cit.gvsig.fmap.tools.BehaviorException;
+import com.iver.cit.gvsig.fmap.tools.Events.PointEvent;
+import com.iver.cit.gvsig.fmap.tools.Listeners.PointListener;
 
 /**
  * <p>

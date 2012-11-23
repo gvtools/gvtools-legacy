@@ -38,7 +38,7 @@
  *   +34 963163400
  *   dac@iver.es
  */
-package com.iver.cit.gvsig.map;
+package com.iver.cit.gvsig.fmap;
 
 import geomatico.events.EventBus;
 
@@ -66,7 +66,6 @@ import javax.inject.Inject;
 import javax.swing.JComponent;
 import javax.swing.Timer;
 
-import org.GNOME.Accessibility.CommandListener;
 import org.gvsig.events.BackgroundColorChangeEvent;
 import org.gvsig.events.BackgroundColorChangeHandler;
 import org.gvsig.events.EditionChangeEvent;
@@ -88,10 +87,10 @@ import org.gvsig.map.MapContext;
 import org.gvsig.map.MapContextFactory;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
-import com.iver.cit.gvsig.tools.behavior.Behavior;
-import com.iver.cit.gvsig.tools.behavior.BehaviorException;
-import com.iver.cit.gvsig.tools.behavior.CompoundBehavior;
-import com.iver.cit.gvsig.tools.listeners.ToolListener;
+import com.iver.cit.gvsig.fmap.tools.BehaviorException;
+import com.iver.cit.gvsig.fmap.tools.Behavior.Behavior;
+import com.iver.cit.gvsig.fmap.tools.Behavior.CompoundBehavior;
+import com.iver.cit.gvsig.fmap.tools.Listeners.ToolListener;
 import com.iver.utiles.exceptionHandling.ExceptionHandlingSupport;
 import com.iver.utiles.exceptionHandling.ExceptionListener;
 import com.iver.utiles.swing.threads.Cancellable;

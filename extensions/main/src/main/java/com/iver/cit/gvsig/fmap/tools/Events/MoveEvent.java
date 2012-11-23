@@ -38,69 +38,89 @@
  *   +34 963163400
  *   dac@iver.es
  */
-package com.iver.cit.gvsig.map;
+package com.iver.cit.gvsig.fmap.tools.Events;
 
-import java.awt.geom.Rectangle2D;
+import java.awt.event.MouseEvent;
+import java.awt.geom.Point2D;
 
 /**
  * <p>
- * Event produced when the adjusted extent of the view port has changed.
+ * <code>MoveEvent</code> is used to notify a movement of the mouse between two
+ * points 2D.
  * </p>
  * 
  * @author Vicente Caballero Navarro
  */
-public class ExtentEvent extends FMapEvent {
+public class MoveEvent {
 	/**
 	 * <p>
-	 * Reference to the new adjusted extent.
+	 * Initial position of the drag & drop movement.
 	 * </p>
 	 */
-	private Rectangle2D newExtent;
+	private Point2D from;
 
 	/**
 	 * <p>
-	 * Identifier of this kind of event.
+	 * Final position of the drag & drop movement.
 	 * </p>
 	 */
-	private static final int EXTENT_EVENT = 0;
+	private Point2D to;
 
 	/**
 	 * <p>
-	 * Returns a new extent event.
+	 * Mouse event that has been the cause of creating this one.
+	 * </p>
+	 */
+	private MouseEvent event;
+
+	/**
+	 * <p>
+	 * Creates a new <code>MoveEvent</code> with all necessary data.
 	 * </p>
 	 * 
-	 * @param c
-	 *            the new adjusted extent
-	 * 
-	 * @return a new extent event
+	 * @param from
+	 *            initial 2D position of the movement
+	 * @param to
+	 *            final 2D position of the movement
+	 * @param e
+	 *            mouse event that has been the cause of creating this one
 	 */
-	public static ExtentEvent createExtentEvent(Rectangle2D r) {
-		return new ExtentEvent(r, EXTENT_EVENT);
+	public MoveEvent(Point2D from, Point2D to, MouseEvent e) {
+		this.from = from;
+		this.to = to;
+		event = e;
 	}
 
 	/**
 	 * <p>
-	 * Creates a new extent event.
+	 * Gets the initial 2D position of the movement.
 	 * </p>
 	 * 
-	 * @param c
-	 *            the new adjusted extent
-	 * @param eventType
-	 *            identifier of this kind of event
+	 * @return initial 2D position of the movement
 	 */
-	private ExtentEvent(Rectangle2D r, int eventType) {
-		setEventType(eventType);
-		newExtent = r;
+	public Point2D getFrom() {
+		return from;
 	}
 
 	/**
 	 * <p>
-	 * Gets the new adjusted event.
+	 * Gets the final 2D position of the movement.
 	 * </p>
 	 * 
-	 * @return the new adjusted extent
+	 * @return final 2D position of the movement
 	 */
-	public Rectangle2D getNewExtent() {
-		return newExtent;
+	public Point2D getTo() {
+		return to;
+	}
+
+	/**
+	 * <p>
+	 * Gets the event that has been the cause of creating this one.
+	 * </p>
+	 * 
+	 * @return mouse event that has been the cause of creating this one
+	 */
+	public MouseEvent getEvent() {
+		return event;
 	}
 }

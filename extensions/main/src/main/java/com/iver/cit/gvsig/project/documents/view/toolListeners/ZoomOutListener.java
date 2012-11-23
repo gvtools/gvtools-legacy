@@ -41,9 +41,9 @@
 package com.iver.cit.gvsig.project.documents.view.toolListeners;
 
 import com.iver.andami.PluginServices;
-import com.iver.cit.gvsig.map.MapControl;
-import com.iver.cit.gvsig.tools.ZoomOutListenerImpl;
-import com.iver.cit.gvsig.tools.events.PointEvent;
+import com.iver.cit.gvsig.fmap.MapControl;
+import com.iver.cit.gvsig.fmap.tools.ZoomOutListenerImpl;
+import com.iver.cit.gvsig.fmap.tools.Events.PointEvent;
 
 /**
  * <p>

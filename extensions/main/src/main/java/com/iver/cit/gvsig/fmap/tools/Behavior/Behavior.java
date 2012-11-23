@@ -41,7 +41,7 @@
  *   +34 963163400
  *   dac@iver.es
  */
-package com.iver.cit.gvsig.tools.behavior;
+package com.iver.cit.gvsig.fmap.tools.Behavior;
 
 import java.awt.Cursor;
 import java.awt.Graphics;
@@ -49,8 +49,9 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.image.BufferedImage;
 
-import com.iver.cit.gvsig.map.MapControl;
-import com.iver.cit.gvsig.tools.listeners.ToolListener;
+import com.iver.cit.gvsig.fmap.MapControl;
+import com.iver.cit.gvsig.fmap.tools.BehaviorException;
+import com.iver.cit.gvsig.fmap.tools.Listeners.ToolListener;
 
 /**
  * <p>

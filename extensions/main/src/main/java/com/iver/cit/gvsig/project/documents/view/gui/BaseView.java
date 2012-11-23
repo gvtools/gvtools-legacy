@@ -54,7 +54,7 @@ import com.iver.andami.ui.mdiManager.IWindowListener;
 import com.iver.andami.ui.mdiManager.IWindowTransform;
 import com.iver.andami.ui.mdiManager.SingletonWindow;
 import com.iver.andami.ui.mdiManager.WindowInfo;
-import com.iver.cit.gvsig.map.MapControl;
+import com.iver.cit.gvsig.fmap.MapControl;
 import com.iver.cit.gvsig.project.documents.gui.IDocumentWindow;
 import com.iver.cit.gvsig.project.documents.gui.WindowData;
 import com.iver.cit.gvsig.project.documents.view.IProjectView;

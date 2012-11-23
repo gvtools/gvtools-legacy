@@ -38,39 +38,69 @@
  *   +34 963163400
  *   dac@iver.es
  */
-package com.iver.cit.gvsig.tools.listeners;
+package com.iver.cit.gvsig.fmap;
 
-import com.iver.cit.gvsig.map.MapControl;
-import com.iver.cit.gvsig.tools.behavior.BehaviorException;
-import com.iver.cit.gvsig.tools.events.RectangleEvent;
+import java.awt.Color;
 
 /**
  * <p>
- * Interface specialized for tools that reply for a {@link RectangleEvent
- * RectangleEvent} produced in the associated {@link MapControl MapControl}
- * object, as a consequence of a 2D rectangle drawn by the mouse.
+ * Event produced when changes the background color of the <i>view port</i>.
  * </p>
  * 
  * @author Vicente Caballero Navarro
  */
-public interface RectangleListener extends ToolListener {
+public class ColorEvent extends FMapEvent {
 	/**
 	 * <p>
-	 * Called when user executes a double click with the mouse, finishing the
-	 * drawn of the rectangle.
+	 * Identifier of this kind of event.
 	 * </p>
-	 * 
-	 * <p>
-	 * All features of the active and vector layers of the associated
-	 * <code>MapControl</code> object that their area intersect with the
-	 * polygonal area defined in the <i>event</i>, will be selected.
-	 * </p>
-	 * 
-	 * @param event
-	 *            mouse event and information about the rectangle defined
-	 * 
-	 * @throws BehaviorException
-	 *             will be thrown when fails the process of this tool
 	 */
-	public void rectangle(RectangleEvent event) throws BehaviorException;
+	private static final int COLOR_EVENT = 0;
+
+	/**
+	 * <p>
+	 * Reference to the new color
+	 * </p>
+	 */
+	private Color color;
+
+	/**
+	 * <p>
+	 * Returns a new color event.
+	 * </p>
+	 * 
+	 * @param c
+	 *            the new color
+	 * 
+	 * @return a new color event
+	 */
+	public static ColorEvent createColorEvent(Color c) {
+		return new ColorEvent(c, COLOR_EVENT);
+	}
+
+	/**
+	 * <p>
+	 * Creates a new color event.
+	 * </p>
+	 * 
+	 * @param c
+	 *            the new color
+	 * @param eventType
+	 *            identifier of this kind of event
+	 */
+	private ColorEvent(Color c, int eventType) {
+		color = c;
+		setEventType(eventType);
+	}
+
+	/**
+	 * <p>
+	 * Gets the new color.
+	 * </p>
+	 * 
+	 * @return the new color
+	 */
+	public Color getNewColor() {
+		return color;
+	}
 }

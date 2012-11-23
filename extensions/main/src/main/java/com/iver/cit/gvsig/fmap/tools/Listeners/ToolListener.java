@@ -38,80 +38,46 @@
  *   +34 963163400
  *   dac@iver.es
  */
-package com.iver.cit.gvsig.tools.events;
+package com.iver.cit.gvsig.fmap.tools.Listeners;
 
-import java.awt.event.MouseEvent;
-import java.awt.geom.Point2D;
+import java.awt.Cursor;
 
 /**
  * <p>
- * <code>PointEvent</code> is used to notify a selection of a point with the
- * mouse.
+ * User can interact with a {@link MapControl MapControl} instance, working with
+ * a tool that applies changes on it processing the events produced by the
+ * current {@link Behavior Behavior} of <code>MapControl</code>.
+ * </p>
+ * 
+ * <p>
+ * The process that the tool applies on the <code>MapControl</code> is a
+ * consequence of the mouse actions that user has done on that area.
+ * </p>
+ * 
+ * <p>
+ * Only some tool listener can be cancelled.
  * </p>
  * 
  * @author Vicente Caballero Navarro
  */
-public class PointEvent {
+public interface ToolListener {
 	/**
 	 * <p>
-	 * The point 2D associated to this event.
-	 * </p>
-	 */
-	private Point2D p;
-
-	/**
-	 * <p>
-	 * The point 2D associated to this event.
-	 * </p>
-	 */
-	private MouseEvent e;
-
-	/**
-	 * <p>
-	 * Creates a new <code>PointEvent</code> with all necessary data.
+	 * Gets the <code>Cursor</code> associated to this tool.
 	 * </p>
 	 * 
-	 * @param p
-	 *            the point 2D associated to this event
-	 * @param e
-	 *            event that has been the cause of creating this one
+	 * @return component with the bitmap associated to this tool
 	 */
-	public PointEvent(Point2D p, MouseEvent e) {
-		this.p = p;
-		this.e = e;
-	}
+	public Cursor getCursor();
 
 	/**
 	 * <p>
-	 * Gets the point 2D where this event was produced.
+	 * Determines if the drawing process that this tool executes on the
+	 * <code>MapControl</code> instance could be canceled or not.
 	 * </p>
 	 * 
-	 * @return the point 2D associated to this event
+	 * @return <code>true</code> if is cancellable; otherwise returns
+	 *         <code>false</code>
 	 */
-	public Point2D getPoint() {
-		return p;
-	}
-
-	/**
-	 * <p>
-	 * Sets the point 2D where this event was produced.
-	 * </p>
-	 * 
-	 * @param the
-	 *            point 2D associated to this event
-	 */
-	public void setPoint(Point2D p) {
-		this.p = p;
-	}
-
-	/**
-	 * <p>
-	 * Gets the event that has been the cause of creating this one.
-	 * </p>
-	 * 
-	 * @return mouse event that has been the cause of creating this one
-	 */
-	public MouseEvent getEvent() {
-		return e;
-	}
+	public boolean cancelDrawing();
 }

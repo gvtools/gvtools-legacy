@@ -38,7 +38,7 @@
  *   +34 963163400
  *   dac@iver.es
  */
-package com.iver.cit.gvsig.tools;
+package com.iver.cit.gvsig.fmap.tools;
 
 import java.awt.Cursor;
 import java.awt.Image;
@@ -49,10 +49,10 @@ import java.awt.geom.Rectangle2D;
 
 import javax.swing.ImageIcon;
 
-import com.iver.cit.gvsig.map.MapControl;
-import com.iver.cit.gvsig.map.ViewPort;
-import com.iver.cit.gvsig.tools.events.MoveEvent;
-import com.iver.cit.gvsig.tools.listeners.PanListener;
+import com.iver.cit.gvsig.fmap.MapControl;
+import com.iver.cit.gvsig.fmap.ViewPort;
+import com.iver.cit.gvsig.fmap.tools.Events.MoveEvent;
+import com.iver.cit.gvsig.fmap.tools.Listeners.PanListener;
 
 /**
  * <p>

@@ -46,7 +46,7 @@
  */
 package com.iver.cit.gvsig.project.documents.view.gui;
 
-import com.iver.cit.gvsig.map.MapControl;
+import com.iver.cit.gvsig.fmap.MapControl;
 
 /**
  * @author FJP

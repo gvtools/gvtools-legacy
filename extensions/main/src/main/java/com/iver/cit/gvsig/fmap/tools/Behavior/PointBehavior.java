@@ -38,67 +38,81 @@
  *   +34 963163400
  *   dac@iver.es
  */
-package com.iver.cit.gvsig.tools.behavior;
+package com.iver.cit.gvsig.fmap.tools.Behavior;
 
 import java.awt.event.MouseEvent;
 
-import com.iver.cit.gvsig.tools.events.PointEvent;
-import com.iver.cit.gvsig.tools.listeners.PointListener;
-import com.iver.cit.gvsig.tools.listeners.ToolListener;
+import com.iver.cit.gvsig.fmap.tools.BehaviorException;
+import com.iver.cit.gvsig.fmap.tools.Events.PointEvent;
+import com.iver.cit.gvsig.fmap.tools.Listeners.PointListener;
+import com.iver.cit.gvsig.fmap.tools.Listeners.ToolListener;
 
 /**
  * <p>
- * Behavior that permits user to move and drag the mouse on the image of the
- * associated <code>MapControl</code> instance using a {@link PointListener
- * PointListener}.
+ * Behavior that permits user to select a point with a double click mouse
+ * action, on the associated <code>MapControl</code> using a
+ * {@link PointListener PointListener}.
  * </p>
  * 
  * @author Vicente Caballero Navarro
  */
-public class MouseMovementBehavior extends Behavior {
+public class PointBehavior extends Behavior {
 	/**
-	 * Tool listener used to work with the <code>MapControl</code> object.
+	 * Tool listener used to work with the <<code>MapControl</code> object.
 	 * 
 	 * @see #getListener()
 	 * @see #setListener(ToolListener)
 	 */
-	protected PointListener listener;
+	private PointListener listener;
+
+	/**
+	 * Flag that determines a double click user action.
+	 */
+	private boolean doubleClick = false;
 
 	/**
 	 * <p>
-	 * Creates a new behavior for moving or dragging the mouse on the image of
-	 * the associated <code>MapControl</code> instance.
+	 * Creates a new behavior for selecting a point.
 	 * </p>
 	 * 
-	 * @param mli
+	 * @param l
 	 *            listener used to permit this object to work with the
 	 *            associated <code>MapControl</code>
 	 */
-	public MouseMovementBehavior(PointListener mli) {
-		listener = mli;
+	public PointBehavior(PointListener l) {
+		listener = l;
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * com.iver.cit.gvsig.fmap.tools.Behavior.Behavior#mouseDragged(java.awt
+	 * com.iver.cit.gvsig.fmap.tools.Behavior.Behavior#mousePressed(java.awt
 	 * .event.MouseEvent)
 	 */
-	public void mouseDragged(MouseEvent e) throws BehaviorException {
-		mouseMoved(e);
+	public void mousePressed(MouseEvent e) {
+		if (listener.cancelDrawing()) {
+			getMapControl().cancelDrawing();
+		}
+		if (e.getClickCount() == 2) {
+			doubleClick = true;
+		}
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * com.iver.cit.gvsig.fmap.tools.Behavior.Behavior#mouseMoved(java.awt.event
-	 * .MouseEvent)
+	 * com.iver.cit.gvsig.fmap.tools.Behavior.Behavior#mouseReleased(java.awt
+	 * .event.MouseEvent)
 	 */
-	public void mouseMoved(MouseEvent e) throws BehaviorException {
+	public void mouseReleased(MouseEvent e) throws BehaviorException {
 		PointEvent event = new PointEvent(e.getPoint(), e);
 		listener.point(event);
+		if (doubleClick) {
+			listener.pointDoubleClick(event);
+			doubleClick = false;
+		}
 	}
 
 	/**

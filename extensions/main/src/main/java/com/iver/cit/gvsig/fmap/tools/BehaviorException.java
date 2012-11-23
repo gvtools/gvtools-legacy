@@ -38,50 +38,41 @@
  *   +34 963163400
  *   dac@iver.es
  */
-package com.iver.cit.gvsig.tools.listeners;
+package com.iver.cit.gvsig.fmap.tools;
 
-import com.iver.cit.gvsig.map.MapControl;
-import com.iver.cit.gvsig.tools.behavior.BehaviorException;
-import com.iver.cit.gvsig.tools.events.PointEvent;
+import com.iver.cit.gvsig.fmap.MapControl;
 
 /**
  * <p>
- * Interface for all tools that reply for a {@link PointEvent PointEvent}
- * produced in the associated {@link MapControl MapControl} object, produced by
- * a simple or double click of a button of the mouse.
+ * Exception produced when fails the process that interacts with a
+ * {@link MapControl MapControl} object, using some tool.
  * </p>
  * 
  * @author Vicente Caballero Navarro
  */
-public interface PointListener extends ToolListener {
-	/**
-	 * <p>
-	 * Called when one click is pressed on the associated
-	 * <code>MapControl</code>, or the location of the cursor of the mouse has
-	 * changed on it.
-	 * </p>
-	 * 
-	 * @param event
-	 *            mouse event with the coordinates of the point selected on the
-	 *            associated <code>MapControl</code>
-	 * 
-	 * @throws BehaviorException
-	 *             will be thrown when fails the process of this tool
-	 */
-	public void point(PointEvent event) throws BehaviorException;
+public class BehaviorException extends Exception {
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * <p>
-	 * Called when a double click is pressed on the associated
-	 * <code>MapControl</code>.
+	 * Creates a new behavior exception with the specified detail message.
 	 * </p>
 	 * 
-	 * @param event
-	 *            mouse event and the coordinates of the point selected on the
-	 *            associated <code>MapControl</code>
-	 * 
-	 * @throws BehaviorException
-	 *             will be thrown when fails the process of this tool
+	 * @see Exception#Exception(String)
 	 */
-	public void pointDoubleClick(PointEvent event) throws BehaviorException;
+	public BehaviorException(String message) {
+		super(message);
+	}
+
+	/**
+	 * <p>
+	 * Creates a new behavior exception with the specified detail message and
+	 * cause.
+	 * </p>
+	 * 
+	 * @see Exception#Exception(String, Throwable)
+	 */
+	public BehaviorException(String message, Throwable cause) {
+		super(message, cause);
+	}
 }

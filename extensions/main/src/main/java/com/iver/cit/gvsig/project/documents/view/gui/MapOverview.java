@@ -4,11 +4,11 @@ import org.gvsig.NotAvailableLabel;
 import org.gvsig.map.MapContext;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
-import com.iver.cit.gvsig.map.ColorEvent;
-import com.iver.cit.gvsig.map.ExtentEvent;
-import com.iver.cit.gvsig.map.MapControl;
-import com.iver.cit.gvsig.map.ProjectionEvent;
-import com.iver.cit.gvsig.map.ViewPortListener;
+import com.iver.cit.gvsig.fmap.ColorEvent;
+import com.iver.cit.gvsig.fmap.ExtentEvent;
+import com.iver.cit.gvsig.fmap.MapControl;
+import com.iver.cit.gvsig.fmap.ProjectionEvent;
+import com.iver.cit.gvsig.fmap.ViewPortListener;
 
 public class MapOverview extends NotAvailableLabel implements ViewPortListener {
 

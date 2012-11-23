@@ -38,38 +38,41 @@
  *   +34 963163400
  *   dac@iver.es
  */
-package com.iver.cit.gvsig.tools.listeners;
-
-import com.iver.cit.gvsig.map.MapControl;
-import com.iver.cit.gvsig.tools.behavior.BehaviorException;
-import com.iver.cit.gvsig.tools.events.MoveEvent;
+package com.iver.cit.gvsig.fmap;
 
 /**
  * <p>
- * Interface for all tools that reply for a {@link MoveEvent MoveEvent} produced
- * in the associated {@link MapControl MapControl} object, as a consequence of a
- * 2D drag and drop movement of the mouse.
+ * Defines the interface for an object that listens to changes in a view port.
  * </p>
- * 
- * @author Vicente Caballero Navarro
  */
-public interface PanListener extends ToolListener {
+public interface ViewPortListener {
 	/**
 	 * <p>
-	 * Called when user drags the mouse on the view.
-	 * </p>
-	 * <p>
-	 * Updates the extent coordinates according to the direction of the movement
-	 * between the initial and final points of line determined by the move of
-	 * the mouse.
+	 * Called when the <i>extent</i> of the view port has changed.
 	 * </p>
 	 * 
-	 * @param event
-	 *            mouse event information about the initial and final positions
-	 *            of the movement
-	 * 
-	 * @throws BehaviorException
-	 *             will be thrown when fails the process of this tool
+	 * @param e
+	 *            an extend event object
 	 */
-	public void move(MoveEvent event) throws BehaviorException;
+	void extentChanged(ExtentEvent e);
+
+	/**
+	 * <p>
+	 * Called when the background color of the view port has changed.
+	 * </p>
+	 * 
+	 * @param e
+	 *            a color event object
+	 */
+	void backColorChanged(ColorEvent e);
+
+	/**
+	 * <p>
+	 * Called when the projection of the view port has changed.
+	 * </p>
+	 * 
+	 * @param e
+	 *            a projection event object
+	 */
+	void projectionChanged(ProjectionEvent e);
 }
