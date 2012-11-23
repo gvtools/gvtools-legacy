@@ -636,8 +636,6 @@ public class ViewPort {
 	 * @return the distance in meters between the two points 2D
 	 * @throws TransformException
 	 *             if the distance cannot be computed
-	 * 
-	 * @see GeoCalc#distanceVincenty(Point2D, Point2D)
 	 */
 	public double distanceWorld(Point2D pt1, Point2D pt2)
 			throws TransformException {
@@ -1628,8 +1626,7 @@ public class ViewPort {
 	 *         <li>the scale of the adjusted extent scale of the view in the
 	 *         screen
 	 *         <li><code>-1</code> if there is no image
-	 *         <li><code>0</code> if there is no extent defined for the image or
-	 *         any error occurs
+	 *         <li><code>0</code> if there is no extent defined for the image
 	 *         </ul>
 	 * @throws FactoryException
 	 *             if the scale cannot be obtained
@@ -1651,9 +1648,16 @@ public class ViewPort {
 			return 0;
 		}
 
-		ReferencedEnvelope envelope = new ReferencedEnvelope(ext, getCrs());
-		return (long) RendererUtilities.calculateScale(envelope, size.width,
-				size.height, getScreenDPI());
+		double dpi = getScreenDPI();
+		if (crs == null) {
+			double widthCm = ((getImageSize().getWidth() / dpi) * 2.54);
+			return (long) (getAdjustedExtent().getWidth() / widthCm * getMapUnits()
+					.toMeter());
+		} else {
+			ReferencedEnvelope envelope = new ReferencedEnvelope(ext, getCrs());
+			return (long) RendererUtilities.calculateScale(envelope,
+					size.width, size.height, dpi);
+		}
 	}
 
 	/**
