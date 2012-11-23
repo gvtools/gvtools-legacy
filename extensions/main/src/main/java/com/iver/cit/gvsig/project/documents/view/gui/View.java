@@ -50,17 +50,22 @@ import java.util.Iterator;
 
 import javax.swing.JSplitPane;
 
+import org.apache.log4j.Logger;
 import org.geotools.referencing.CRS;
 import org.gvsig.layer.Layer;
 import org.gvsig.layer.LayerFilter;
 import org.gvsig.map.MapContext;
+import org.opengis.referencing.FactoryException;
+import org.opengis.referencing.operation.TransformException;
 
 import com.iver.andami.PluginServices;
+import com.iver.andami.ui.mdiFrame.NewStatusBar;
 import com.iver.andami.ui.mdiManager.WindowInfo;
 import com.iver.cit.gvsig.map.ColorEvent;
 import com.iver.cit.gvsig.map.ExtentEvent;
 import com.iver.cit.gvsig.map.MapControl;
 import com.iver.cit.gvsig.map.ProjectionEvent;
+import com.iver.cit.gvsig.map.ViewPort;
 import com.iver.cit.gvsig.map.ViewPortListener;
 import com.iver.cit.gvsig.project.documents.view.ProjectViewBase;
 import com.iver.cit.gvsig.project.documents.view.toolListeners.PanListener;
@@ -106,6 +111,8 @@ import com.iver.utiles.console.jedit.JEditTextArea;
  * @author vcn
  */
 public class View extends BaseView {
+	private static final Logger logger = Logger.getLogger(View.class);
+
 	static private Color defaultViewBackColor = Color.WHITE;
 
 	/** DOCUMENT ME! */
@@ -178,20 +185,18 @@ public class View extends BaseView {
 			viewPortListener = new ViewPortListener() {
 				public void extentChanged(ExtentEvent e) {
 					if (PluginServices.getMainFrame() != null) {
-						PluginServices
-								.getMainFrame()
-								.getStatusBar()
-								.setControlValue(
-										"scale",
-										String.valueOf(m_MapControl
-												.getViewPort().getScaleView()));
-						PluginServices
-								.getMainFrame()
-								.getStatusBar()
-								.setMessage(
-										"projection",
-										CRS.toSRS(getMapControl().getViewPort()
-												.getCrs()));
+						NewStatusBar status = PluginServices.getMainFrame()
+								.getStatusBar();
+						try {
+							long scale = m_MapControl.getViewPort()
+									.getScaleView();
+							status.setControlValue("scale",
+									String.valueOf(scale));
+						} catch (Exception exc) {
+							logger.warn("Cannot get viewport scale", exc);
+						}
+						status.setMessage("projection", CRS
+								.toSRS(getMapControl().getViewPort().getCrs()));
 					}
 				}
 
@@ -444,25 +449,17 @@ public class View extends BaseView {
 	 * @see com.iver.mdiApp.ui.MDIManager.IWindow#windowActivated()
 	 */
 	public void windowActivated() {
-		PluginServices
-				.getMainFrame()
-				.getStatusBar()
-				.setMessage(
-						"units",
-						PluginServices.getText(this, getMapControl()
-								.getViewPort().getDistanceUnits().name));
-		PluginServices
-				.getMainFrame()
-				.getStatusBar()
-				.setControlValue(
-						"scale",
-						String.valueOf(m_MapControl.getViewPort()
-								.getScaleView()));
-		PluginServices
-				.getMainFrame()
-				.getStatusBar()
-				.setMessage("projection",
-						CRS.toSRS(getMapControl().getViewPort().getCrs()));
+		NewStatusBar status = PluginServices.getMainFrame().getStatusBar();
+		status.setMessage("units", PluginServices.getText(this, getMapControl()
+				.getViewPort().getDistanceUnits().name));
+		try {
+			long scale = m_MapControl.getViewPort().getScaleView();
+			status.setControlValue("scale", String.valueOf(scale));
+		} catch (Exception e) {
+			logger.warn("Cannot get viewport scale", e);
+		}
+		status.setMessage("projection",
+				CRS.toSRS(getMapControl().getViewPort().getCrs()));
 	}
 
 	/**
@@ -470,12 +467,13 @@ public class View extends BaseView {
 	 */
 	public void windowClosed() {
 		super.windowClosed();
-		if (viewPortListener != null)
-			getMapControl().getViewPort().removeViewPortListener(
-					viewPortListener);
-		if (getMapOverview() != null)
-			getMapOverview().getViewPort().removeViewPortListener(
-					getMapOverview());
+		ViewPort viewport = getMapControl().getViewPort();
+		if (viewPortListener != null) {
+			viewport.removeViewPortListener(viewPortListener);
+		}
+		if (getMapControl() != null) {
+			viewport.removeViewPortListener(getMapOverview());
+		}
 
 	}
 
