@@ -487,33 +487,30 @@ public class View extends BaseView {
 		m_MapLoc.setSize(new Dimension(200, 150));
 		movp = new MapOverViewPalette(m_MapLoc, this);
 		PluginServices.getMDIManager().addWindow(movp);
-		FLayer[] layers = getModel().getMapContext().getLayers().getActives();
-		if (layers.length > 0 && layers[0] instanceof FLyrVect) {
-			if (((FLyrVect) layers[0]).isEditing()) {
-				showConsole();
-				return;
-			}
+		Layer root = getModel().getMapContext().getRootLayer();
+		Layer[] layers = root.filter(LayerFilter.ACTIVE);
+		if (layers.length > 0 && layers[0].getVectorial().isEditing()) {
+			showConsole();
+		} else {
+			hideConsole();
 		}
-		hideConsole();
-
 	}
 
 	public void restore() {
 		isPalette = false;
 		PluginServices.getMDIManager().closeWindow(movp);
-		FLayer[] layers = getModel().getMapContext().getLayers().getActives();
-		if (layers.length > 0 && layers[0] instanceof FLyrVect) {
-			if (((FLyrVect) layers[0]).isEditing()) {
-				showConsole();
-				return;
-			}
+		Layer root = getModel().getMapContext().getRootLayer();
+		Layer[] layers = root.filter(LayerFilter.ACTIVE);
+		if (layers.length > 0 && layers[0].getVectorial().isEditing()) {
+			showConsole();
+		} else {
+			hideConsole();
+			JSplitPane tempSplitToc = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+			tempSplitToc.setTopComponent(m_TOC);
+			tempSplitToc.setBottomComponent(m_MapLoc);
+			tempSplitToc.setResizeWeight(0.7);
+			tempMainSplit.setLeftComponent(tempSplitToc);
 		}
-		hideConsole();
-		JSplitPane tempSplitToc = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
-		tempSplitToc.setTopComponent(m_TOC);
-		tempSplitToc.setBottomComponent(m_MapLoc);
-		tempSplitToc.setResizeWeight(0.7);
-		tempMainSplit.setLeftComponent(tempSplitToc);
 	}
 
 	/**
