@@ -69,8 +69,8 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
 import org.gvsig.gui.beans.swing.JFileChooser;
+import org.gvsig.inject.ExtModule;
 import org.gvsig.inject.InjectorSingleton;
-import org.gvsig.inject.Module;
 import org.gvsig.tools.file.PathGenerator;
 
 import com.google.inject.Guice;
@@ -151,7 +151,7 @@ public class ProjectExtension extends Extension implements IExtensionStatus {
 	 */
 	public void initialize() {
 
-		InjectorSingleton.setInjector(Guice.createInjector(new Module()));
+		InjectorSingleton.setInjector(Guice.createInjector(new ExtModule()));
 
 		try {
 			Class.forName("javax.media.jai.EnumeratedParameter");
