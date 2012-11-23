@@ -40,15 +40,23 @@
  */
 package com.iver.cit.gvsig.project.documents.view.toolListeners;
 
+import geomatico.events.EventBus;
+import geomatico.events.ExceptionEvent;
+
 import java.awt.Cursor;
 import java.awt.geom.Point2D;
 import java.text.NumberFormat;
 
+import javax.inject.Inject;
+
 import org.geotools.referencing.CRS;
+import org.gvsig.crs.ExtendedMathTransform;
 import org.gvsig.units.Unit;
+import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.crs.ProjectedCRS;
 import org.opengis.referencing.operation.MathTransform;
+import org.opengis.referencing.operation.TransformException;
 
 import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiFrame.MainFrame;
@@ -132,6 +140,9 @@ public class StatusBarListener implements PointListener {
 	 */
 	private NumberFormat nf = null;
 
+	@Inject
+	private EventBus eventBus;
+
 	/**
 	 * <p>
 	 * Creates a new <code>StatusBarListener</code> object.
@@ -198,9 +209,19 @@ public class StatusBarListener implements PointListener {
 			mF.getStatusBar().setMessage("projection",
 					CRS.toSRS(mapControl.getViewPort().getCrs()));
 
-			String[] coords = getCoords(p);
-			mF.getStatusBar().setMessage("x", axisText[0] + coords[0]);
-			mF.getStatusBar().setMessage("y", axisText[1] + coords[1]);
+			try {
+				String[] coords = getCoords(p);
+				mF.getStatusBar().setMessage("x", axisText[0] + coords[0]);
+				mF.getStatusBar().setMessage("y", axisText[1] + coords[1]);
+			} catch (FactoryException e) {
+				eventBus.fireEvent(new ExceptionEvent(
+						ExceptionEvent.Severity.WARNING,
+						"Cannot transform the coordinate", e));
+			} catch (TransformException e) {
+				eventBus.fireEvent(new ExceptionEvent(
+						ExceptionEvent.Severity.WARNING,
+						"Cannot transform the coordinate", e));
+			}
 		}
 	}
 
@@ -342,8 +363,11 @@ public class StatusBarListener implements PointListener {
 	 * 
 	 * @return coordinates equivalent to <code>p</code>, according to the
 	 *         algorithm explained up
+	 * @throws FactoryException
+	 * @throws TransformException
 	 */
-	public String[] getCoords(Point2D p) {
+	public String[] getCoords(Point2D p) throws FactoryException,
+			TransformException {
 		String[] coords = new String[2];
 		CoordinateReferenceSystem crs = mapControl.getMapContext().getCRS();
 		if (!(crs instanceof ProjectedCRS)) {
@@ -356,7 +380,7 @@ public class StatusBarListener implements PointListener {
 					PluginServices.getText(this, "Grados"))) {
 				MathTransform trans = CRS.findMathTransform(projected,
 						projected.getBaseCRS());
-				Point2D pgeo = ProjectionUtils.transform(p, trans);
+				Point2D pgeo = new ExtendedMathTransform(trans).transform(p);
 				coords[0] = String.valueOf(formatDegrees(pgeo.getX()));
 				coords[1] = String.valueOf(formatDegrees(pgeo.getY()));
 			} else {
