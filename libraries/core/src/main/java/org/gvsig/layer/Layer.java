@@ -31,13 +31,6 @@ public interface Layer {
 	Layer[] getAllLayers();
 
 	/**
-	 * Returns an instance of {@link VectorialLayer}
-	 * 
-	 * @return
-	 */
-	VectorialLayer getVectorial();
-
-	/**
 	 * Obtains an array of all layers that all match the filter condition. This
 	 * layer and all the descendant are tested
 	 * 
@@ -46,4 +39,7 @@ public interface Layer {
 	 */
 	Layer[] filter(LayerFilter filter);
 
+	boolean isEditing();
+	
+	boolean isVectorial();
 }

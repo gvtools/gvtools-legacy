@@ -489,7 +489,7 @@ public class View extends BaseView {
 		PluginServices.getMDIManager().addWindow(movp);
 		Layer root = getModel().getMapContext().getRootLayer();
 		Layer[] layers = root.filter(LayerFilter.ACTIVE);
-		if (layers.length > 0 && layers[0].getVectorial().isEditing()) {
+		if (layers.length > 0 && layers[0].isEditing()) {
 			showConsole();
 		} else {
 			hideConsole();
@@ -501,7 +501,7 @@ public class View extends BaseView {
 		PluginServices.getMDIManager().closeWindow(movp);
 		Layer root = getModel().getMapContext().getRootLayer();
 		Layer[] layers = root.filter(LayerFilter.ACTIVE);
-		if (layers.length > 0 && layers[0].getVectorial().isEditing()) {
+		if (layers.length > 0 && layers[0].isEditing()) {
 			showConsole();
 		} else {
 			hideConsole();

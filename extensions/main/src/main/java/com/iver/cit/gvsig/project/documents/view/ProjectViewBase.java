@@ -192,7 +192,7 @@ public abstract class ProjectViewBase extends ProjectDocument implements
 			return true;
 		Layer[] layers = getMapContext().getRootLayer().getAllLayers();
 		for (Layer layer : layers) {
-			if (layer.getVectorial().isEditing()) {
+			if (layer.isEditing()) {
 				return true;
 			}
 		}
