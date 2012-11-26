@@ -542,11 +542,14 @@ public class View extends BaseView {
 	 */
 	public static Color getDefaultBackColor() {
 		// TODO es millorable?
-		XMLEntity xml = PluginServices.getPluginServices("com.iver.cit.gvsig")
-				.getPersistentXML();
-		if (xml.contains("DefaultViewBackColor"))
-			defaultViewBackColor = StringUtilities.string2Color(xml
-					.getStringProperty("DefaultViewBackColor"));
+		PluginServices plugin = PluginServices
+				.getPluginServices("com.iver.cit.gvsig");
+		if (plugin != null) {
+			XMLEntity xml = plugin.getPersistentXML();
+			if (xml.contains("DefaultViewBackColor"))
+				defaultViewBackColor = StringUtilities.string2Color(xml
+						.getStringProperty("DefaultViewBackColor"));
+		}
 		return defaultViewBackColor;
 	}
 

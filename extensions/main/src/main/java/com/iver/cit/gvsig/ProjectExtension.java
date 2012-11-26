@@ -89,6 +89,7 @@ import com.iver.andami.ui.wizard.UnsavedDataPanel;
 import com.iver.cit.gvsig.project.Project;
 import com.iver.cit.gvsig.project.ProjectFactory;
 import com.iver.cit.gvsig.project.documents.ProjectDocument;
+import com.iver.cit.gvsig.project.documents.contextMenu.AbstractDocumentContextMenuAction;
 import com.iver.cit.gvsig.project.documents.exceptions.OpenException;
 import com.iver.cit.gvsig.project.documents.gui.ProjectWindow;
 import com.iver.cit.gvsig.project.documents.view.ProjectViewFactory;
@@ -104,8 +105,8 @@ import com.iver.utiles.xml.XMLEncodingUtils;
 
 /**
  * Extension que proporciona controles para crear proyectos nuevos, abrirlos y
- * guardarlos. Adem�s los tipos de tabla que soporta el proyecto son a�adidos en
- * esta clase.
+ * guardarlos. Adem�s los tipos de tabla que soporta el proyecto son
+ * a�adidos en esta clase.
  * 
  * @author Fernando Gonz�lez Cort�s
  * @author Pablo Piqueras Bartolom� (pablo.piqueras@iver.es)
@@ -480,8 +481,8 @@ public class ProjectExtension extends Extension implements IExtensionStatus {
 	}
 
 	/**
-	 * Escribe el proyecto en XML. Pero permite decidir si se pide confirmaci�n
-	 * para sobreescribir
+	 * Escribe el proyecto en XML. Pero permite decidir si se pide
+	 * confirmaci�n para sobreescribir
 	 * 
 	 * @param file
 	 *            Fichero.
@@ -793,32 +794,25 @@ public class ProjectExtension extends Extension implements IExtensionStatus {
 	private void initializeDocumentActionsExtensionPoint() {
 		ExtensionPoints extensionPoints = ExtensionPointsSingleton
 				.getInstance();
+		String className = AbstractDocumentContextMenuAction.class
+				.getCanonicalName();
 		if (!extensionPoints.containsKey("DocumentActions_View")) {
-			extensionPoints
-					.put(new ExtensionPoint(
-							"DocumentActions_View",
-							"Context menu options of the view document list"
-									+ " in the project window "
-									+ "(register instances of "
-									+ "com.iver.cit.gvsig.project.AbstractDocumentContextMenuAction)"));
+			extensionPoints.put(new ExtensionPoint("DocumentActions_View",
+					"Context menu options of the view document list"
+							+ " in the project window "
+							+ "(register instances of " + className + ")"));
 		}
 		if (!extensionPoints.containsKey("DocumentActions_Table")) {
-			extensionPoints
-					.put(new ExtensionPoint(
-							"DocumentActions_Table",
-							"Context menu options of the table document list"
-									+ " in the project window "
-									+ "(register instances of "
-									+ "com.iver.cit.gvsig.project.AbstractDocumentContextMenuAction)"));
+			extensionPoints.put(new ExtensionPoint("DocumentActions_Table",
+					"Context menu options of the table document list"
+							+ " in the project window "
+							+ "(register instances of " + className + ")"));
 		}
 		if (!extensionPoints.containsKey("DocumentActions_Map")) {
-			extensionPoints
-					.put(new ExtensionPoint(
-							"DocumentActions_Map",
-							"Context menu options of the map document list"
-									+ " in the project window "
-									+ "(register instances of "
-									+ "com.iver.cit.gvsig.project.AbstractDocumentContextMenuAction)"));
+			extensionPoints.put(new ExtensionPoint("DocumentActions_Map",
+					"Context menu options of the map document list"
+							+ " in the project window "
+							+ "(register instances of " + className + ")"));
 		}
 	}
 

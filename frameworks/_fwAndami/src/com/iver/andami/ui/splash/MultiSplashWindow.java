@@ -106,7 +106,7 @@ public class MultiSplashWindow extends JWindow implements TimerCallBack,
 		setLocation((screenSize.width / 2) - (splashDimension.width / 2),
 				(screenSize.height / 2) - (splashDimension.height / 2));
 		index = 0;
-		setVisible(true);
+//		setVisible(true);
 		this.addMouseListener(this);
 	}
 

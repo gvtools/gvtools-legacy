@@ -123,7 +123,7 @@ public class ProjectViewFactory extends ProjectDocumentFactory {
 	 */
 	public static void register() {
 		register(registerName, new ProjectViewFactory(),
-				"com.iver.cit.gvsig.project.ProjectView");
+				ProjectView.class.getCanonicalName());
 
 		PluginServices.getIconTheme().registerDefault("document-view-icon",
 				ProjectView.class.getResource("/images/Vista.png"));

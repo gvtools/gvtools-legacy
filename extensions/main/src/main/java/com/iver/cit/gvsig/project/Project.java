@@ -82,6 +82,7 @@ import com.iver.cit.gvsig.project.documents.ProjectDocument;
 import com.iver.cit.gvsig.project.documents.ProjectDocumentFactory;
 import com.iver.cit.gvsig.project.documents.exceptions.OpenException;
 import com.iver.cit.gvsig.project.documents.exceptions.SaveException;
+import com.iver.cit.gvsig.project.documents.gui.ProjectWindow;
 import com.iver.cit.gvsig.project.documents.gui.WindowData;
 import com.iver.cit.gvsig.project.documents.view.ProjectView;
 import com.iver.cit.gvsig.project.documents.view.ProjectViewFactory;
@@ -217,8 +218,8 @@ public class Project implements Serializable, PropertyChangeListener {
 	// }
 
 	/**
-	 * Asigna la fecha de creaci�n del proyecto. Este m�todo tiene sentido s�lo
-	 * por que al recuperar la fecha del XML hay que asignarla al objeto
+	 * Asigna la fecha de creaci�n del proyecto. Este m�todo tiene sentido
+	 * s�lo por que al recuperar la fecha del XML hay que asignarla al objeto
 	 * proyecto de alguna manera. La fecha se asigna en el constructor y no se
 	 * deber�a de modificar nunca
 	 * 
@@ -349,8 +350,8 @@ public class Project implements Serializable, PropertyChangeListener {
 	}
 
 	/**
-	 * M�todo invocado al recuperar de XML para establecer el color de seleccion
-	 * del proyecto
+	 * M�todo invocado al recuperar de XML para establecer el color de
+	 * seleccion del proyecto
 	 * 
 	 * @param color
 	 *            Entero que representa un color
@@ -544,8 +545,8 @@ public class Project implements Serializable, PropertyChangeListener {
 				} else if (child.contains("className") // restore the position
 						// of the project
 						// manager window
-						&& child.getStringProperty("className")
-								.equals("com.iver.cit.gvsig.project.document.gui.ProjectWindow")
+						&& child.getStringProperty("className").equals(
+								ProjectWindow.class.getCanonicalName())
 						&& child.contains("name")
 						&& child.getStringProperty("name").equals(
 								"ViewInfoProperties")) {
@@ -722,19 +723,24 @@ public class Project implements Serializable, PropertyChangeListener {
 
 	public static CoordinateReferenceSystem getDefaultCrs() {
 		if (defaultCrs == null) {
-			XMLEntity xml = PluginServices.getPluginServices(
-					"com.iver.cit.gvsig").getPersistentXML();
-
 			// Default Projection
 			CoordinateReferenceSystem crs = null;
-			if (xml.contains("DefaultProjection")) {
-				String projCode = xml.getStringProperty("DefaultProjection");
-				try {
-					crs = CRS.decode(projCode);
-				} catch (NoSuchAuthorityCodeException e) {
-					logger.debug("Cannot parse CRS", e);
-				} catch (FactoryException e) {
-					logger.debug("Cannot parse CRS", e);
+
+			PluginServices plugin = PluginServices
+					.getPluginServices("com.iver.cit.gvsig");
+			if (plugin != null) {
+				XMLEntity xml = plugin.getPersistentXML();
+
+				if (xml != null && xml.contains("DefaultProjection")) {
+					String projCode = xml
+							.getStringProperty("DefaultProjection");
+					try {
+						crs = CRS.decode(projCode);
+					} catch (NoSuchAuthorityCodeException e) {
+						logger.debug("Cannot parse CRS", e);
+					} catch (FactoryException e) {
+						logger.debug("Cannot parse CRS", e);
+					}
 				}
 			}
 			if (crs == null) {
@@ -972,11 +978,14 @@ public class Project implements Serializable, PropertyChangeListener {
 	 */
 	public static Color getDefaultSelectionColor() {
 		// TODO es millorable?
-		XMLEntity xml = PluginServices.getPluginServices("com.iver.cit.gvsig")
-				.getPersistentXML();
-		if (xml.contains("DefaultSelectionColor"))
-			defaultSelectionColor = StringUtilities.string2Color(xml
-					.getStringProperty("DefaultSelectionColor"));
+		PluginServices plugin = PluginServices
+				.getPluginServices("com.iver.cit.gvsig");
+		if (plugin != null) {
+			XMLEntity xml = plugin.getPersistentXML();
+			if (xml.contains("DefaultSelectionColor"))
+				defaultSelectionColor = StringUtilities.string2Color(xml
+						.getStringProperty("DefaultSelectionColor"));
+		}
 		return defaultSelectionColor;
 	}
 
@@ -986,11 +995,14 @@ public class Project implements Serializable, PropertyChangeListener {
 	 */
 	public static Unit getDefaultMapUnits() {
 		if (defaultMapUnits == null) {
-			XMLEntity xml = PluginServices.getPluginServices(
-					"com.iver.cit.gvsig").getPersistentXML();
-			if (xml.contains("DefaultMapUnits")) {
-				defaultMapUnits = Unit.fromName(xml
-						.getStringProperty("DefaultMapUnits"));
+			PluginServices plugin = PluginServices
+					.getPluginServices("com.iver.cit.gvsig");
+			if (plugin != null) {
+				XMLEntity xml = plugin.getPersistentXML();
+				if (xml.contains("DefaultMapUnits")) {
+					defaultMapUnits = Unit.fromName(xml
+							.getStringProperty("DefaultMapUnits"));
+				}
 			}
 			if (defaultMapUnits == null) {
 				defaultMapUnits = Unit.M;
@@ -1006,11 +1018,14 @@ public class Project implements Serializable, PropertyChangeListener {
 	 */
 	public static Unit getDefaultDistanceUnits() {
 		if (defaultDistanceUnits == null) {
-			XMLEntity xml = PluginServices.getPluginServices(
-					"com.iver.cit.gvsig").getPersistentXML();
-			if (xml.contains("DefaultDistanceUnits")) {
-				defaultDistanceUnits = Unit.fromName(xml
-						.getStringProperty("DefaultDistanceUnits"));
+			PluginServices plugin = PluginServices
+					.getPluginServices("com.iver.cit.gvsig");
+			if (plugin != null) {
+				XMLEntity xml = plugin.getPersistentXML();
+				if (xml.contains("DefaultDistanceUnits")) {
+					defaultDistanceUnits = Unit.fromName(xml
+							.getStringProperty("DefaultDistanceUnits"));
+				}
 			}
 			if (defaultDistanceUnits == null) {
 				defaultDistanceUnits = Unit.M;
@@ -1026,11 +1041,14 @@ public class Project implements Serializable, PropertyChangeListener {
 	 */
 	public static Unit getDefaultDistanceArea() {
 		if (defaultDistanceArea == null) {
-			XMLEntity xml = PluginServices.getPluginServices(
-					"com.iver.cit.gvsig").getPersistentXML();
-			if (xml.contains("DefaultDistanceArea")) {
-				defaultDistanceArea = Unit.fromName(xml
-						.getStringProperty("DefaultDistanceArea"));
+			PluginServices plugin = PluginServices
+					.getPluginServices("com.iver.cit.gvsig");
+			if (plugin != null) {
+				XMLEntity xml = plugin.getPersistentXML();
+				if (xml.contains("DefaultDistanceArea")) {
+					defaultDistanceArea = Unit.fromName(xml
+							.getStringProperty("DefaultDistanceArea"));
+				}
 			}
 			if (defaultDistanceArea == null) {
 				defaultDistanceArea = Unit.M;

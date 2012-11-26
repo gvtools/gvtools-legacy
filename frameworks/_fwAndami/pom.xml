@@ -4,16 +4,12 @@
 	<groupId>org.gvsig</groupId>
 	<artifactId>_fwAndami</artifactId>
 	<packaging>jar</packaging>
-	<version>2.0-SNAPSHOT</version>
 	<name>_fwAndami</name>
 	<parent>
 		<groupId>org.gvsig</groupId>
 		<artifactId>gvSIGCE-frameworks</artifactId>
 		<version>2.0-SNAPSHOT</version>
 	</parent>
-	<properties>
-		<lib>${repo-root}/jars</lib>
-	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
@@ -24,12 +20,12 @@
 		<dependency>
 			<groupId>org.gvsig</groupId>
 			<artifactId>libIverUtiles</artifactId>
-			<version>2.0-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.gvsig</groupId>
 			<artifactId>libUIComponent</artifactId>
-			<version>2.0-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-codec</groupId>
@@ -41,7 +37,7 @@
 			<artifactId>javaws</artifactId>
 			<version>gvsig</version>
 			<scope>system</scope>
-			<systemPath>${lib}/javaws.jar</systemPath>
+			<systemPath>${gvjars}/javaws.jar</systemPath>
 		</dependency>
 	</dependencies>
 	<build>

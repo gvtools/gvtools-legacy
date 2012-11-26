@@ -10,12 +10,12 @@
 		<fileSet>
 			<directory>${basedir}/src/main/config</directory>
 			<outputDirectory>/</outputDirectory>
-		</fileSet>
+		</fileSet>		
 		<fileSet>
 			<directory>${basedir}/src/main/images</directory>
 			<outputDirectory>/images</outputDirectory>
 		</fileSet>
-			</fileSets>
+	</fileSets>
 
 	<dependencySets>
 		<dependencySet>

@@ -4,7 +4,6 @@
 	<groupId>org.gvsig</groupId>
 	<artifactId>libIverUtiles</artifactId>
 	<packaging>jar</packaging>
-	<version>2.0-SNAPSHOT</version>
 	<name>libIverUtiles</name>
 	<parent>
 		<groupId>org.gvsig</groupId>
@@ -36,7 +35,7 @@
 		<dependency>
 			<groupId>org.gvsig</groupId>
 			<artifactId>libInternationalization</artifactId>
-			<version>2.0-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
 	<build>

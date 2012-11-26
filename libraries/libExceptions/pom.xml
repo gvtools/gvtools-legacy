@@ -4,7 +4,6 @@
 	<groupId>org.gvsig</groupId>
 	<artifactId>libExceptions</artifactId>
 	<packaging>jar</packaging>
-	<version>2.0-SNAPSHOT</version>
 	<name>libExceptions</name>
 	<url>http://maven.apache.org</url>
 	<parent>

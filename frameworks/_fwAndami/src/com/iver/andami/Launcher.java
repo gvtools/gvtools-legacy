@@ -1,4 +1,4 @@
-/* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
+/* gvSIG. Sistema de Informaciï¿½n Geogrï¿½fica de la Generalitat Valenciana
  *
  * Copyright (C) 2004-2007 IVER T.I. and Generalitat Valenciana.
  *
@@ -307,7 +307,7 @@ public class Launcher {
 			registerIcons();
 			validate();
 
-			// Obtener la personalización de la aplicación.
+			// Obtener la personalizaciï¿½n de la aplicaciï¿½n.
 			Theme theme = getTheme();
 
 			// Mostrar la ventana de inicio
@@ -334,11 +334,10 @@ public class Launcher {
 					"SplashWindow.setting_up_class_loaders"));
 			pluginsClassLoaders();
 
-			// 5. Se carga un Skin si alguno de los plugins trae información
+			// 5. Se carga un Skin si alguno de los plugins trae informaciï¿½n
 			// para ello
 			splashWindow.process(50, PluginServices.getText(Launcher.class,
 					"SplashWindow.looking_for_a_skin"));
-			// skinPlugin( "com.iver.core.mdiManager.NewSkin");
 			skinPlugin(null);
 
 			// 6. Se configura la cola de eventos
@@ -347,7 +346,7 @@ public class Launcher {
 			EventQueue waitQueue = new AndamiEventQueue();
 			Toolkit.getDefaultToolkit().getSystemEventQueue().push(waitQueue);
 
-			// 7. Se configura la mensajería del plugin
+			// 7. Se configura la mensajerï¿½a del plugin
 			splashWindow
 					.process(
 							70,
@@ -362,7 +361,7 @@ public class Launcher {
 			updateAndamiConfig();
 
 			frame = new MDIFrame();
-			// 9. Se configura el nombre e icono de la aplicación
+			// 9. Se configura el nombre e icono de la aplicaciï¿½n
 			splashWindow.process(90, PluginServices.getText(Launcher.class,
 					"SplashWindow.setting_up_applications_name_and_icons"));
 			frameIcon(theme);
@@ -395,7 +394,7 @@ public class Launcher {
 				}
 			});
 
-			// 13. Se inicializan la extensión exclusiva
+			// 13. Se inicializan la extensiï¿½n exclusiva
 			splashWindow.process(130, PluginServices.getText(Launcher.class,
 					"SplashWindow.setting_up_master_extension"));
 			SwingUtilities.invokeAndWait(new Runnable() {
@@ -453,7 +452,7 @@ public class Launcher {
 			});
 
 			// Definimos un KeyEventDispatcher global para que las extensiones
-			// puedan registrar sus "teclas rápidas".
+			// puedan registrar sus "teclas rï¿½pidas".
 			GlobalKeyEventDispatcher keyDispatcher = GlobalKeyEventDispatcher
 					.getInstance();
 			KeyboardFocusManager.getCurrentKeyboardFocusManager()
@@ -466,7 +465,7 @@ public class Launcher {
 			});
 			splashWindow.close();
 		} catch (Exception e) {
-			logger.error("excepción al arrancar", e);
+			logger.error("excepciï¿½n al arrancar", e);
 			System.exit(-1);
 		}
 
@@ -500,8 +499,8 @@ public class Launcher {
 	}
 
 	/**
-	 * Obtiene la personalización de los iconos, splash, fondo y el nombre de la
-	 * aplicación.
+	 * Obtiene la personalizaciï¿½n de los iconos, splash, fondo y el nombre de la
+	 * aplicaciï¿½n.
 	 * 
 	 * @return Theme
 	 */
@@ -523,7 +522,7 @@ public class Launcher {
 	}
 
 	/**
-	 * Establece los datos que teníamos guardados respecto de la configuración
+	 * Establece los datos que tenï¿½amos guardados respecto de la configuraciï¿½n
 	 * del proxy.
 	 */
 	private static void configureProxy() {
@@ -547,7 +546,7 @@ public class Launcher {
 	}
 
 	/**
-	 * Recupera la geometría (tamaño, posicón y estado) de la ventana principal
+	 * Recupera la geometrï¿½a (tamaï¿½o, posicï¿½n y estado) de la ventana principal
 	 * de Andami. TODO Pendiente de ver como se asigna un pluginServices para el
 	 * launcher.
 	 * 
@@ -689,7 +688,6 @@ public class Launcher {
 				}
 			}
 		}
-		// return "com.iver.core.mdiManager.NewSkin";
 		return defaultSkin;
 	}
 
@@ -1244,7 +1242,7 @@ public class Launcher {
 	private static void pluginsClassLoaders() {
 		HashSet<String> instalados = new HashSet<String>();
 
-		// Se itera hasta que están todos instalados
+		// Se itera hasta que estï¿½n todos instalados
 		while (instalados.size() != pluginsConfig.size()) {
 			boolean circle = true;
 
@@ -1284,8 +1282,8 @@ public class Launcher {
 					}
 				}
 
-				// Si no están sus dependencias satisfechas se aborta la
-				// instalación
+				// Si no estï¿½n sus dependencias satisfechas se aborta la
+				// instalaciï¿½n
 				if (!ready) {
 					continue;
 				}
@@ -1525,7 +1523,7 @@ public class Launcher {
 
 		InputStreamReader reader = null;
 		try {
-			// Se lee la configuración
+			// Se lee la configuraciï¿½n
 			reader = XMLEncodingUtils.getReader(xml);
 			andamiConfig = (AndamiConfig) AndamiConfig.unmarshal(reader);
 		} catch (FileNotFoundException e) {
@@ -1728,7 +1726,7 @@ public class Launcher {
 
 				// Guardamos la fecha del fichero de extensiones que nos hemos
 				// bajado, y
-				// comprobamos el último que se ha bajado. Si no son
+				// comprobamos el ï¿½ltimo que se ha bajado. Si no son
 				// iguales, nos bajamos el nuevo. Si son iguales, no
 				// nos bajamos nada.
 				Long miliSecondsInWeb = new Long(connection.getLastModified());
@@ -2337,7 +2335,7 @@ public class Launcher {
 		 * unsaved data.
 		 */
 		public void closeAndami() {
-			// Configuración de Andami
+			// Configuraciï¿½n de Andami
 			try {
 				andamiConfigToXML(andamiConfigPath);
 			} catch (MarshalException e) {
@@ -2363,7 +2361,7 @@ public class Launcher {
 			// Clean any temp data created
 			Utilities.cleanUpTempFiles();
 
-			// Para la depuración de memory leaks
+			// Para la depuraciï¿½n de memory leaks
 			System.gc();
 
 			System.exit(0);

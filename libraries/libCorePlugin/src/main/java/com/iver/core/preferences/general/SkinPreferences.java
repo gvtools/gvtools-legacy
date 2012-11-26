@@ -18,6 +18,8 @@ import com.iver.andami.plugins.config.generate.PluginConfig;
 import com.iver.andami.plugins.config.generate.SkinExtension;
 import com.iver.andami.preferences.AbstractPreferencePage;
 import com.iver.andami.preferences.StoreException;
+import com.iver.core.CorePlugin;
+import com.iver.core.mdiManager.NewSkin;
 import com.iver.utiles.XMLEntity;
 import com.iver.utiles.swing.JComboBox;
 
@@ -27,7 +29,7 @@ public class SkinPreferences extends AbstractPreferencePage {
 	private ImageIcon icon;
 	private Vector<String> listSkinsPlugins;
 	private JComboBox comboBox;
-	private String skinName = "com.iver.core.mdiManager.NewSkin";
+	private String skinName = NewSkin.class.getCanonicalName();
 	private static Preferences prefs = Preferences.userRoot().node(
 			"gvsig.configuration.3D");
 
@@ -46,7 +48,7 @@ public class SkinPreferences extends AbstractPreferencePage {
 
 	public void storeValues() throws StoreException {
 		// System.out.println("ESTOY LLAMANDO A storeValues()");
-		PluginServices ps = PluginServices.getPluginServices("com.iver.core");
+		PluginServices ps = PluginServices.getPluginServices(CorePlugin.NAME);
 		XMLEntity xml = ps.getPersistentXML();
 		xml.putProperty("Skin-Selected", skinName);
 	}
@@ -127,7 +129,7 @@ public class SkinPreferences extends AbstractPreferencePage {
 			}
 		}
 
-		PluginServices ps = PluginServices.getPluginServices("com.iver.core");
+		PluginServices ps = PluginServices.getPluginServices(CorePlugin.NAME);
 		XMLEntity xml = ps.getPersistentXML();
 		if (xml.contains("Skin-Selected")) {
 			skinName = xml.getStringProperty("Skin-Selected");

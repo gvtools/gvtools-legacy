@@ -1,21 +1,21 @@
 package com.iver.cit.gvsig.project.documents;
 
 /**
- * Interface que deben de cumplir una acciÛn aplicable dede un Menu contextual o
+ * Interface que deben de cumplir una acci√≥n aplicable dede un Menu contextual o
  * popup. <br>
- * Las acciones se deben registrar en el punto de extensiÛn adecuado * <br>
+ * Las acciones se deben registrar en el punto de extensi√≥n adecuado * <br>
  * <br>
  * Por lo general extender de la clase AbstractDocumentAction
  * 
  * 
  * 
- * @author Jose Manuel VivÛ (Chema)
+ * @author Jose Manuel Viv√≥ (Chema)
  */
 
 public interface IContextMenuAction {
 
 	/**
-	 * Dice si la acciÛn es visible segun los documentos seleccionados <br>
+	 * Dice si la acci√≥n es visible segun los documentos seleccionados <br>
 	 * 
 	 * @param item
 	 *            elemento sobre el que se ha pulsado
@@ -26,7 +26,7 @@ public interface IContextMenuAction {
 	public boolean isVisible(Object item, Object[] selectedItems);
 
 	/**
-	 * Dice si la acciÛn esta habilitada segun los documentos seleccionados <br>
+	 * Dice si la acci√≥n esta habilitada segun los documentos seleccionados <br>
 	 * 
 	 * @param item
 	 *            elemento sobre el que se ha pulsado
@@ -37,7 +37,7 @@ public interface IContextMenuAction {
 	public boolean isEnabled(Object item, Object[] selectedItems);
 
 	/**
-	 * Ejecuta la acciÛn sobre los documentos seleccionados <br>
+	 * Ejecuta la acci√≥n sobre los documentos seleccionados <br>
 	 * 
 	 * @param item
 	 *            elemento sobre el que se ha pulsado
@@ -53,7 +53,7 @@ public interface IContextMenuAction {
 	public String getGroup();
 
 	/**
-	 * Orden del grupo al que pertenece la acciÛn
+	 * Orden del grupo al que pertenece la acci√≥n
 	 */
 	public int getGroupOrder();
 
@@ -68,7 +68,7 @@ public interface IContextMenuAction {
 	public String getText();
 
 	/**
-	 * DescripciÛn mas detallada de la acciÛn (se utilizar· como Tooltip)
+	 * Descripci√≥n mas detallada de la acci√≥n (se utilizar√° como Tooltip)
 	 */
 	public String getDescription();
 

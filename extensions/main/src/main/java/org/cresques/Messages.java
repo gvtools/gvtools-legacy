@@ -19,7 +19,7 @@
  *
  *  Generalitat Valenciana
  *   Conselleria d'Infraestructures i Transport
- *   Av. Blasco Ib·Òez, 50
+ *   Av. Blasco Ib√°√±ez, 50
  *   46010 VALENCIA
  *   SPAIN
  *
