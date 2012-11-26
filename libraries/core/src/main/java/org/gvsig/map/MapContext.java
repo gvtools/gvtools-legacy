@@ -12,6 +12,13 @@ import org.gvsig.util.ProcessContext;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 public interface MapContext {
+	public static Unit DEFAULT_MAP_UNITS = Unit.M;
+	public static Unit DEFAULT_AREA_UNITS = Unit.M;
+	public static Unit DEFAULT_DISTANCE_UNITS = Unit.M;
+
+	public static Color DEFAULT_BG_COLOR = Color.white;
+
+	public static String DEFAULT_CRS_CODE = "EPSG:23030";
 
 	/**
 	 * Get the root of the layer tree
