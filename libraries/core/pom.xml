@@ -64,4 +64,22 @@
 			<version>${geotools.version}</version>
 		</dependency>
 	</dependencies>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>cobertura-maven-plugin</artifactId>
+				<version>2.5.2</version>
+				<executions>
+					<execution>
+						<phase>verify</phase>
+						<goals>
+							<goal>clean</goal>
+							<goal>cobertura</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
 </project>

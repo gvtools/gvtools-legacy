@@ -7,13 +7,13 @@ import com.google.inject.Injector;
 
 import junit.framework.TestCase;
 
-public class GVSIGTestCase extends TestCase {
+public abstract class GVSIGTestCase extends TestCase {
 
 	@Override
 	protected void setUp() throws Exception {
 		Injector injector = Guice.createInjector(new LibModule());
 		injector.injectMembers(this);
-		
+
 		super.setUp();
 	}
 }

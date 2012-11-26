@@ -7,7 +7,7 @@ import org.gvsig.layer.Layer;
 import org.gvsig.layer.LayerFilter;
 
 public class RootLayer implements Layer {
-	private List<Layer> layers = new ArrayList<>();
+	private List<Layer> layers = new ArrayList<Layer>();
 
 	private String name;
 
@@ -33,7 +33,7 @@ public class RootLayer implements Layer {
 
 	@Override
 	public Layer[] filter(LayerFilter filter) {
-		List<Layer> ret = new ArrayList<>();
+		List<Layer> ret = new ArrayList<Layer>();
 		for (Layer layer : layers) {
 			if (filter.accepts(layer)) {
 				ret.add(layer);
