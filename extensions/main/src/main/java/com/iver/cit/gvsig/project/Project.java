@@ -878,7 +878,6 @@ public class Project implements Serializable, PropertyChangeListener {
 
 	public DataSourceType getSourceInfoXMLEntity(Source di) {
 		DataSourceType ret = new DataSourceType();
-		ret.setId(di.getId());
 		Map<String, Object> properties = di.getPersistentProperties();
 		Iterator<String> keyIterator = properties.keySet().iterator();
 		while (keyIterator.hasNext()) {

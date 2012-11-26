@@ -13,9 +13,8 @@ public class SourceManagerTest extends GVSIGTestCase {
 
 	public void testAddSource() throws Exception {
 		Source source = mock(Source.class);
-		sourceManager.register("a", source);
+		sourceManager.register(source);
 
-		assertTrue(sourceManager.getSource("a") == source);
 		assertTrue(sourceManager.getSources().length == 1);
 		assertTrue(sourceManager.getSources()[0] == source);
 	}

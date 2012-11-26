@@ -24,15 +24,6 @@ public interface Source {
 	DefaultLegend getDefaultLegend();
 
 	/**
-	 * Returns the unique id this source this source has in the manager it is
-	 * registered
-	 * 
-	 * @return The id or null if this instance has not been registered in a
-	 *         {@link SourceManager} yet
-	 */
-	String getId();
-
-	/**
 	 * Returns a map of properties that can be used to rebuild this instance in
 	 * the future by calling the
 	 * {@link SourceFactory#createSource(java.util.HashMap)} method

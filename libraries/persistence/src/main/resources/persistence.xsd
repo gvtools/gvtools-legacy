@@ -49,7 +49,6 @@
 		<xs:sequence>
 			<xs:element name="property" type="PropertyType" maxOccurs="unbounded" />
 		</xs:sequence>
-		<xs:attribute name="id" type="xs:string" />
 	</xs:complexType>
 	<xs:complexType name="PropertyType" abstract="true">
 		<xs:attribute name="property-name" type="xs:string" />
