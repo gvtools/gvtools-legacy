@@ -4,15 +4,15 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import junit.framework.TestCase;
 
-import org.gvsig.layer.impl.RootLayer;
+import org.gvsig.layer.impl.ContainerLayer;
 
-public class RootLayerTest extends TestCase {
-	private RootLayer root;
+public class ContainerLayerTest extends TestCase {
+	private ContainerLayer root;
 
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
-		root = new RootLayer();
+		root = new ContainerLayer();
 	}
 
 	public void testAddLayer() throws Exception {

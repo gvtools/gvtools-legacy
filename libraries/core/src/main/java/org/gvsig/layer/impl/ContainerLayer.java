@@ -6,7 +6,7 @@ import java.util.List;
 import org.gvsig.layer.Layer;
 import org.gvsig.layer.LayerFilter;
 
-public class RootLayer extends AbstractLayer {
+public class ContainerLayer extends AbstractLayer {
 	private List<Layer> layers = new ArrayList<Layer>();
 
 	@Override
