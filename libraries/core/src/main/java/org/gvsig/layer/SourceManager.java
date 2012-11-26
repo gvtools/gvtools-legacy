@@ -1,5 +1,6 @@
 package org.gvsig.layer;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.geotools.data.simple.SimpleFeatureSource;
@@ -15,16 +16,16 @@ public interface SourceManager {
 	Source[] getSources();
 
 	/**
-	 * Registers the specified <code>source</code> in this manager
+	 * Registers the specified <code>source</code> in this manager. It there is
+	 * already the same source in the manager this call does nothing.
 	 * 
 	 * @param source
 	 * @throws IllegalArgumentException
-	 *             If the source or the name is null or it is already added to a
-	 *             {@link SourceManager} instance
+	 *             If the source is null
 	 */
 	void register(Source source) throws IllegalArgumentException;
 
-	SimpleFeatureSource getFeatureSource(Source source);
+	SimpleFeatureSource getFeatureSource(Source source) throws IOException;
 
 	DataSourceType[] getPersistence();
 

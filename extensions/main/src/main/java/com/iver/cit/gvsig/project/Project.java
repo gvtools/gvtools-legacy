@@ -58,7 +58,6 @@ import javax.inject.Inject;
 import org.apache.log4j.Logger;
 import org.exolab.castor.xml.XMLException;
 import org.geotools.referencing.CRS;
-import org.gvsig.exceptions.DriverException;
 import org.gvsig.layer.Layer;
 import org.gvsig.layer.Source;
 import org.gvsig.layer.SourceManager;
@@ -218,8 +217,8 @@ public class Project implements Serializable, PropertyChangeListener {
 	// }
 
 	/**
-	 * Asigna la fecha de creaci�n del proyecto. Este m�todo tiene sentido
-	 * s�lo por que al recuperar la fecha del XML hay que asignarla al objeto
+	 * Asigna la fecha de creaci�n del proyecto. Este m�todo tiene sentido s�lo
+	 * por que al recuperar la fecha del XML hay que asignarla al objeto
 	 * proyecto de alguna manera. La fecha se asigna en el constructor y no se
 	 * deber�a de modificar nunca
 	 * 
@@ -350,8 +349,8 @@ public class Project implements Serializable, PropertyChangeListener {
 	}
 
 	/**
-	 * M�todo invocado al recuperar de XML para establecer el color de
-	 * seleccion del proyecto
+	 * M�todo invocado al recuperar de XML para establecer el color de seleccion
+	 * del proyecto
 	 * 
 	 * @param color
 	 *            Entero que representa un color
@@ -880,15 +879,15 @@ public class Project implements Serializable, PropertyChangeListener {
 
 	public DataSourceType getSourceInfoXMLEntity(Source di) {
 		DataSourceType ret = new DataSourceType();
-		Map<String, Object> properties = di.getPersistentProperties();
+		Map<String, String> properties = di.getPersistentProperties();
 		Iterator<String> keyIterator = properties.keySet().iterator();
 		while (keyIterator.hasNext()) {
 			String persistencePropertyKey = keyIterator.next();
-			Object persistencePropertyValue = properties
+			String persistencePropertyValue = properties
 					.get(persistencePropertyKey);
 			StringPropertyType property = new StringPropertyType();
 			property.setPropertyName(persistencePropertyKey);
-			property.setPropertyValue(persistencePropertyValue.toString());
+			property.setPropertyValue(persistencePropertyValue);
 			ret.getProperty().add(property);
 		}
 

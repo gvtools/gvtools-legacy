@@ -42,11 +42,24 @@ public interface SourceFactory {
 			String dbName, String tableName, String driverInfo);
 
 	/**
-	 * Creates a new Source. The properties are just passed to
-	 * {@link DataStoreFinder#getDataStore(java.util.Map)}
+	 * Creates a new Source.
+	 * 
+	 * @param featureName
+	 *            The name of the type inside the DataStore that this Source
+	 *            will reference. null for the first type
+	 * @param properties
+	 *            just passed to
+	 *            {@link DataStoreFinder#getDataStore(java.util.Map)}
+	 * @return
+	 */
+	Source createSource(String featureName, Map<String, String> properties);
+
+	/**
+	 * The same as createSource(null, Map)
 	 * 
 	 * @param properties
 	 * @return
+	 * @see #createSource(String, Map)
 	 */
 	Source createSource(Map<String, String> properties);
 
