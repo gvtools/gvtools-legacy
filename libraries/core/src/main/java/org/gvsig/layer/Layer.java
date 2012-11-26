@@ -39,7 +39,13 @@ public interface Layer {
 	 */
 	Layer[] filter(LayerFilter filter);
 
+	/**
+	 * Determines if the layer is being edited. A layer is being edited if there
+	 * are any editing tasks being performed. In any other case (including
+	 * composite layers), this method returns <code>false</code>.
+	 * 
+	 * @return <code>true</code> if the layer is being edited,
+	 *         <code>false</code> otherwise.
+	 */
 	boolean isEditing();
-	
-	boolean isVectorial();
 }
