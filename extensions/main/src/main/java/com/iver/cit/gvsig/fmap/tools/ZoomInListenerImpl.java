@@ -109,8 +109,8 @@ public class ZoomInListenerImpl implements RectangleListener {
 	/**
 	 * The image to display when the cursor is active.
 	 */
-	private final Image izoomin = new ImageIcon(
-			MapControl.class.getResource("images/ZoomInCursor.gif")).getImage();
+	private final Image izoomin = new ImageIcon(getClass().getResource(
+			"/images/ZoomInCursor.gif")).getImage();
 
 	/**
 	 * The cursor used to work with this tool listener.

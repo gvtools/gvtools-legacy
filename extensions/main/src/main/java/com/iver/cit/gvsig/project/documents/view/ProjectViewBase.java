@@ -40,6 +40,9 @@ public abstract class ProjectViewBase extends ProjectDocument implements
 	 * @return
 	 */
 	public MapContext getMapContext() {
+		if (mapContext == null) {
+			mapContext = mapContextFactory.createMapContext();
+		}
 		return mapContext;
 	}
 

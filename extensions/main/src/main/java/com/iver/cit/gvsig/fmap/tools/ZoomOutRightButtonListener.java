@@ -106,9 +106,8 @@ public class ZoomOutRightButtonListener implements PointListener {
 	/**
 	 * The image to display when the cursor is active.
 	 */
-	private final Image izoomout = new ImageIcon(
-			MapControl.class.getResource("images/ZoomOutCursor.gif"))
-			.getImage();
+	private final Image izoomout = new ImageIcon(getClass().getResource(
+			"/images/ZoomOutCursor.gif")).getImage();
 
 	/**
 	 * The cursor used to work with this tool listener.

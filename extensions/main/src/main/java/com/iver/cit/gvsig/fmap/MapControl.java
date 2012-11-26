@@ -563,8 +563,6 @@ public class MapControl extends JComponent implements ComponentListener {
 		// Clase usada para cancelar el dibujado
 		canceldraw = new CancelDraw();
 
-		setMapContext(mapContextFactory.createMapContext());
-
 		// eventos
 		this.addComponentListener(this);
 		this.addMouseListener(mapToolListener);
@@ -581,7 +579,10 @@ public class MapControl extends JComponent implements ComponentListener {
 				}
 			}
 		});
+	}
 
+	public void init() {
+		setMapContext(mapContextFactory.createMapContext());
 		eventBus.addHandler(EditionChangeEvent.class, mapContextListener);
 		eventBus.addHandler(BackgroundColorChangeEvent.class,
 				mapContextListener);
@@ -628,6 +629,7 @@ public class MapControl extends JComponent implements ComponentListener {
 	 */
 	public void setMapContext(MapContext model) {
 		mapContext = model;
+
 		assert false : "Update view port";
 
 		status = DESACTUALIZADO;

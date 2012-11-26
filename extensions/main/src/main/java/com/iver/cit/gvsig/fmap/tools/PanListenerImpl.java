@@ -72,8 +72,8 @@ public class PanListenerImpl implements PanListener {
 	/**
 	 * The image to display when the cursor is active.
 	 */
-	private final Image ipan = new ImageIcon(
-			MapControl.class.getResource("images/Hand.gif")).getImage();
+	private final Image ipan = new ImageIcon(getClass().getResource(
+			"/images/Hand.gif")).getImage();
 
 	/**
 	 * The cursor used to work with this tool listener.

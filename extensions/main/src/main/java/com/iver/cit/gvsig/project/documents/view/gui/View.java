@@ -52,6 +52,7 @@ import javax.swing.JSplitPane;
 
 import org.apache.log4j.Logger;
 import org.geotools.referencing.CRS;
+import org.gvsig.inject.InjectorSingleton;
 import org.gvsig.layer.Layer;
 import org.gvsig.layer.filter.LayerFilter;
 import org.gvsig.map.MapContext;
@@ -71,6 +72,7 @@ import com.iver.cit.gvsig.fmap.tools.Behavior.MouseMovementBehavior;
 import com.iver.cit.gvsig.fmap.tools.Behavior.MoveBehavior;
 import com.iver.cit.gvsig.fmap.tools.Behavior.PointBehavior;
 import com.iver.cit.gvsig.fmap.tools.Behavior.RectangleBehavior;
+import com.iver.cit.gvsig.project.documents.view.ProjectView;
 import com.iver.cit.gvsig.project.documents.view.ProjectViewBase;
 import com.iver.cit.gvsig.project.documents.view.toolListeners.PanListener;
 import com.iver.cit.gvsig.project.documents.view.toolListeners.StatusBarListener;
@@ -365,8 +367,9 @@ public class View extends BaseView {
 	 * DOCUMENT ME!
 	 */
 	protected void initComponents() { // GEN-BEGIN:initComponents
-		m_MapControl = new MapControl(); // Default is paintEnabled = false.
-											// Remember to activate it
+		m_MapControl = InjectorSingleton.getInjector().getInstance(
+				MapControl.class);// Default is paintEnabled = false.
+									// Remember to activate it
 
 		m_MapControl.addExceptionListener(mapControlExceptionListener);
 		m_TOC = new TOC();
