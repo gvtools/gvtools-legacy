@@ -629,9 +629,7 @@ public class MapControl extends JComponent implements ComponentListener {
 	 */
 	public void setMapContext(MapContext model) {
 		mapContext = model;
-
-		assert false : "Update view port";
-
+		viewPort = new ViewPort(mapContext.getCRS());
 		status = DESACTUALIZADO;
 	}
 
