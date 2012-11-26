@@ -6,10 +6,8 @@ import java.util.List;
 import org.gvsig.layer.Layer;
 import org.gvsig.layer.LayerFilter;
 
-public class RootLayer implements Layer {
+public class RootLayer extends AbstractLayer {
 	private List<Layer> layers = new ArrayList<Layer>();
-
-	private String name;
 
 	@Override
 	public boolean contains(Layer layer) {
@@ -19,11 +17,6 @@ public class RootLayer implements Layer {
 			}
 		}
 		return false;
-	}
-
-	@Override
-	public String getName() {
-		return name;
 	}
 
 	@Override
@@ -45,10 +38,6 @@ public class RootLayer implements Layer {
 	@Override
 	public boolean isEditing() {
 		return false;
-	}
-
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	public void addLayer(Layer layer) {
