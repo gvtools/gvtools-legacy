@@ -8,7 +8,7 @@ public class VectorialLayer extends AbstractLayer {
 
 	@Override
 	public boolean contains(Layer layer) {
-		return this.equals(layer);
+		return this == layer;
 	}
 
 	@Override

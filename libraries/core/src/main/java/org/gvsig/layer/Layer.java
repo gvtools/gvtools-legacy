@@ -6,7 +6,7 @@ public interface Layer {
 
 	/**
 	 * If the layer is a single layer returns true if the <code>layer</code>
-	 * parameter is equal to this.
+	 * parameter is this.
 	 * 
 	 * If the layer is a collection, returns true in case the tree contains the
 	 * specified instance.

@@ -65,10 +65,20 @@ public class CompositeLayerTest extends TestCase {
 
 	public void testContains() throws Exception {
 		Layer l1 = mock(Layer.class);
+		when(l1.contains(l1)).thenReturn(true);
 		Layer l2 = mock(Layer.class);
+		when(l2.contains(l2)).thenReturn(true);
+		Layer l3 = mock(Layer.class);
+		when(l3.contains(l3)).thenReturn(true);
+		CompositeLayer composite = new CompositeLayer();
+		composite.addLayer(l3);
 		root.addLayer(l1);
+		root.addLayer(composite);
 
+		assertTrue(root.contains(root));
 		assertTrue(root.contains(l1));
+		assertTrue(root.contains(composite));
+		assertTrue(root.contains(l3));
 		assertFalse(root.contains(l2));
 		assertFalse(root.contains(null));
 	}

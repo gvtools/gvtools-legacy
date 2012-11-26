@@ -11,12 +11,16 @@ public class CompositeLayer extends AbstractLayer {
 
 	@Override
 	public boolean contains(Layer layer) {
-		for (Layer l : layers) {
-			if (l.equals(layer)) {
-				return true;
+		if (layer == this) {
+			return true;
+		} else {
+			for (Layer l : layers) {
+				if (l.contains(layer)) {
+					return true;
+				}
 			}
+			return false;
 		}
-		return false;
 	}
 
 	@Override
@@ -44,7 +48,7 @@ public class CompositeLayer extends AbstractLayer {
 	public boolean isVectorial() {
 		return false;
 	}
-	
+
 	@Override
 	public boolean isActive() {
 		return false;
