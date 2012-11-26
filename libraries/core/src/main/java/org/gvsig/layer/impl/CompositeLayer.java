@@ -25,7 +25,12 @@ public class CompositeLayer extends AbstractLayer {
 
 	@Override
 	public Layer[] getAllLayers() {
-		return layers.toArray(new Layer[layers.size()]);
+		Layer[] ret = new Layer[layers.size() + 1];
+		ret[0] = this;
+		for (int i = 1; i < ret.length; i++) {
+			ret[i] = layers.get(i - 1);
+		}
+		return ret;
 	}
 
 	@Override

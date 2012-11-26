@@ -58,7 +58,8 @@ public class MapContextTest extends GVSIGTestCase {
 	public void testRootLayer() throws Exception {
 		Layer root = mapContext.getRootLayer();
 		assertTrue(root instanceof CompositeLayer);
-		assertEquals(0, root.getAllLayers().length);
+		assertEquals(1, root.getAllLayers().length);
+		assertEquals(root, root.getAllLayers()[0]);
 	}
 
 	public void testCRS() throws Exception {

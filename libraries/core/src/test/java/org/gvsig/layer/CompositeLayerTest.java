@@ -21,8 +21,8 @@ public class CompositeLayerTest extends TestCase {
 		root.addLayer(layer);
 
 		Layer[] layers = root.getAllLayers();
-		assertEquals(1, layers.length);
-		assertEquals(layer, layers[0]);
+		assertEquals(2, layers.length);
+		assertEquals(layer, layers[1]);
 	}
 
 	public void testAddNullLayer() throws Exception {
@@ -38,29 +38,33 @@ public class CompositeLayerTest extends TestCase {
 		root.addLayer(layer);
 
 		assertTrue(root.removeLayer(layer));
-		assertEquals(0, root.getAllLayers().length);
+		assertEquals(1, root.getAllLayers().length);
+		assertEquals(root, root.getAllLayers()[0]);
 
 		assertFalse(root.removeLayer(layer));
-		assertEquals(0, root.getAllLayers().length);
+		assertEquals(1, root.getAllLayers().length);
+		assertEquals(root, root.getAllLayers()[0]);
 	}
 
 	public void testGetAllLayers() throws Exception {
 		Layer[] layers = root.getAllLayers();
-		assertEquals(0, layers.length);
+		assertEquals(1, layers.length);
+		assertEquals(root, layers[0]);
 
 		Layer l1 = mock(Layer.class);
 		Layer l2 = mock(Layer.class);
 		root.addLayer(l1);
 		root.addLayer(l2);
 		layers = root.getAllLayers();
-		assertEquals(2, layers.length);
-		assertEquals(l1, layers[0]);
-		assertEquals(l2, layers[1]);
+		assertEquals(3, layers.length);
+		assertEquals(root, layers[0]);
+		assertEquals(l1, layers[1]);
+		assertEquals(l2, layers[2]);
 
 		root.removeLayer(l1);
 		layers = root.getAllLayers();
-		assertEquals(1, layers.length);
-		assertEquals(l2, layers[0]);
+		assertEquals(2, layers.length);
+		assertEquals(l2, layers[1]);
 	}
 
 	public void testContains() throws Exception {
