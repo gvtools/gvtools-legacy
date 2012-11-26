@@ -1,5 +1,7 @@
 package org.gvsig.layer;
 
+import org.gvsig.layer.filter.LayerFilter;
+
 public interface Layer {
 
 	/**
@@ -48,4 +50,20 @@ public interface Layer {
 	 *         <code>false</code> otherwise.
 	 */
 	boolean isEditing();
+
+	/**
+	 * Determines if this layer is vectorial.
+	 * 
+	 * @return <code>true</code> if the layer is vectorial, <code>false</code>
+	 *         otherwise (including composite layers).
+	 */
+	boolean isVectorial();
+
+	/**
+	 * Determines if the layer is active. A composite layer is never active.
+	 * 
+	 * @return <code>true</code> if the layer is active, <code>false</code>
+	 *         otherwise.
+	 */
+	boolean isActive();
 }

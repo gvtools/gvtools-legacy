@@ -1,4 +1,6 @@
-package org.gvsig.layer;
+package org.gvsig.layer.filter;
+
+import org.gvsig.layer.Layer;
 
 public interface LayerFilter {
 

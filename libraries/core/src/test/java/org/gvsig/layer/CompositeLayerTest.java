@@ -4,15 +4,16 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import junit.framework.TestCase;
 
-import org.gvsig.layer.impl.ContainerLayer;
+import org.gvsig.layer.filter.LayerFilter;
+import org.gvsig.layer.impl.CompositeLayer;
 
-public class ContainerLayerTest extends TestCase {
-	private ContainerLayer root;
+public class CompositeLayerTest extends TestCase {
+	private CompositeLayer root;
 
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
-		root = new ContainerLayer();
+		root = new CompositeLayer();
 	}
 
 	public void testAddLayer() throws Exception {
@@ -106,5 +107,9 @@ public class ContainerLayerTest extends TestCase {
 			}
 		});
 		assertEquals(1, layers.length);
+	}
+
+	public void testIsVectorial() throws Exception {
+		assertFalse(root.isVectorial());
 	}
 }

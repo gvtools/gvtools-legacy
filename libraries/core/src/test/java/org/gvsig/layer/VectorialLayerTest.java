@@ -3,15 +3,16 @@ package org.gvsig.layer;
 import static org.mockito.Mockito.mock;
 import junit.framework.TestCase;
 
-import org.gvsig.layer.impl.SingleLayer;
+import org.gvsig.layer.filter.LayerFilter;
+import org.gvsig.layer.impl.VectorialLayer;
 
-public class SingleLayerTest extends TestCase {
-	private SingleLayer layer;
+public class VectorialLayerTest extends TestCase {
+	private VectorialLayer layer;
 
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
-		layer = new SingleLayer();
+		layer = new VectorialLayer();
 	}
 
 	public void testGetAllLayers() throws Exception {
@@ -61,5 +62,23 @@ public class SingleLayerTest extends TestCase {
 		});
 		assertEquals(1, layers.length);
 		assertEquals(layer, layers[0]);
+	}
+
+	public void testIsVectorial() throws Exception {
+		assertTrue(layer.isVectorial());
+	}
+
+	public void testActivation() throws Exception {
+		assertFalse(layer.isActive());
+
+		layer.activate();
+		assertTrue(layer.isActive());
+		layer.activate();
+		assertTrue(layer.isActive());
+
+		layer.deactivate();
+		assertFalse(layer.isActive());
+		layer.deactivate();
+		assertFalse(layer.isActive());
 	}
 }

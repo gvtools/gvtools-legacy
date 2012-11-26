@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.gvsig.layer.Layer;
-import org.gvsig.layer.LayerFilter;
+import org.gvsig.layer.filter.LayerFilter;
 
-public class ContainerLayer extends AbstractLayer {
+public class CompositeLayer extends AbstractLayer {
 	private List<Layer> layers = new ArrayList<Layer>();
 
 	@Override
@@ -37,6 +37,16 @@ public class ContainerLayer extends AbstractLayer {
 
 	@Override
 	public boolean isEditing() {
+		return false;
+	}
+
+	@Override
+	public boolean isVectorial() {
+		return false;
+	}
+	
+	@Override
+	public boolean isActive() {
 		return false;
 	}
 

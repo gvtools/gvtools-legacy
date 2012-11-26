@@ -53,7 +53,7 @@ import javax.swing.JSplitPane;
 import org.apache.log4j.Logger;
 import org.geotools.referencing.CRS;
 import org.gvsig.layer.Layer;
-import org.gvsig.layer.LayerFilter;
+import org.gvsig.layer.filter.LayerFilter;
 import org.gvsig.map.MapContext;
 
 import com.iver.andami.PluginServices;

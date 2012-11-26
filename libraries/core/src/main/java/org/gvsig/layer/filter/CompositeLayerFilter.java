@@ -1,4 +1,6 @@
-package org.gvsig.layer;
+package org.gvsig.layer.filter;
+
+import org.gvsig.layer.Layer;
 
 public class CompositeLayerFilter implements LayerFilter {
 	private LayerFilter[] filters;
@@ -9,7 +11,11 @@ public class CompositeLayerFilter implements LayerFilter {
 
 	@Override
 	public boolean accepts(Layer layer) {
-		assert false;
-		return false;
+		for (LayerFilter filter : filters) {
+			if (!filter.accepts(layer)) {
+				return false;
+			}
+		}
+		return true;
 	}
 }
