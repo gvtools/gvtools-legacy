@@ -6,10 +6,13 @@ import java.awt.Component;
 import javax.inject.Inject;
 import javax.swing.JOptionPane;
 
+import org.geotools.referencing.CRS;
 import org.gvsig.layer.Layer;
 import org.gvsig.map.ErrorListener;
 import org.gvsig.map.MapContext;
 import org.gvsig.map.MapContextFactory;
+import org.gvsig.units.Unit;
+import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.iver.andami.PluginServices;
@@ -19,6 +22,18 @@ import com.iver.cit.gvsig.project.documents.view.toolListeners.LinkListener;
 
 public abstract class ProjectViewBase extends ProjectDocument implements
 		ErrorListener, IProjectView {
+	protected static Unit DEFAULT_MAP_UNITS = Unit.M;
+	protected static Unit DEFAULT_AREA_UNITS = Unit.M;
+	protected static Unit DEFAULT_DISTANCE_UNITS = Unit.M;
+	protected static CoordinateReferenceSystem DEFAULT_CRS;
+
+	static {
+		try {
+			DEFAULT_CRS = CRS.decode("EPSG:4326");
+		} catch (FactoryException e) {
+			throw new RuntimeException("bug", e);
+		}
+	}
 
 	@Inject
 	protected MapContextFactory mapContextFactory;
@@ -41,9 +56,14 @@ public abstract class ProjectViewBase extends ProjectDocument implements
 	 */
 	public MapContext getMapContext() {
 		if (mapContext == null) {
-			mapContext = mapContextFactory.createMapContext();
+			mapContext = newMapContext();
 		}
 		return mapContext;
+	}
+
+	protected MapContext newMapContext() {
+		return mapContextFactory.createMapContext(DEFAULT_MAP_UNITS,
+				DEFAULT_DISTANCE_UNITS, DEFAULT_AREA_UNITS, DEFAULT_CRS);
 	}
 
 	/**

@@ -1,16 +1,11 @@
 package org.gvsig.map.impl;
 
-import geomatico.events.EventBus;
-import geomatico.events.ExceptionEvent;
-
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
-import org.geotools.referencing.CRS;
 import org.gvsig.layer.Layer;
 import org.gvsig.layer.impl.CompositeLayer;
 import org.gvsig.map.ErrorListener;
@@ -18,14 +13,9 @@ import org.gvsig.map.MapContext;
 import org.gvsig.persistence.generated.MapType;
 import org.gvsig.units.Unit;
 import org.gvsig.util.ProcessContext;
-import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
-import com.google.inject.Inject;
-
 public class MapContextImpl implements MapContext {
-	private static final Logger logger = Logger.getLogger(MapContextImpl.class);
-
 	private Unit mapUnits, areaUnits, distanceUnits;
 
 	private Layer rootLayer;
@@ -33,10 +23,13 @@ public class MapContextImpl implements MapContext {
 	private Color backgroundColor;
 	private CoordinateReferenceSystem crs;
 
-	@Inject
-	private EventBus eventBus;
-
-	public MapContextImpl() {
+	public MapContextImpl(Unit mapUnits, Unit distanceUnits, Unit areaUnits,
+			CoordinateReferenceSystem crs) {
+		this.mapUnits = mapUnits;
+		this.areaUnits = areaUnits;
+		this.distanceUnits = distanceUnits;
+		this.crs = crs;
+		this.backgroundColor = Color.white;
 		this.rootLayer = new CompositeLayer();
 		this.errorListeners = new ArrayList<ErrorListener>();
 	}
@@ -59,15 +52,6 @@ public class MapContextImpl implements MapContext {
 
 	@Override
 	public CoordinateReferenceSystem getCRS() {
-		if (crs == null) {
-			try {
-				crs = CRS.decode(DEFAULT_CRS_CODE);
-			} catch (FactoryException e) {
-				logger.error("Cannot obtain default CRS", e);
-				eventBus.fireEvent(new ExceptionEvent(
-						"Cannot obtain default CRS", e));
-			}
-		}
 		return crs;
 	}
 
@@ -83,9 +67,6 @@ public class MapContextImpl implements MapContext {
 
 	@Override
 	public Color getBackgroundColor() {
-		if (backgroundColor == null) {
-			backgroundColor = DEFAULT_BG_COLOR;
-		}
 		return backgroundColor;
 	}
 
@@ -117,25 +98,16 @@ public class MapContextImpl implements MapContext {
 
 	@Override
 	public Unit getMapUnits() {
-		if (mapUnits == null) {
-			mapUnits = DEFAULT_MAP_UNITS;
-		}
 		return mapUnits;
 	}
 
 	@Override
 	public Unit getDistanceUnits() {
-		if (distanceUnits == null) {
-			distanceUnits = DEFAULT_DISTANCE_UNITS;
-		}
 		return distanceUnits;
 	}
 
 	@Override
 	public Unit getAreaUnits() {
-		if (areaUnits == null) {
-			areaUnits = DEFAULT_AREA_UNITS;
-		}
 		return areaUnits;
 	}
 

@@ -40,7 +40,6 @@
  */
 package com.iver.cit.gvsig.project.documents.view;
 
-
 import org.exolab.castor.xml.XMLException;
 import org.gvsig.map.MapContext;
 import org.gvsig.persistence.generated.DocumentType;
@@ -105,11 +104,11 @@ public class ProjectView extends ProjectViewBase {
 		super.read(xml);
 		ViewDocumentType viewDocumentXML = (ViewDocumentType) xml;
 		try {
-			MapContext mapContext = mapContextFactory.createMapContext();
+			MapContext mapContext = newMapContext();
 			mapContext.setXML(viewDocumentXML.getMainMap());
 			setMapContext(mapContext);
 			if (viewDocumentXML.getOverviewMap() != null) {
-				mapContext = mapContextFactory.createMapContext();
+				mapContext = newMapContext();
 				mapContext.setXML(viewDocumentXML.getMainMap());
 				setMapOverViewContext(mapContext);
 			}

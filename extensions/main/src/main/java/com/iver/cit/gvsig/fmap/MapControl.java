@@ -84,6 +84,7 @@ import org.gvsig.events.LayerVisibilityChangeHandler;
 import org.gvsig.layer.Layer;
 import org.gvsig.map.MapContext;
 import org.gvsig.map.MapContextFactory;
+import org.gvsig.units.Unit;
 import org.gvsig.util.ProcessContext;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
@@ -541,8 +542,7 @@ public class MapControl extends JComponent implements ComponentListener {
 	 * must cancel it.</li>
 	 * <li>Creates a new {@link MapContext MapContext} with a new
 	 * {@link ViewPort ViewPort} in the projection <i>"EPSG:23030"</i> .</li>
-	 * <li>Creates a new {@link CommandListener CommandListener} for edition
-	 * operations.</li>
+	 * <li>Creates a new CommandListener for edition operations.</li>
 	 * <li>Creates a new {@link MapToolListener MapToolListener}, and associates
 	 * it as a listener of whatever kind of mouse events produced in this
 	 * component.</li>
@@ -581,8 +581,10 @@ public class MapControl extends JComponent implements ComponentListener {
 		});
 	}
 
-	public void init() {
-		setMapContext(mapContextFactory.createMapContext());
+	public void init(Unit mapUnits, Unit areaUnits, Unit distanceUnits,
+			CoordinateReferenceSystem crs) {
+		setMapContext(mapContextFactory.createMapContext(mapUnits,
+				distanceUnits, areaUnits, crs));
 		eventBus.addHandler(EditionChangeEvent.class, mapContextListener);
 		eventBus.addHandler(BackgroundColorChangeEvent.class,
 				mapContextListener);

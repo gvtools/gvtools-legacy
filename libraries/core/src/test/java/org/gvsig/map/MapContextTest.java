@@ -5,9 +5,7 @@ import java.awt.Color;
 import org.geotools.referencing.CRS;
 import org.gvsig.GVSIGTestCase;
 import org.gvsig.layer.Layer;
-import org.gvsig.layer.impl.CompositeLayer;
 import org.gvsig.units.Unit;
-import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.google.inject.Inject;
 
@@ -20,70 +18,98 @@ public class MapContextTest extends GVSIGTestCase {
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
-		mapContext = factory.createMapContext();
+		mapContext = factory.createMapContext(Unit.M, Unit.M, Unit.M,
+				CRS.decode("EPSG:4326"));
+	}
+
+	public void testNotNullInContructor() throws Exception {
+		try {
+			factory.createMapContext(null, Unit.M, Unit.M,
+					CRS.decode("EPSG:4326"));
+			fail();
+		} catch (IllegalArgumentException e) {
+		}
+		try {
+			factory.createMapContext(Unit.M, null, Unit.M,
+					CRS.decode("EPSG:4326"));
+			fail();
+		} catch (IllegalArgumentException e) {
+		}
+		try {
+			factory.createMapContext(Unit.M, Unit.M, null,
+					CRS.decode("EPSG:4326"));
+			fail();
+		} catch (IllegalArgumentException e) {
+		}
+		try {
+			factory.createMapContext(Unit.M, Unit.M, Unit.M, null);
+			fail();
+		} catch (IllegalArgumentException e) {
+		}
+	}
+
+	public void testNonNullSetters() throws Exception {
+		try {
+			mapContext.setMapUnits(null);
+			fail();
+		} catch (IllegalArgumentException e) {
+		}
+		try {
+			mapContext.setAreaUnits(null);
+			fail();
+		} catch (IllegalArgumentException e) {
+		}
+		try {
+			mapContext.setDistanceUnits(null);
+			fail();
+		} catch (IllegalArgumentException e) {
+		}
+		try {
+			mapContext.setCRS(null);
+			fail();
+		} catch (IllegalArgumentException e) {
+		}
 	}
 
 	public void testMapUnits() throws Exception {
-		assertEquals(MapContext.DEFAULT_MAP_UNITS, mapContext.getMapUnits());
-
 		mapContext.setMapUnits(Unit.CM);
 		assertEquals(Unit.CM, mapContext.getMapUnits());
-
-		mapContext.setMapUnits(null);
-		assertEquals(MapContext.DEFAULT_MAP_UNITS, mapContext.getMapUnits());
+		mapContext.setMapUnits(Unit.M);
+		assertEquals(Unit.M, mapContext.getMapUnits());
 	}
 
 	public void testAreaUnits() throws Exception {
-		assertEquals(MapContext.DEFAULT_AREA_UNITS, mapContext.getAreaUnits());
-
 		mapContext.setAreaUnits(Unit.CM);
 		assertEquals(Unit.CM, mapContext.getAreaUnits());
-
-		mapContext.setAreaUnits(null);
-		assertEquals(MapContext.DEFAULT_AREA_UNITS, mapContext.getAreaUnits());
+		mapContext.setAreaUnits(Unit.M);
+		assertEquals(Unit.M, mapContext.getAreaUnits());
 	}
 
 	public void testDistanceUnits() throws Exception {
-		assertEquals(MapContext.DEFAULT_DISTANCE_UNITS,
-				mapContext.getDistanceUnits());
-
 		mapContext.setDistanceUnits(Unit.CM);
 		assertEquals(Unit.CM, mapContext.getDistanceUnits());
-
-		mapContext.setDistanceUnits(null);
-		assertEquals(MapContext.DEFAULT_DISTANCE_UNITS,
-				mapContext.getDistanceUnits());
+		mapContext.setDistanceUnits(Unit.M);
+		assertEquals(Unit.M, mapContext.getDistanceUnits());
 	}
 
 	public void testRootLayer() throws Exception {
 		Layer root = mapContext.getRootLayer();
-		assertTrue(root instanceof CompositeLayer);
 		assertEquals(1, root.getAllLayers().length);
 		assertEquals(root, root.getAllLayers()[0]);
 	}
 
 	public void testCRS() throws Exception {
-		CoordinateReferenceSystem defaultCrs = CRS
-				.decode(MapContext.DEFAULT_CRS_CODE);
-		assertEquals(defaultCrs, mapContext.getCRS());
-
 		mapContext.setCRS(CRS.decode("EPSG:4326"));
 		assertEquals(CRS.decode("EPSG:4326"), mapContext.getCRS());
-
-		mapContext.setCRS(null);
-		assertEquals(defaultCrs, mapContext.getCRS());
+		mapContext.setCRS(CRS.decode("EPSG:25830"));
+		assertEquals(CRS.decode("EPSG:25830"), mapContext.getCRS());
 	}
 
 	public void testBGColor() throws Exception {
-		assertEquals(MapContext.DEFAULT_BG_COLOR,
-				mapContext.getBackgroundColor());
-
 		mapContext.setBackgroundColor(Color.black);
 		assertEquals(Color.black, mapContext.getBackgroundColor());
-
-		mapContext.setBackgroundColor(null);
-		assertEquals(MapContext.DEFAULT_BG_COLOR,
-				mapContext.getBackgroundColor());
+		mapContext.setBackgroundColor(Color.red);
+		assertEquals(Color.red, mapContext.getBackgroundColor());
 	}
 
 	public void testDraw() throws Exception {
