@@ -17,7 +17,6 @@ import org.geotools.renderer.GTRenderer;
 import org.geotools.renderer.RenderListener;
 import org.geotools.renderer.lite.StreamingRenderer;
 import org.gvsig.events.DrawingErrorEvent;
-import org.gvsig.inject.LibModule;
 import org.gvsig.layer.Layer;
 import org.gvsig.layer.LayerFactory;
 import org.gvsig.map.MapContext;
@@ -27,7 +26,6 @@ import org.gvsig.util.ProcessContext;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
-import com.google.inject.Guice;
 import com.vividsolutions.jts.geom.Envelope;
 
 public class MapContextImpl implements MapContext, RenderListener {
@@ -40,20 +38,16 @@ public class MapContextImpl implements MapContext, RenderListener {
 	@Inject
 	private EventBus eventBus;
 
-	@Inject
-	private LayerFactory layerFactory;
-
-	public MapContextImpl(Unit mapUnits, Unit distanceUnits, Unit areaUnits,
+	public MapContextImpl(EventBus eventBus, LayerFactory layerFactory,
+			Unit mapUnits, Unit distanceUnits, Unit areaUnits,
 			CoordinateReferenceSystem crs) {
+		this.eventBus = eventBus;
 		this.mapUnits = mapUnits;
 		this.areaUnits = areaUnits;
 		this.distanceUnits = distanceUnits;
 		this.crs = crs;
 		this.backgroundColor = Color.white;
 		this.rootLayer = layerFactory.createCompositeLayer();
-
-		assert false : "This line should not be necessary";
-		Guice.createInjector(new LibModule()).injectMembers(rootLayer);
 	}
 
 	@Override
