@@ -1,29 +1,42 @@
 package org.gvsig.layer;
 
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
-
-import javax.inject.Inject;
 
 import org.gvsig.GVSIGTestCase;
 import org.gvsig.layer.filter.CompositeLayerFilter;
 import org.gvsig.layer.filter.LayerFilter;
 
-public class FilterTest extends GVSIGTestCase {
+import com.google.inject.Inject;
 
+public class FilterTest extends GVSIGTestCase {
 	@Inject
 	private LayerFactory layerFactory;
 
 	public void testActive() throws Exception {
-		Layer root = layerFactory.createCompositeLayer();
+		// Vectorial active
+		Layer layer = spy(layerFactory.createLayer(mock(Source.class)));
+		when(layer.isActive()).thenReturn(true);
+
+		Layer[] layers = layer.filter(LayerFilter.ACTIVE);
+		assertEquals(1, layers.length);
+		assertEquals(layer, layers[0]);
+
+		// Vectorial not active
+		layer = spy(layerFactory.createLayer(mock(Source.class)));
+		when(layer.isActive()).thenReturn(false);
+		layers = layer.filter(LayerFilter.ACTIVE);
+		assertEquals(0, layers.length);
+
+		// Composite
 		Layer l1 = mock(Layer.class);
 		Layer l2 = mock(Layer.class);
 		when(l1.isActive()).thenReturn(false);
 		when(l2.isActive()).thenReturn(true);
-		root.addLayer(l1);
-		root.addLayer(l2);
+		layer = layerFactory.createLayer(l1, l2);
 
-		Layer[] layers = root.filter(LayerFilter.ACTIVE);
+		layers = layer.filter(LayerFilter.ACTIVE);
 		assertEquals(1, layers.length);
 		assertEquals(l2, layers[0]);
 	}
@@ -46,59 +59,59 @@ public class FilterTest extends GVSIGTestCase {
 		when(l3.isVectorial()).thenReturn(true);
 		when(l3.isActive()).thenReturn(false);
 
-		Layer root = layerFactory.createCompositeLayer();
-		root.addLayer(l1);
-		root.addLayer(l2);
-		root.addLayer(l3);
+		Layer layer = layerFactory.createLayer(l1, l2, l3);
 
-		Layer[] layers = root.filter(filter);
+		Layer[] layers = layer.filter(filter);
 		assertEquals(1, layers.length);
 		assertEquals(l1, layers[0]);
 	}
 
 	public void testEditing() throws Exception {
-		Layer root = layerFactory.createCompositeLayer();
-		// Vectorial and editing
+		// Composite layer
 		Layer l1 = mock(Layer.class);
 		when(l1.isVectorial()).thenReturn(true);
 		when(l1.isEditing()).thenReturn(true);
-		// Not Vectorial and editing
 		Layer l2 = mock(Layer.class);
 		when(l2.isVectorial()).thenReturn(false);
 		when(l2.isEditing()).thenReturn(true);
-		// Not editing
 		Layer l3 = mock(Layer.class);
 		when(l3.isVectorial()).thenReturn(true);
 		when(l3.isEditing()).thenReturn(false);
 
-		root.addLayer(l1);
-		root.addLayer(l2);
-		root.addLayer(l3);
-
-		Layer[] layers = root.filter(LayerFilter.VECTORIAL_EDITING);
+		Layer layer = layerFactory.createLayer(l1, l2, l3);
+		Layer[] layers = layer.filter(LayerFilter.VECTORIAL_EDITING);
 		assertEquals(1, layers.length);
 		assertEquals(l1, layers[0]);
+
+		// Vectorial layer
+		layer = spy(layerFactory.createLayer(mock(Source.class)));
+		when(layer.isEditing()).thenReturn(true);
+		layers = layer.filter(LayerFilter.VECTORIAL_EDITING);
+		assertEquals(1, layers.length);
+		assertEquals(layer, layers[0]);
+
+		layer = spy(layerFactory.createLayer(mock(Source.class)));
+		when(layer.isEditing()).thenReturn(false);
+		layers = layer.filter(LayerFilter.VECTORIAL_EDITING);
+		assertEquals(0, layers.length);
 	}
 
 	public void testVectorial() throws Exception {
-		Layer root = layerFactory.createCompositeLayer();
+		// Vectorial layer
+		Layer layer = layerFactory.createLayer(mock(Source.class));
+		Layer[] layers = layer.filter(LayerFilter.VECTORIAL);
+		assertEquals(1, layers.length);
+		assertEquals(layer, layers[0]);
+
+		// Composite layer
 		Layer l1 = mock(Layer.class);
 		Layer l2 = mock(Layer.class);
 		when(l1.isVectorial()).thenReturn(false);
 		when(l2.isVectorial()).thenReturn(true);
-		root.addLayer(l1);
-		root.addLayer(l2);
+		layer = layerFactory.createLayer(l1, l2);
 
-		Layer[] layers = root.filter(LayerFilter.VECTORIAL);
+		layers = layer.filter(LayerFilter.VECTORIAL);
 		assertEquals(1, layers.length);
 		assertEquals(l2, layers[0]);
-	}
-
-	public void testVectorialSingle() throws Exception {
-		// Active
-		Layer l1 = layerFactory.createLayer(mock(Source.class));
-		Layer[] layers = l1.filter(LayerFilter.VECTORIAL);
-		assertEquals(1, layers.length);
-		assertEquals(l1, layers[0]);
 	}
 }

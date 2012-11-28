@@ -90,6 +90,7 @@ import org.gvsig.util.EnvelopeUtils;
 import org.gvsig.util.ProcessContext;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
+import com.google.inject.Inject;
 import com.iver.cit.gvsig.fmap.tools.BehaviorException;
 import com.iver.cit.gvsig.fmap.tools.Behavior.Behavior;
 import com.iver.cit.gvsig.fmap.tools.Behavior.CompoundBehavior;
@@ -319,6 +320,9 @@ public class MapControl extends JComponent implements ComponentListener {
 	 * @see #setMapContext(MapContext)
 	 */
 	private MapContext mapContext = null;
+
+	@Inject
+	private EventBus eventBus;
 
 	// private boolean drawerAlive = false;
 

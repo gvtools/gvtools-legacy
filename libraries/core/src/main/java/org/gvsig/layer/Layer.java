@@ -24,20 +24,6 @@ public interface Layer {
 	boolean contains(Layer layer);
 
 	/**
-	 * Getter for the name property
-	 * 
-	 * @return
-	 */
-	String getName();
-
-	/**
-	 * Setter for the name property
-	 * 
-	 * @param string
-	 */
-	void setName(String string);
-
-	/**
 	 * Returns this layer along with all the children layers, if any
 	 * 
 	 * @return
@@ -127,5 +113,4 @@ public interface Layer {
 	 * @throws IOException
 	 */
 	ReferencedEnvelope getBounds() throws IOException;
-
 }

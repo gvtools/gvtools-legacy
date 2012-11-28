@@ -666,8 +666,7 @@ public class Project implements Serializable, PropertyChangeListener {
 			}
 		}
 
-		throw new RuntimeException("The layer '" + layer.getName()
-				+ "' is not in a view");
+		throw new RuntimeException("The layer is not in a view");
 	}
 
 	/**

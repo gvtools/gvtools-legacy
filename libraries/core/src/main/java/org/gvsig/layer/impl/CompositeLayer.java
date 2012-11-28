@@ -13,7 +13,7 @@ import org.gvsig.events.LayerAddedEvent;
 import org.gvsig.layer.Layer;
 import org.gvsig.layer.filter.LayerFilter;
 
-public class CompositeLayer extends AbstractLayer {
+public class CompositeLayer implements Layer {
 	private List<Layer> layers = new ArrayList<Layer>();
 
 	private EventBus eventBus;
@@ -49,6 +49,10 @@ public class CompositeLayer extends AbstractLayer {
 	@Override
 	public Layer[] filter(LayerFilter filter) {
 		List<Layer> ret = new ArrayList<Layer>();
+		if (filter.accepts(this)) {
+			ret.add(this);
+		}
+
 		for (Layer layer : layers) {
 			if (filter.accepts(layer)) {
 				ret.add(layer);

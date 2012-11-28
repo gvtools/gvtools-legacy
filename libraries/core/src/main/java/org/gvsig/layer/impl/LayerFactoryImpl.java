@@ -3,7 +3,6 @@ package org.gvsig.layer.impl;
 import geomatico.events.EventBus;
 
 import javax.inject.Inject;
-
 import org.gvsig.layer.Layer;
 import org.gvsig.layer.LayerFactory;
 import org.gvsig.layer.Source;
@@ -32,8 +31,12 @@ public class LayerFactoryImpl implements LayerFactory {
 	}
 
 	@Override
-	public Layer createCompositeLayer() {
-		return new CompositeLayer(eventBusProvider.get());
+	public Layer createLayer(Layer... layers) {
+		CompositeLayer composite = new CompositeLayer(eventBusProvider.get());
+		for (Layer layer : layers) {
+			composite.addLayer(layer);
+		}
+		return composite;
 	}
 
 }

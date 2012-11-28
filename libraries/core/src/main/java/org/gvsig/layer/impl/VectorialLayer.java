@@ -8,14 +8,16 @@ import java.util.Collections;
 import org.geotools.data.simple.SimpleFeatureSource;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.map.FeatureLayer;
+import org.geotools.renderer.RenderListener;
 import org.geotools.styling.Style;
 import org.gvsig.layer.Layer;
 import org.gvsig.layer.Source;
 import org.gvsig.layer.SourceManager;
 import org.gvsig.layer.SymbolFactoryFacade;
 import org.gvsig.layer.filter.LayerFilter;
+import org.opengis.feature.simple.SimpleFeature;
 
-public class VectorialLayer extends AbstractLayer {
+public class VectorialLayer implements Layer, RenderListener {
 	private boolean editing, active;
 	private Source source;
 	private Style style;
@@ -80,6 +82,18 @@ public class VectorialLayer extends AbstractLayer {
 	}
 
 	@Override
+	public void errorOccurred(Exception e) {
+		// TODO Auto-generated method stub
+		assert false;
+	}
+
+	@Override
+	public void featureRenderer(SimpleFeature feature) {
+		// TODO Auto-generated method stub
+		assert false;
+	}
+
+	@Override
 	public Collection<org.geotools.map.Layer> getDrawingLayers()
 			throws IOException {
 		return Collections.singletonList(getGTLayer());
@@ -109,4 +123,19 @@ public class VectorialLayer extends AbstractLayer {
 		assert false : "TODO";
 		return false;
 	}
+
+	// @Override
+	// public void setXML(LayerType layer) {
+	// if (!layer.isVectorial()) {
+	// throw new IllegalArgumentException("Attempting to assign a "
+	// + "non-vectorial layer to a vectorial layer");
+	// } else if (layer.getLayers().size() > 0) {
+	// throw new IllegalArgumentException("Attempting to assign a "
+	// + "layer with children to a vectorial layer");
+	// }
+	//
+	// active = layer.isActive();
+	// editing = layer.isEditing();
+	// setName(layer.getName());
+	// }
 }

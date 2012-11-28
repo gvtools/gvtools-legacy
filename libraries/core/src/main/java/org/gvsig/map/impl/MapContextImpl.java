@@ -47,7 +47,7 @@ public class MapContextImpl implements MapContext, RenderListener {
 		this.distanceUnits = distanceUnits;
 		this.crs = crs;
 		this.backgroundColor = Color.white;
-		this.rootLayer = layerFactory.createCompositeLayer();
+		this.rootLayer = layerFactory.createLayer();
 	}
 
 	@Override
