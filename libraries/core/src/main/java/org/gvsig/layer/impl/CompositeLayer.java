@@ -1,10 +1,14 @@
 package org.gvsig.layer.impl;
 
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.geotools.styling.Style;
 import org.gvsig.layer.Layer;
 import org.gvsig.layer.filter.LayerFilter;
+import org.gvsig.util.ProcessContext;
 
 public class CompositeLayer extends AbstractLayer {
 	private List<Layer> layers = new ArrayList<Layer>();
@@ -68,5 +72,26 @@ public class CompositeLayer extends AbstractLayer {
 
 	public boolean removeLayer(Layer layer) {
 		return layers.remove(layer);
+	}
+
+	@Override
+	public void draw(BufferedImage image, Graphics2D g, long scaleDenominator,
+			ProcessContext processContext) {
+		for (int i = layers.size() - 1; i >= 0; i--) {
+			Layer layer = layers.get(i);
+			layer.draw(image, g, scaleDenominator, processContext);
+		}
+	}
+
+	@Override
+	public Style getStyle() {
+		throw new UnsupportedOperationException(
+				"Layer groups do not have style property");
+	}
+
+	@Override
+	public void setStyle(Style style) {
+		throw new UnsupportedOperationException(
+				"Layer groups do not have style property");
 	}
 }

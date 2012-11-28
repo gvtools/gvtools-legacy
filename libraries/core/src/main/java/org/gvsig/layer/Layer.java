@@ -1,6 +1,11 @@
 package org.gvsig.layer;
 
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+
+import org.geotools.styling.Style;
 import org.gvsig.layer.filter.LayerFilter;
+import org.gvsig.util.ProcessContext;
 
 public interface Layer {
 
@@ -66,4 +71,36 @@ public interface Layer {
 	 *         otherwise.
 	 */
 	boolean isActive();
+
+	void draw(BufferedImage image, Graphics2D g, long scaleDenominator,
+			ProcessContext processContext);
+
+	/**
+	 * Adds a layer as a child of this one.
+	 * 
+	 * @param testLayer
+	 * @throws UnsupportedOperationException
+	 *             If this layer is not a collection
+	 */
+	void addLayer(Layer testLayer) throws UnsupportedOperationException;
+
+	/**
+	 * Getter for the layer style
+	 * 
+	 * @return
+	 * @throws UnsupportedOperationException
+	 *             If the layer does not support the style property, e.g.: layer
+	 *             groups
+	 */
+	Style getStyle() throws UnsupportedOperationException;
+
+	/**
+	 * Setter for the layer style
+	 * 
+	 * @param style
+	 * @throws UnsupportedOperationException
+	 *             If the layer does not support the style property, e.g.: layer
+	 *             groups
+	 */
+	void setStyle(Style style) throws UnsupportedOperationException;
 }

@@ -2,13 +2,12 @@ package org.gvsig.layer;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import junit.framework.TestCase;
 
 import org.gvsig.layer.filter.CompositeLayerFilter;
 import org.gvsig.layer.filter.LayerFilter;
 import org.gvsig.layer.impl.CompositeLayer;
 import org.gvsig.layer.impl.VectorialLayer;
-
-import junit.framework.TestCase;
 
 public class FilterTest extends TestCase {
 
@@ -28,7 +27,7 @@ public class FilterTest extends TestCase {
 
 	public void testActiveSingle() throws Exception {
 		// Active
-		VectorialLayer l1 = new VectorialLayer();
+		VectorialLayer l1 = new VectorialLayer(mock(Source.class));
 		l1.activate();
 		Layer[] layers = l1.filter(LayerFilter.ACTIVE);
 		assertEquals(1, layers.length);
@@ -94,7 +93,7 @@ public class FilterTest extends TestCase {
 
 	public void testEditingSingle() throws Exception {
 		// Active
-		VectorialLayer l1 = new VectorialLayer();
+		VectorialLayer l1 = new VectorialLayer(mock(Source.class));
 		l1.startEdition();
 		Layer[] layers = l1.filter(LayerFilter.VECTORIAL_EDITING);
 		assertEquals(1, layers.length);
@@ -122,7 +121,7 @@ public class FilterTest extends TestCase {
 
 	public void testVectorialSingle() throws Exception {
 		// Active
-		VectorialLayer l1 = new VectorialLayer();
+		VectorialLayer l1 = new VectorialLayer(mock(Source.class));
 		Layer[] layers = l1.filter(LayerFilter.VECTORIAL);
 		assertEquals(1, layers.length);
 		assertEquals(l1, layers[0]);

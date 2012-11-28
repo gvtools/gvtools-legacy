@@ -12,7 +12,7 @@ public class VectorialLayerTest extends TestCase {
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
-		layer = new VectorialLayer();
+		layer = new VectorialLayer(mock(Source.class));
 	}
 
 	public void testGetAllLayers() throws Exception {
@@ -30,6 +30,11 @@ public class VectorialLayerTest extends TestCase {
 		assertNull(layer.getName());
 		layer.setName("name");
 		assertEquals("name", layer.getName());
+	}
+
+	public void testSymbology() throws Exception {
+		fail("Check default symbology for point layers, "
+				+ "multipoint layers, line layers, etc. and heterogeneous layers");
 	}
 
 	public void testEditing() throws Exception {

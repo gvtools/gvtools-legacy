@@ -16,6 +16,11 @@ public class CompositeLayerTest extends TestCase {
 		root = new CompositeLayer();
 	}
 
+	public void testReminder() throws Exception {
+		fail("We should not do tests on concrete instances only. "
+				+ "First on the interface and, if necessary, on the implementation");
+	}
+
 	public void testAddLayer() throws Exception {
 		Layer layer = mock(Layer.class);
 		root.addLayer(layer);
