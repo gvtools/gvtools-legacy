@@ -1312,8 +1312,8 @@ public class MapControl extends JComponent implements ComponentListener {
 					// FIN ESTILO MAC
 					// SIN MAC:
 
-					mapContext.draw(image, g, canceldraw,
-							viewPort.getScaleView());
+					mapContext.draw(image, g, viewPort.getScaleView(),
+							canceldraw);
 					if (!canceldraw.isCancelled()) {
 						status = ACTUALIZADO;
 					} else {
@@ -1646,7 +1646,7 @@ public class MapControl extends JComponent implements ComponentListener {
 					g.fillRect(0, 0, viewPort.getImageWidth(),
 							viewPort.getImageHeight());
 					status = ACTUALIZADO;
-					mapContext.draw(image, g, cancel, viewPort.getScaleView());
+					mapContext.draw(image, g, viewPort.getScaleView(), cancel);
 				} else if (status == ONLY_GRAPHICS) {
 					status = ACTUALIZADO;
 					drawGraphics(image, g, cancel, viewPort.getScaleView());

@@ -57,6 +57,6 @@ public interface MapContext {
 
 	Unit getAreaUnits();
 
-	void draw(BufferedImage image, Graphics2D g, ProcessContext canceldraw,
-			long scaleDenominator);
+	void draw(BufferedImage image, Graphics2D g, long scaleDenominator,
+			ProcessContext processContext);
 }

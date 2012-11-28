@@ -112,8 +112,8 @@ public class MapContextImpl implements MapContext {
 	}
 
 	@Override
-	public void draw(BufferedImage image, Graphics2D g,
-			ProcessContext canceldraw, long scaleDenominator) {
-		// TODO Auto-generated method stub
+	public void draw(BufferedImage image, Graphics2D g, long scaleDenominator,
+			ProcessContext processContext) {
+		getRootLayer().draw(image, g, scaleDenominator, processContext);
 	}
 }
