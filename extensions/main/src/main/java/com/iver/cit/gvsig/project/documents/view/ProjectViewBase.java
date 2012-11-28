@@ -1,12 +1,17 @@
 package com.iver.cit.gvsig.project.documents.view;
 
+import geomatico.events.EventBus;
+
 import java.awt.Color;
 import java.awt.Component;
+import java.util.ArrayList;
 
 import javax.inject.Inject;
 import javax.swing.JOptionPane;
 
 import org.geotools.referencing.CRS;
+import org.gvsig.events.LayerDrawErrorEvent;
+import org.gvsig.events.LayerDrawErrorHandler;
 import org.gvsig.layer.Layer;
 import org.gvsig.map.ErrorListener;
 import org.gvsig.map.MapContext;
@@ -37,12 +42,29 @@ public abstract class ProjectViewBase extends ProjectDocument implements
 
 	@Inject
 	protected MapContextFactory mapContextFactory;
+	@Inject
+	private EventBus eventBus;
 
 	protected MapContext mapOverViewContext;
 	protected MapContext mapContext;
 	protected int m_typeLink = LinkListener.TYPELINKIMAGE;
 	protected String m_extLink;
 	protected String m_selectedField = null;
+	private ArrayList<String> drawErrors = new ArrayList<String>();
+
+	public ProjectViewBase() {
+		eventBus.addHandler(LayerDrawErrorEvent.class,
+				new LayerDrawErrorHandler() {
+
+					@Override
+					public void error(Layer source, String message,
+							Throwable problem) {
+						if (getMapContext().getRootLayer().contains(source)) {
+							drawErrors.add(message);
+						}
+					}
+				});
+	}
 
 	// OVERRIDE THESE
 	public IWindow getProperties() {
@@ -81,7 +103,6 @@ public abstract class ProjectViewBase extends ProjectDocument implements
 	 */
 	public void setMapContext(MapContext fmap) {
 		mapContext = fmap;
-		fmap.addErrorListener(this);
 	}
 
 	/**
@@ -96,12 +117,12 @@ public abstract class ProjectViewBase extends ProjectDocument implements
 	}
 
 	public void showErrors() {
-		if (mapContext.getLayersError().size() > 0) {
+		if (drawErrors.size() > 0) {
 			String layersError = "";
-			for (int i = 0; i < mapContext.getLayersError().size(); i++) {
-				layersError = layersError + "\n"
-						+ mapContext.getLayersError().get(i);
+			for (int i = 0; i < drawErrors.size(); i++) {
+				layersError = layersError + "\n" + drawErrors.get(i);
 			}
+			drawErrors.clear();
 			JOptionPane.showMessageDialog(
 					(Component) PluginServices.getMainFrame(),
 					PluginServices.getText(this, "fallo_capas") + " : \n"

@@ -3,12 +3,9 @@ package org.gvsig.map.impl;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.gvsig.layer.Layer;
 import org.gvsig.layer.impl.CompositeLayer;
-import org.gvsig.map.ErrorListener;
 import org.gvsig.map.MapContext;
 import org.gvsig.persistence.generated.MapType;
 import org.gvsig.units.Unit;
@@ -19,7 +16,6 @@ public class MapContextImpl implements MapContext {
 	private Unit mapUnits, areaUnits, distanceUnits;
 
 	private Layer rootLayer;
-	private List<ErrorListener> errorListeners;
 	private Color backgroundColor;
 	private CoordinateReferenceSystem crs;
 
@@ -31,23 +27,11 @@ public class MapContextImpl implements MapContext {
 		this.crs = crs;
 		this.backgroundColor = Color.white;
 		this.rootLayer = new CompositeLayer();
-		this.errorListeners = new ArrayList<ErrorListener>();
 	}
 
 	@Override
 	public Layer getRootLayer() {
 		return rootLayer;
-	}
-
-	@Override
-	public void addErrorListener(ErrorListener errorListener) {
-		errorListeners.add(errorListener);
-	}
-
-	@Override
-	public List<String> getLayersError() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override

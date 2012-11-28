@@ -3,7 +3,6 @@ package org.gvsig.map;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.util.List;
 
 import org.gvsig.layer.Layer;
 import org.gvsig.persistence.generated.MapType;
@@ -18,10 +17,6 @@ public interface MapContext {
 	 * @return
 	 */
 	Layer getRootLayer();
-
-	void addErrorListener(ErrorListener errorListener);
-
-	List<String> getLayersError();
 
 	/**
 	 * Gets this map {@link CoordinateReferenceSystem}
