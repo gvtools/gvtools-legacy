@@ -41,6 +41,7 @@
 package com.iver.cit.gvsig.fmap;
 
 import geomatico.events.EventBus;
+import geomatico.events.ExceptionEvent;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -58,6 +59,7 @@ import java.awt.event.MouseWheelListener;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Set;
 
@@ -85,6 +87,7 @@ import org.gvsig.layer.Layer;
 import org.gvsig.map.MapContext;
 import org.gvsig.map.MapContextFactory;
 import org.gvsig.units.Unit;
+import org.gvsig.util.EnvelopeUtils;
 import org.gvsig.util.ProcessContext;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
@@ -95,6 +98,7 @@ import com.iver.cit.gvsig.fmap.tools.Listeners.ToolListener;
 import com.iver.utiles.exceptionHandling.ExceptionHandlingSupport;
 import com.iver.utiles.exceptionHandling.ExceptionListener;
 import com.iver.utiles.swing.threads.Cancellable;
+import com.vividsolutions.jts.geom.Envelope;
 
 /**
  * <p>
@@ -1267,7 +1271,8 @@ public class MapControl extends JComponent implements ComponentListener {
 		 * </p>
 		 * 
 		 * @see #cancelDrawing()
-		 * @see MapContext#draw(BufferedImage, Graphics2D, Cancellable, double)
+		 * @see MapContext#draw(BufferedImage, Graphics2D, Envelope,
+		 *      Cancellable, double)
 		 * @see MapContext#drawGraphics(BufferedImage, Graphics2D, Cancellable,
 		 *      double)
 		 * 
@@ -1312,8 +1317,10 @@ public class MapControl extends JComponent implements ComponentListener {
 					// FIN ESTILO MAC
 					// SIN MAC:
 
-					mapContext.draw(image, g, viewPort.getScaleView(),
-							canceldraw);
+					if (viewPort.getExtent() != null) {
+						mapContext.draw(image, g, viewPort.getAdjustedExtent(),
+								viewPort.getScaleView(), canceldraw);
+					}
 					if (!canceldraw.isCancelled()) {
 						status = ACTUALIZADO;
 					} else {
@@ -1561,7 +1568,7 @@ public class MapControl extends JComponent implements ComponentListener {
 	 * </li>
 	 * <li><code><i>OUTDATED</i></code>: refreshes all layers, changing the
 	 * status to <code><i>UPDATED</i></code>, via
-	 * {@linkplain MapContext#draw(BufferedImage, Graphics2D, Cancellable, double)
+	 * {@linkplain MapContext#draw(BufferedImage, Graphics2D, Envelope, Cancellable, double)
 	 * MapContext#draw(BufferedImage, Graphics2D, Cancellable, double)}.</li>
 	 * <ul>
 	 * </p>
@@ -1628,7 +1635,8 @@ public class MapControl extends JComponent implements ComponentListener {
 
 		/**
 		 * @see java.lang.Runnable#run()
-		 * @see MapContext#draw(BufferedImage, Graphics2D, Cancellable, double)
+		 * @see MapContext#draw(BufferedImage, Graphics2D, Envelope,
+		 *      Cancellable, double)
 		 * @see MapContext#drawGraphics(BufferedImage, Graphics2D, Cancellable,
 		 *      double)
 		 */
@@ -1646,7 +1654,8 @@ public class MapControl extends JComponent implements ComponentListener {
 					g.fillRect(0, 0, viewPort.getImageWidth(),
 							viewPort.getImageHeight());
 					status = ACTUALIZADO;
-					mapContext.draw(image, g, viewPort.getScaleView(), cancel);
+					mapContext.draw(image, g, viewPort.getAdjustedExtent(),
+							viewPort.getScaleView(), cancel);
 				} else if (status == ONLY_GRAPHICS) {
 					status = ACTUALIZADO;
 					drawGraphics(image, g, cancel, viewPort.getScaleView());
@@ -1953,9 +1962,27 @@ public class MapControl extends JComponent implements ComponentListener {
 			LayerSelectionChangeHandler, LayerVisibilityChangeHandler {
 
 		@Override
-		public void layerAdded(MapContext map, Layer layer) {
-			MapControl.this.drawMap(false);
-			return;
+		public void layerAdded(Layer layer) {
+			Layer rootLayer = getMapContext().getRootLayer();
+			if (rootLayer.contains(layer)) {
+				MapControl.this.drawMap(false);
+
+				/*
+				 * Set extent to the layer if there is no extent or the map was
+				 * empty (only had the root layer)
+				 */
+				if (viewPort.getExtent() == null
+						|| rootLayer.getAllLayers().length == 2) {
+					// First layer, set extent
+					try {
+						viewPort.setExtent(EnvelopeUtils.toRectangle2D(layer
+								.getBounds()));
+					} catch (IOException e) {
+						eventBus.fireEvent(new ExceptionEvent(
+								"Cannot obtain the extent of the layer", e));
+					}
+				}
+			}
 		}
 	}
 

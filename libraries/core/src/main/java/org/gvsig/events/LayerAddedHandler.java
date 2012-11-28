@@ -1,12 +1,11 @@
 package org.gvsig.events;
 
-import org.gvsig.layer.Layer;
-import org.gvsig.map.MapContext;
-
 import geomatico.events.EventHandler;
+
+import org.gvsig.layer.Layer;
 
 public interface LayerAddedHandler extends EventHandler {
 
-	void layerAdded(MapContext map, Layer layer);
-	
+	void layerAdded(Layer layer);
+
 }
