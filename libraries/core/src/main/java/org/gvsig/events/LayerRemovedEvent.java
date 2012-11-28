@@ -7,7 +7,7 @@ public class LayerRemovedEvent implements Event<LayerRemovedHandler> {
 	@Override
 	public void dispatch(LayerRemovedHandler arg0) {
 		// TODO Auto-generated method stub
-		assert true;
+		assert false;
 	}
 
 }
