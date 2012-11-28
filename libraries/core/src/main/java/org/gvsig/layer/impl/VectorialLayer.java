@@ -5,8 +5,6 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
 
-import javax.inject.Inject;
-
 import org.geotools.data.simple.SimpleFeatureSource;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.map.FeatureLayer;
@@ -22,13 +20,14 @@ public class VectorialLayer extends AbstractLayer {
 	private Source source;
 	private Style style;
 
-	@Inject
 	private SourceManager sourceManager;
 
-	@Inject
 	private SymbolFactoryFacade symbolFactoryFacade;
 
-	public VectorialLayer(Source source) {
+	public VectorialLayer(SourceManager sourceManager,
+			SymbolFactoryFacade symbolFactoryFacade, Source source) {
+		this.sourceManager = sourceManager;
+		this.symbolFactoryFacade = symbolFactoryFacade;
 		this.source = source;
 	}
 
@@ -64,38 +63,6 @@ public class VectorialLayer extends AbstractLayer {
 	@Override
 	public boolean isActive() {
 		return active;
-	}
-
-	/**
-	 * Starts the edition of this layer. If the layer is already being edited,
-	 * this method does nothing.
-	 */
-	public void startEdition() {
-		editing = true;
-	}
-
-	/**
-	 * Stops the edition of this layer. If the layer is not being edited, this
-	 * method does nothing.
-	 */
-	public void stopEdition() {
-		editing = false;
-	}
-
-	/**
-	 * Activates this layer. If the layer is already active, this method does
-	 * nothing.
-	 */
-	public void activate() {
-		active = true;
-	}
-
-	/**
-	 * Deactivates this layer. If the layer is not active, this method does
-	 * nothing.
-	 */
-	public void deactivate() {
-		active = false;
 	}
 
 	@Override
@@ -134,5 +101,12 @@ public class VectorialLayer extends AbstractLayer {
 	@Override
 	public ReferencedEnvelope getBounds() throws IOException {
 		return getGTLayer().getBounds();
+	}
+
+	@Override
+	public boolean removeLayer(Layer layer) {
+		// TODO Auto-generated method stub
+		assert false : "TODO";
+		return false;
 	}
 }

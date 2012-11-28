@@ -1,18 +1,23 @@
 package org.gvsig.layer;
 
 import static org.mockito.Mockito.mock;
-import junit.framework.TestCase;
 
+import javax.inject.Inject;
+
+import org.gvsig.GVSIGTestCase;
 import org.gvsig.layer.filter.LayerFilter;
-import org.gvsig.layer.impl.VectorialLayer;
 
-public class VectorialLayerTest extends TestCase {
-	private VectorialLayer layer;
+public class VectorialLayerTest extends GVSIGTestCase {
+
+	@Inject
+	private LayerFactory layerFactory;
+
+	private Layer layer;
 
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
-		layer = new VectorialLayer(mock(Source.class));
+		layer = layerFactory.createLayer(mock(Source.class));
 	}
 
 	public void testGetAllLayers() throws Exception {
@@ -37,19 +42,6 @@ public class VectorialLayerTest extends TestCase {
 				+ "multipoint layers, line layers, etc. and heterogeneous layers");
 	}
 
-	public void testEditing() throws Exception {
-		assertFalse(layer.isEditing());
-
-		layer.startEdition();
-		assertTrue(layer.isEditing());
-		layer.startEdition();
-		assertTrue(layer.isEditing());
-		layer.stopEdition();
-		assertFalse(layer.isEditing());
-		layer.stopEdition();
-		assertFalse(layer.isEditing());
-	}
-
 	public void testFilter() throws Exception {
 		Layer[] layers = layer.filter(new LayerFilter() {
 			@Override
@@ -71,19 +63,5 @@ public class VectorialLayerTest extends TestCase {
 
 	public void testIsVectorial() throws Exception {
 		assertTrue(layer.isVectorial());
-	}
-
-	public void testActivation() throws Exception {
-		assertFalse(layer.isActive());
-
-		layer.activate();
-		assertTrue(layer.isActive());
-		layer.activate();
-		assertTrue(layer.isActive());
-
-		layer.deactivate();
-		assertFalse(layer.isActive());
-		layer.deactivate();
-		assertFalse(layer.isActive());
 	}
 }

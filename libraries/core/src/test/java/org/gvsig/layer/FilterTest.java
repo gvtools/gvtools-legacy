@@ -2,17 +2,20 @@ package org.gvsig.layer;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import junit.framework.TestCase;
 
+import javax.inject.Inject;
+
+import org.gvsig.GVSIGTestCase;
 import org.gvsig.layer.filter.CompositeLayerFilter;
 import org.gvsig.layer.filter.LayerFilter;
-import org.gvsig.layer.impl.CompositeLayer;
-import org.gvsig.layer.impl.VectorialLayer;
 
-public class FilterTest extends TestCase {
+public class FilterTest extends GVSIGTestCase {
+
+	@Inject
+	private LayerFactory layerFactory;
 
 	public void testActive() throws Exception {
-		CompositeLayer root = new CompositeLayer();
+		Layer root = layerFactory.createCompositeLayer();
 		Layer l1 = mock(Layer.class);
 		Layer l2 = mock(Layer.class);
 		when(l1.isActive()).thenReturn(false);
@@ -23,20 +26,6 @@ public class FilterTest extends TestCase {
 		Layer[] layers = root.filter(LayerFilter.ACTIVE);
 		assertEquals(1, layers.length);
 		assertEquals(l2, layers[0]);
-	}
-
-	public void testActiveSingle() throws Exception {
-		// Active
-		VectorialLayer l1 = new VectorialLayer(mock(Source.class));
-		l1.activate();
-		Layer[] layers = l1.filter(LayerFilter.ACTIVE);
-		assertEquals(1, layers.length);
-		assertEquals(l1, layers[0]);
-
-		// Not active
-		l1.deactivate();
-		layers = l1.filter(LayerFilter.ACTIVE);
-		assertEquals(0, layers.length);
 	}
 
 	public void testComposite() throws Exception {
@@ -57,7 +46,7 @@ public class FilterTest extends TestCase {
 		when(l3.isVectorial()).thenReturn(true);
 		when(l3.isActive()).thenReturn(false);
 
-		CompositeLayer root = new CompositeLayer();
+		Layer root = layerFactory.createCompositeLayer();
 		root.addLayer(l1);
 		root.addLayer(l2);
 		root.addLayer(l3);
@@ -68,7 +57,7 @@ public class FilterTest extends TestCase {
 	}
 
 	public void testEditing() throws Exception {
-		CompositeLayer root = new CompositeLayer();
+		Layer root = layerFactory.createCompositeLayer();
 		// Vectorial and editing
 		Layer l1 = mock(Layer.class);
 		when(l1.isVectorial()).thenReturn(true);
@@ -91,22 +80,8 @@ public class FilterTest extends TestCase {
 		assertEquals(l1, layers[0]);
 	}
 
-	public void testEditingSingle() throws Exception {
-		// Active
-		VectorialLayer l1 = new VectorialLayer(mock(Source.class));
-		l1.startEdition();
-		Layer[] layers = l1.filter(LayerFilter.VECTORIAL_EDITING);
-		assertEquals(1, layers.length);
-		assertEquals(l1, layers[0]);
-
-		// Not active
-		l1.stopEdition();
-		layers = l1.filter(LayerFilter.ACTIVE);
-		assertEquals(0, layers.length);
-	}
-
 	public void testVectorial() throws Exception {
-		CompositeLayer root = new CompositeLayer();
+		Layer root = layerFactory.createCompositeLayer();
 		Layer l1 = mock(Layer.class);
 		Layer l2 = mock(Layer.class);
 		when(l1.isVectorial()).thenReturn(false);
@@ -121,7 +96,7 @@ public class FilterTest extends TestCase {
 
 	public void testVectorialSingle() throws Exception {
 		// Active
-		VectorialLayer l1 = new VectorialLayer(mock(Source.class));
+		Layer l1 = layerFactory.createLayer(mock(Source.class));
 		Layer[] layers = l1.filter(LayerFilter.VECTORIAL);
 		assertEquals(1, layers.length);
 		assertEquals(l1, layers[0]);

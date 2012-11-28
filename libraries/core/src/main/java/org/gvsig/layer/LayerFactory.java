@@ -4,4 +4,5 @@ public interface LayerFactory {
 
 	Layer createLayer(Source source);
 
+	Layer createCompositeLayer();
 }

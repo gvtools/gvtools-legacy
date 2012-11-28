@@ -2,18 +2,22 @@ package org.gvsig.layer;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import junit.framework.TestCase;
 
+import javax.inject.Inject;
+
+import org.gvsig.GVSIGTestCase;
 import org.gvsig.layer.filter.LayerFilter;
-import org.gvsig.layer.impl.CompositeLayer;
 
-public class CompositeLayerTest extends TestCase {
-	private CompositeLayer root;
+public class CompositeLayerTest extends GVSIGTestCase {
+	private Layer root;
+
+	@Inject
+	private LayerFactory layerFactory;
 
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
-		root = new CompositeLayer();
+		root = layerFactory.createCompositeLayer();
 	}
 
 	public void testReminder() throws Exception {
@@ -79,7 +83,7 @@ public class CompositeLayerTest extends TestCase {
 		when(l2.contains(l2)).thenReturn(true);
 		Layer l3 = mock(Layer.class);
 		when(l3.contains(l3)).thenReturn(true);
-		CompositeLayer composite = new CompositeLayer();
+		Layer composite = layerFactory.createCompositeLayer();
 		composite.addLayer(l3);
 		root.addLayer(l1);
 		root.addLayer(composite);
@@ -130,5 +134,10 @@ public class CompositeLayerTest extends TestCase {
 
 	public void testIsVectorial() throws Exception {
 		assertFalse(root.isVectorial());
+	}
+
+	public void testEvents() throws Exception {
+		fail("Should test that all layer events are "
+				+ "raised. Not only in Componsite but also in Vectorial");
 	}
 }

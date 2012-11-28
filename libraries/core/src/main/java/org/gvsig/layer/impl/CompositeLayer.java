@@ -1,5 +1,7 @@
 package org.gvsig.layer.impl;
 
+import geomatico.events.EventBus;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -7,11 +9,18 @@ import java.util.List;
 
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.styling.Style;
+import org.gvsig.events.LayerAddedEvent;
 import org.gvsig.layer.Layer;
 import org.gvsig.layer.filter.LayerFilter;
 
 public class CompositeLayer extends AbstractLayer {
 	private List<Layer> layers = new ArrayList<Layer>();
+
+	private EventBus eventBus;
+
+	public CompositeLayer(EventBus eventBus) {
+		this.eventBus = eventBus;
+	}
 
 	@Override
 	public boolean contains(Layer layer) {
@@ -68,6 +77,7 @@ public class CompositeLayer extends AbstractLayer {
 			throw new IllegalArgumentException("Layer cannot be null");
 		}
 		layers.add(layer);
+		eventBus.fireEvent(new LayerAddedEvent(layer));
 	}
 
 	public boolean removeLayer(Layer layer) {
