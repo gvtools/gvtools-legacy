@@ -2,7 +2,9 @@ package org.gvsig.map;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 import org.gvsig.layer.Layer;
 import org.gvsig.persistence.generated.MapType;
@@ -52,6 +54,16 @@ public interface MapContext {
 
 	Unit getAreaUnits();
 
-	void draw(BufferedImage image, Graphics2D g, long scaleDenominator,
-			ProcessContext processContext);
+	/**
+	 * @param image
+	 * @param g
+	 * @param extent
+	 * @param scaleDenominator
+	 * @param processContext
+	 * @throws IOException
+	 *             If some error makes the drawing fail completely
+	 */
+	void draw(BufferedImage image, Graphics2D g, Rectangle2D extent,
+			long scaleDenominator, ProcessContext processContext)
+			throws IOException;
 }

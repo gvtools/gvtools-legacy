@@ -1,11 +1,11 @@
 package org.gvsig.layer;
 
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.Collection;
 
+import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.styling.Style;
 import org.gvsig.layer.filter.LayerFilter;
-import org.gvsig.util.ProcessContext;
 
 public interface Layer {
 
@@ -72,9 +72,6 @@ public interface Layer {
 	 */
 	boolean isActive();
 
-	void draw(BufferedImage image, Graphics2D g, long scaleDenominator,
-			ProcessContext processContext);
-
 	/**
 	 * Adds a layer as a child of this one.
 	 * 
@@ -103,4 +100,22 @@ public interface Layer {
 	 *             groups
 	 */
 	void setStyle(Style style) throws UnsupportedOperationException;
+
+	/**
+	 * Returns a collection of GeoTools layers that will be used to draw.
+	 * 
+	 * @return
+	 * @throws IOException
+	 *             If the geotools layer cannot be built
+	 */
+	Collection<org.geotools.map.Layer> getDrawingLayers() throws IOException;
+
+	/**
+	 * Get the bounds of this layer. Null if this layer contains no data (e.g.:
+	 * it is an empty collection)
+	 * 
+	 * @return
+	 * @throws IOException
+	 */
+	ReferencedEnvelope getBounds() throws IOException;
 }

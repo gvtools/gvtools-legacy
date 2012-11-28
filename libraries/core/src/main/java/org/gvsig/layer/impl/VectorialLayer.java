@@ -1,39 +1,26 @@
 package org.gvsig.layer.impl;
 
-import geomatico.events.EventBus;
-
 import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Collection;
+import java.util.Collections;
 
 import javax.inject.Inject;
 
 import org.geotools.data.simple.SimpleFeatureSource;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.map.FeatureLayer;
-import org.geotools.map.MapContent;
-import org.geotools.renderer.GTRenderer;
-import org.geotools.renderer.RenderListener;
-import org.geotools.renderer.lite.StreamingRenderer;
 import org.geotools.styling.Style;
-import org.gvsig.events.LayerDrawErrorEvent;
 import org.gvsig.layer.Layer;
 import org.gvsig.layer.Source;
 import org.gvsig.layer.SourceManager;
 import org.gvsig.layer.SymbolFactoryFacade;
 import org.gvsig.layer.filter.LayerFilter;
-import org.gvsig.util.ProcessContext;
-import org.opengis.feature.simple.SimpleFeature;
 
-public class VectorialLayer extends AbstractLayer implements RenderListener {
+public class VectorialLayer extends AbstractLayer {
 	private boolean editing, active;
 	private Source source;
 	private Style style;
-
-	@Inject
-	private EventBus eventBus;
 
 	@Inject
 	private SourceManager sourceManager;
@@ -126,55 +113,26 @@ public class VectorialLayer extends AbstractLayer implements RenderListener {
 	}
 
 	@Override
-	public void draw(BufferedImage image, Graphics2D g, long scaleDenominator,
-			ProcessContext processContext) {
-		assert false : "processContext.isCancelled should be taken into account";
-		GTRenderer renderer = new StreamingRenderer();
-		MapContent mapContent = new MapContent();
-
-		SimpleFeatureSource featureSource = null;
-		try {
-			featureSource = sourceManager.getFeatureSource(source);
-		} catch (IOException e) {
-			reportError(e, "Cannot instantiate feature source", this);
-			return;
-		}
-		FeatureLayer layer = new FeatureLayer(featureSource, getStyle());
-		mapContent.addLayer(layer);
-		renderer.setMapContent(mapContent);
-
-		ReferencedEnvelope bounds = null;
-		try {
-			bounds = featureSource.getBounds();
-		} catch (IOException e) {
-			reportError(e, "Cannot get layer bounds", this);
-			return;
-		}
-		renderer.addRenderListener(this);
-		if (bounds != null) {
-			renderer.paint(g,
-					new Rectangle(0, 0, image.getWidth(), image.getHeight()),
-					bounds);
-		}
+	public Collection<org.geotools.map.Layer> getDrawingLayers()
+			throws IOException {
+		return Collections.singletonList(getGTLayer());
 	}
 
-	private void reportError(Exception e, String message,
-			VectorialLayer sourceLayer) {
-		eventBus.fireEvent(new LayerDrawErrorEvent(sourceLayer, message, e));
-	}
-
-	@Override
-	public void featureRenderer(SimpleFeature feature) {
-		// ignore
-	}
-
-	@Override
-	public void errorOccurred(Exception e) {
-		reportError(e, e.getMessage(), this);
+	private org.geotools.map.Layer getGTLayer() throws IOException {
+		SimpleFeatureSource featureSource = sourceManager
+				.getFeatureSource(source);
+		org.geotools.map.Layer layer = new FeatureLayer(featureSource,
+				getStyle());
+		return layer;
 	}
 
 	@Override
 	public void addLayer(Layer testLayer) {
 		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public ReferencedEnvelope getBounds() throws IOException {
+		return getGTLayer().getBounds();
 	}
 }

@@ -1,14 +1,14 @@
 package org.gvsig.layer.impl;
 
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
+import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.styling.Style;
 import org.gvsig.layer.Layer;
 import org.gvsig.layer.filter.LayerFilter;
-import org.gvsig.util.ProcessContext;
 
 public class CompositeLayer extends AbstractLayer {
 	private List<Layer> layers = new ArrayList<Layer>();
@@ -75,15 +75,6 @@ public class CompositeLayer extends AbstractLayer {
 	}
 
 	@Override
-	public void draw(BufferedImage image, Graphics2D g, long scaleDenominator,
-			ProcessContext processContext) {
-		for (int i = layers.size() - 1; i >= 0; i--) {
-			Layer layer = layers.get(i);
-			layer.draw(image, g, scaleDenominator, processContext);
-		}
-	}
-
-	@Override
 	public Style getStyle() {
 		throw new UnsupportedOperationException(
 				"Layer groups do not have style property");
@@ -93,5 +84,30 @@ public class CompositeLayer extends AbstractLayer {
 	public void setStyle(Style style) {
 		throw new UnsupportedOperationException(
 				"Layer groups do not have style property");
+	}
+
+	@Override
+	public Collection<org.geotools.map.Layer> getDrawingLayers()
+			throws IOException {
+		ArrayList<org.geotools.map.Layer> ret = new ArrayList<org.geotools.map.Layer>();
+		for (Layer layer : this.layers) {
+			ret.addAll(layer.getDrawingLayers());
+		}
+
+		return ret;
+	}
+
+	@Override
+	public ReferencedEnvelope getBounds() throws IOException {
+		ReferencedEnvelope ret = null;
+		for (Layer layer : this.layers) {
+			if (ret == null) {
+				ret = new ReferencedEnvelope(layer.getBounds());
+			} else {
+				ret.expandToInclude(layer.getBounds());
+			}
+		}
+
+		return ret;
 	}
 }
