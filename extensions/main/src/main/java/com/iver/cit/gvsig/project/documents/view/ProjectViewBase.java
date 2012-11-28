@@ -10,8 +10,8 @@ import javax.inject.Inject;
 import javax.swing.JOptionPane;
 
 import org.geotools.referencing.CRS;
-import org.gvsig.events.LayerDrawErrorEvent;
-import org.gvsig.events.LayerDrawErrorHandler;
+import org.gvsig.events.DrawingErrorEvent;
+import org.gvsig.events.DrawingErrorHandler;
 import org.gvsig.layer.Layer;
 import org.gvsig.map.ErrorListener;
 import org.gvsig.map.MapContext;
@@ -52,17 +52,16 @@ public abstract class ProjectViewBase extends ProjectDocument implements
 
 	@Inject
 	public ProjectViewBase(EventBus eventBus) {
-		eventBus.addHandler(LayerDrawErrorEvent.class,
-				new LayerDrawErrorHandler() {
+		eventBus.addHandler(DrawingErrorEvent.class, new DrawingErrorHandler() {
 
-					@Override
-					public void error(Layer source, String message,
-							Throwable problem) {
-						if (getMapContext().getRootLayer().contains(source)) {
-							drawErrors.add(message);
-						}
-					}
-				});
+			@Override
+			public void error(MapContext source, String message,
+					Throwable problem) {
+				if (getMapContext() == source) {
+					drawErrors.add(message);
+				}
+			}
+		});
 	}
 
 	// OVERRIDE THESE
