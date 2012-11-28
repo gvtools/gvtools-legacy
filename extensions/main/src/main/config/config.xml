@@ -3,6 +3,10 @@
 	<libraries library-dir="." />
 	<resourceBundle name="text" />
 	<extensions>
+		<extension class-name="org.gvsig.TestExtension" active="true">
+			<menu text="Test/test" action-command="" position="-100" />
+		</extension>
+
 		<!-- FILE MENU -->
 		<extension class-name="com.iver.cit.gvsig.ProjectExtension"
 			description="Extensión encargada de gestionar los proyectos." active="true"

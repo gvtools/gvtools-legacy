@@ -40,6 +40,10 @@
  */
 package com.iver.cit.gvsig.project.documents.view;
 
+import geomatico.events.EventBus;
+
+import javax.inject.Inject;
+
 import org.exolab.castor.xml.XMLException;
 import org.gvsig.map.MapContext;
 import org.gvsig.persistence.generated.DocumentType;
@@ -64,6 +68,11 @@ public class ProjectView extends ProjectViewBase {
 	// public static int KILOMETROS = 1;
 	// public static int[] unidades = new int[] { METROS, KILOMETROS };
 	// /private Color backgroundColor = new Color(255, 255, 255);
+
+	@Inject
+	public ProjectView(EventBus eventBus) {
+		super(eventBus);
+	}
 
 	/**
 	 * DOCUMENT ME!

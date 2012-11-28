@@ -42,8 +42,6 @@ public abstract class ProjectViewBase extends ProjectDocument implements
 
 	@Inject
 	protected MapContextFactory mapContextFactory;
-	@Inject
-	private EventBus eventBus;
 
 	protected MapContext mapOverViewContext;
 	protected MapContext mapContext;
@@ -52,7 +50,8 @@ public abstract class ProjectViewBase extends ProjectDocument implements
 	protected String m_selectedField = null;
 	private ArrayList<String> drawErrors = new ArrayList<String>();
 
-	public ProjectViewBase() {
+	@Inject
+	public ProjectViewBase(EventBus eventBus) {
 		eventBus.addHandler(LayerDrawErrorEvent.class,
 				new LayerDrawErrorHandler() {
 
