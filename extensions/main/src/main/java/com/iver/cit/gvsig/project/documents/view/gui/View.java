@@ -40,6 +40,8 @@
  */
 package com.iver.cit.gvsig.project.documents.view.gui;
 
+import geomatico.events.EventBus;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -56,6 +58,7 @@ import org.gvsig.inject.InjectorSingleton;
 import org.gvsig.layer.Layer;
 import org.gvsig.layer.filter.LayerFilter;
 import org.gvsig.map.MapContext;
+import org.gvsig.map.MapContextFactory;
 
 import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiFrame.NewStatusBar;
@@ -367,9 +370,13 @@ public class View extends BaseView {
 	 * DOCUMENT ME!
 	 */
 	protected void initComponents() { // GEN-BEGIN:initComponents
-		m_MapControl = InjectorSingleton.getInjector().getInstance(
-				MapControl.class);// Default is paintEnabled = false.
-									// Remember to activate it
+		EventBus eventBus = InjectorSingleton.getInjector().getInstance(
+				EventBus.class);
+		MapContextFactory factory = InjectorSingleton.getInjector()
+				.getInstance(MapContextFactory.class);
+		m_MapControl = new MapControl(eventBus, factory,
+				ProjectView.DEFAULT_MAP_UNITS, ProjectView.DEFAULT_AREA_UNITS,
+				ProjectView.DEFAULT_DISTANCE_UNITS, ProjectView.DEFAULT_CRS);
 
 		m_MapControl.addExceptionListener(mapControlExceptionListener);
 		m_TOC = new TOC();

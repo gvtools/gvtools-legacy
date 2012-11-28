@@ -63,7 +63,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Set;
 
-import javax.inject.Inject;
 import javax.swing.JComponent;
 import javax.swing.Timer;
 
@@ -309,9 +308,6 @@ public class MapControl extends JComponent implements ComponentListener {
 	// private static Logger logger =
 	// Logger.getLogger(MapControl.class.getName());
 
-	@Inject
-	private MapContextFactory mapContextFactory;
-
 	/**
 	 * <p>
 	 * Inner model with the layers, event support for drawing them, and the
@@ -323,9 +319,6 @@ public class MapControl extends JComponent implements ComponentListener {
 	 * @see #setMapContext(MapContext)
 	 */
 	private MapContext mapContext = null;
-
-	@Inject
-	private EventBus eventBus;
 
 	// private boolean drawerAlive = false;
 
@@ -558,7 +551,9 @@ public class MapControl extends JComponent implements ComponentListener {
 	 * </ul>
 	 * </p>
 	 */
-	public MapControl() {
+	public MapControl(EventBus eventBus, MapContextFactory factory,
+			Unit mapUnits, Unit areaUnits, Unit distanceUnits,
+			CoordinateReferenceSystem crs) {
 		this.setName("MapControl");
 		setDoubleBuffered(false);
 		setOpaque(true);
@@ -583,12 +578,9 @@ public class MapControl extends JComponent implements ComponentListener {
 				}
 			}
 		});
-	}
 
-	public void init(Unit mapUnits, Unit areaUnits, Unit distanceUnits,
-			CoordinateReferenceSystem crs) {
-		setMapContext(mapContextFactory.createMapContext(mapUnits,
-				distanceUnits, areaUnits, crs));
+		setMapContext(factory.createMapContext(mapUnits, distanceUnits,
+				areaUnits, crs));
 		eventBus.addHandler(EditionChangeEvent.class, mapContextListener);
 		eventBus.addHandler(BackgroundColorChangeEvent.class,
 				mapContextListener);
