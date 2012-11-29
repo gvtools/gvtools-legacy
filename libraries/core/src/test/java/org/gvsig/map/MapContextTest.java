@@ -202,8 +202,4 @@ public class MapContextTest extends GVSIGTestCase {
 		Layer[] layers2 = mapContext2.getRootLayer().getAllLayers();
 		assertEquals(layers1.length, layers2.length);
 	}
-
-	public void testDrawErrors() throws Exception {
-		fail();
-	}
 }
