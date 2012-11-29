@@ -10,11 +10,13 @@ import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.map.FeatureLayer;
 import org.geotools.renderer.RenderListener;
 import org.geotools.styling.Style;
+import org.gvsig.layer.FeatureSourceCache;
 import org.gvsig.layer.Layer;
 import org.gvsig.layer.Source;
-import org.gvsig.layer.SourceManager;
+import org.gvsig.layer.SourceFactory;
 import org.gvsig.layer.SymbolFactoryFacade;
 import org.gvsig.layer.filter.LayerFilter;
+import org.gvsig.persistence.generated.LayerType;
 import org.opengis.feature.simple.SimpleFeature;
 
 public class VectorialLayer implements Layer, RenderListener {
@@ -22,14 +24,16 @@ public class VectorialLayer implements Layer, RenderListener {
 	private Source source;
 	private Style style;
 
-	private SourceManager sourceManager;
-
+	private SourceFactory sourceFactory;
+	private FeatureSourceCache sourceManager;
 	private SymbolFactoryFacade symbolFactoryFacade;
 
-	public VectorialLayer(SourceManager sourceManager,
-			SymbolFactoryFacade symbolFactoryFacade, Source source) {
-		this.sourceManager = sourceManager;
+	public VectorialLayer(FeatureSourceCache featureSourceCache,
+			SymbolFactoryFacade symbolFactoryFacade,
+			SourceFactory sourceFactory, Source source) {
+		this.sourceManager = featureSourceCache;
 		this.symbolFactoryFacade = symbolFactoryFacade;
+		this.sourceFactory = sourceFactory;
 		this.source = source;
 	}
 
@@ -124,18 +128,28 @@ public class VectorialLayer implements Layer, RenderListener {
 		return false;
 	}
 
-	// @Override
-	// public void setXML(LayerType layer) {
-	// if (!layer.isVectorial()) {
-	// throw new IllegalArgumentException("Attempting to assign a "
-	// + "non-vectorial layer to a vectorial layer");
-	// } else if (layer.getLayers().size() > 0) {
-	// throw new IllegalArgumentException("Attempting to assign a "
-	// + "layer with children to a vectorial layer");
-	// }
-	//
-	// active = layer.isActive();
-	// editing = layer.isEditing();
-	// setName(layer.getName());
-	// }
+	@Override
+	public LayerType getXML() {
+		LayerType xml = new LayerType();
+		xml.setActive(isActive());
+		xml.setEditing(isEditing());
+		xml.setVectorial(isVectorial());
+		xml.setSource(source.getXML());
+		return xml;
+	}
+
+	@Override
+	public void setXML(LayerType layer) {
+		if (!layer.isVectorial()) {
+			throw new IllegalArgumentException("Attempting to assign a "
+					+ "non-vectorial layer to a vectorial layer");
+		} else if (layer.getLayers().size() > 0) {
+			throw new IllegalArgumentException("Attempting to assign a "
+					+ "layer with children to a vectorial layer");
+		}
+
+		active = layer.isActive();
+		editing = layer.isEditing();
+		source = sourceFactory.createSource(layer.getSource());
+	}
 }

@@ -6,7 +6,7 @@ import junit.framework.TestSuite;
 
 import org.gvsig.layer.FilterTest;
 import org.gvsig.layer.LayerTest;
-import org.gvsig.layer.SourceManagerTest;
+import org.gvsig.layer.FeatureSourceCacheTest;
 import org.gvsig.layer.SourceTest;
 import org.gvsig.map.MapContextTest;
 
@@ -17,7 +17,7 @@ public class AllTests extends TestCase {
 
 		suite.addTestSuite(LayerTest.class);
 		suite.addTestSuite(FilterTest.class);
-		suite.addTestSuite(SourceManagerTest.class);
+		suite.addTestSuite(FeatureSourceCacheTest.class);
 		suite.addTestSuite(SourceTest.class);
 		suite.addTestSuite(MapContextTest.class);
 

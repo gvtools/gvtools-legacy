@@ -5,6 +5,7 @@ import java.net.URL;
 import java.util.Map;
 
 import org.geotools.data.simple.SimpleFeatureSource;
+import org.gvsig.persistence.generated.DataSourceType;
 
 /**
  * Abstraction of a data source that is accessed through layers. Any
@@ -34,6 +35,8 @@ public interface Source {
 	 * @return
 	 */
 	Map<String, String> getPersistentProperties();
+
+	DataSourceType getXML();
 
 	/**
 	 * Creates and returns a {@link SimpleFeatureSource} for this Source. All

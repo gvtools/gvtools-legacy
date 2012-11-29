@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.geotools.data.DataStoreFinder;
+import org.gvsig.persistence.generated.DataSourceType;
 
 /**
  * Interface to create {@link Source} instances
@@ -63,4 +64,5 @@ public interface SourceFactory {
 	 */
 	Source createSource(Map<String, String> properties);
 
+	Source createSource(DataSourceType xml);
 }

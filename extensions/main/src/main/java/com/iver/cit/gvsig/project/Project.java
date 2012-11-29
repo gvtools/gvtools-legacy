@@ -60,7 +60,7 @@ import org.exolab.castor.xml.XMLException;
 import org.geotools.referencing.CRS;
 import org.gvsig.layer.Layer;
 import org.gvsig.layer.Source;
-import org.gvsig.layer.SourceManager;
+import org.gvsig.layer.FeatureSourceCache;
 import org.gvsig.persistence.generated.DataSourceType;
 import org.gvsig.persistence.generated.DocumentType;
 import org.gvsig.persistence.generated.LabeledExtentType;
@@ -103,7 +103,7 @@ public class Project implements Serializable, PropertyChangeListener {
 	private static final Logger logger = Logger.getLogger(Project.class);
 
 	@Inject
-	private SourceManager sourceManager;
+	private FeatureSourceCache sourceCache;
 
 	static private CoordinateReferenceSystem defaultCrs = null;
 
@@ -217,8 +217,8 @@ public class Project implements Serializable, PropertyChangeListener {
 	// }
 
 	/**
-	 * Asigna la fecha de creaci�n del proyecto. Este m�todo tiene sentido s�lo
-	 * por que al recuperar la fecha del XML hay que asignarla al objeto
+	 * Asigna la fecha de creaci�n del proyecto. Este m�todo tiene sentido
+	 * s�lo por que al recuperar la fecha del XML hay que asignarla al objeto
 	 * proyecto de alguna manera. La fecha se asigna en el constructor y no se
 	 * deber�a de modificar nunca
 	 * 
@@ -349,8 +349,8 @@ public class Project implements Serializable, PropertyChangeListener {
 	}
 
 	/**
-	 * M�todo invocado al recuperar de XML para establecer el color de seleccion
-	 * del proyecto
+	 * M�todo invocado al recuperar de XML para establecer el color de
+	 * seleccion del proyecto
 	 * 
 	 * @param color
 	 *            Entero que representa un color
@@ -474,9 +474,6 @@ public class Project implements Serializable, PropertyChangeListener {
 		for (int i = 0; i < extents.size(); i++) {
 			ret.getExtents().add(extents.get(i).getXMLEntity());
 		}
-
-		Collections
-				.addAll(ret.getDataSources(), sourceManager.getPersistence());
 
 		for (int i = 0; i < documents.size(); i++) {
 			DocumentType xmlchild = documents.get(i).getXMLEntity();
@@ -607,8 +604,6 @@ public class Project implements Serializable, PropertyChangeListener {
 				ProjectExtent pe = ProjectExtent.createFromXML(extent);
 				p.extents.add(pe);
 			}
-
-			p.sourceManager.setPersistence(xml.getDataSources());
 
 			for (int i = 0; i < xml.getDocuments().size(); i++) {
 				DocumentType document = xml.getDocuments().get(i);
@@ -887,7 +882,7 @@ public class Project implements Serializable, PropertyChangeListener {
 			StringPropertyType property = new StringPropertyType();
 			property.setPropertyName(persistencePropertyKey);
 			property.setPropertyValue(persistencePropertyValue);
-			ret.getProperty().add(property);
+			ret.getProperties().add(property);
 		}
 
 		return ret;

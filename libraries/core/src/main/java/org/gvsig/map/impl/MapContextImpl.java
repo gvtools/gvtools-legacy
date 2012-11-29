@@ -10,9 +10,8 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Collection;
 
-import javax.inject.Inject;
-
 import org.geotools.map.MapContent;
+import org.geotools.referencing.CRS;
 import org.geotools.renderer.GTRenderer;
 import org.geotools.renderer.RenderListener;
 import org.geotools.renderer.lite.StreamingRenderer;
@@ -24,6 +23,7 @@ import org.gvsig.persistence.generated.MapType;
 import org.gvsig.units.Unit;
 import org.gvsig.util.ProcessContext;
 import org.opengis.feature.simple.SimpleFeature;
+import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.vividsolutions.jts.geom.Envelope;
@@ -34,14 +34,14 @@ public class MapContextImpl implements MapContext, RenderListener {
 	private Layer rootLayer;
 	private Color backgroundColor;
 	private CoordinateReferenceSystem crs;
-
-	@Inject
 	private EventBus eventBus;
+	private LayerFactory layerFactory;
 
 	public MapContextImpl(EventBus eventBus, LayerFactory layerFactory,
 			Unit mapUnits, Unit distanceUnits, Unit areaUnits,
 			CoordinateReferenceSystem crs) {
 		this.eventBus = eventBus;
+		this.layerFactory = layerFactory;
 		this.mapUnits = mapUnits;
 		this.areaUnits = areaUnits;
 		this.distanceUnits = distanceUnits;
@@ -77,13 +77,34 @@ public class MapContextImpl implements MapContext, RenderListener {
 
 	@Override
 	public MapType getXML() {
-		// TODO Auto-generated method stub
-		return null;
+		MapType type = new MapType();
+		type.setAreaUnits(areaUnits.ordinal());
+		type.setMapUnits(mapUnits.ordinal());
+		type.setDistanceUnits(distanceUnits.ordinal());
+		type.setColor(backgroundColor.getRGB());
+		type.setCrs(CRS.toSRS(crs));
+		// type.setRootLayer(rootLayer.getXML());
+		return type;
 	}
 
 	@Override
 	public void setXML(MapType mainMap) {
-		// TODO Auto-generated method stub
+		Unit[] units = Unit.values();
+		mapUnits = units[mainMap.getMapUnits()];
+		areaUnits = units[mainMap.getAreaUnits()];
+		distanceUnits = units[mainMap.getDistanceUnits()];
+
+		backgroundColor = new Color(mainMap.getColor());
+
+		try {
+			crs = CRS.decode(mainMap.getCrs());
+		} catch (FactoryException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		rootLayer = layerFactory.createLayer();
+		rootLayer.setXML(mainMap.getRootLayer());
 	}
 
 	@Override

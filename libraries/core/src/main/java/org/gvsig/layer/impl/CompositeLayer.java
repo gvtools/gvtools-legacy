@@ -11,15 +11,18 @@ import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.styling.Style;
 import org.gvsig.events.LayerAddedEvent;
 import org.gvsig.layer.Layer;
+import org.gvsig.layer.LayerFactory;
 import org.gvsig.layer.filter.LayerFilter;
+import org.gvsig.persistence.generated.LayerType;
 
 public class CompositeLayer implements Layer {
 	private List<Layer> layers = new ArrayList<Layer>();
-
 	private EventBus eventBus;
+	private LayerFactory layerFactory;
 
-	public CompositeLayer(EventBus eventBus) {
+	public CompositeLayer(EventBus eventBus, LayerFactory layerFactory) {
 		this.eventBus = eventBus;
+		this.layerFactory = layerFactory;
 	}
 
 	@Override
@@ -123,5 +126,33 @@ public class CompositeLayer implements Layer {
 		}
 
 		return ret;
+	}
+
+	@Override
+	public LayerType getXML() {
+		LayerType xml = new LayerType();
+		xml.setActive(isActive());
+		xml.setEditing(isEditing());
+		xml.setVectorial(isVectorial());
+
+		List<LayerType> xmlLayers = xml.getLayers();
+		xmlLayers.clear();
+		for (Layer layer : layers) {
+			xmlLayers.add(layer.getXML());
+		}
+		return xml;
+	}
+
+	@Override
+	public void setXML(LayerType type) {
+		if (type.isActive() || type.isEditing() || type.isVectorial()) {
+			throw new IllegalArgumentException(
+					"Composite layer cannot be active, editing or vectorial");
+		}
+
+		List<LayerType> xmlLayers = type.getLayers();
+		for (LayerType layer : xmlLayers) {
+			layers.add(layerFactory.createLayer(layer));
+		}
 	}
 }

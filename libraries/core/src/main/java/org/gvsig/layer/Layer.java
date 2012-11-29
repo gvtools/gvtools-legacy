@@ -6,6 +6,7 @@ import java.util.Collection;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.styling.Style;
 import org.gvsig.layer.filter.LayerFilter;
+import org.gvsig.persistence.generated.LayerType;
 
 public interface Layer {
 
@@ -65,6 +66,7 @@ public interface Layer {
 	 */
 	boolean isActive();
 
+
 	/**
 	 * Adds a layer as a child of this one.
 	 * 
@@ -75,7 +77,6 @@ public interface Layer {
 	void addLayer(Layer testLayer) throws UnsupportedOperationException;
 
 	boolean removeLayer(Layer layer);
-
 	/**
 	 * Getter for the layer style
 	 * 
@@ -95,7 +96,6 @@ public interface Layer {
 	 *             groups
 	 */
 	void setStyle(Style style) throws UnsupportedOperationException;
-
 	/**
 	 * Returns a collection of GeoTools layers that will be used to draw.
 	 * 
@@ -113,4 +113,8 @@ public interface Layer {
 	 * @throws IOException
 	 */
 	ReferencedEnvelope getBounds() throws IOException;
+	
+	LayerType getXML();
+	
+	void setXML(LayerType type);
 }

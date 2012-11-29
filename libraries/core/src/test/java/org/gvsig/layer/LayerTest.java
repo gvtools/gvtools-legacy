@@ -2,10 +2,12 @@ package org.gvsig.layer;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
 import org.gvsig.GVSIGTestCase;
 import org.gvsig.layer.filter.LayerFilter;
+import org.gvsig.persistence.generated.LayerType;
 
 import com.google.inject.Inject;
 
@@ -151,76 +153,114 @@ public class LayerTest extends GVSIGTestCase {
 	}
 
 	public void testGetXML() throws Exception {
-		fail();
+		// Vectorial
+		Layer layer = spy(layerFactory.createLayer(mock(Source.class)));
+		when(layer.isActive()).thenReturn(true);
+		when(layer.isEditing()).thenReturn(true);
+		LayerType xml = layer.getXML();
+		assertTrue(xml.isActive());
+		assertTrue(xml.isEditing());
+		assertEquals(0, xml.getLayers().size());
 
-		// // Vectorial
-		// String name = "Name";
-		// layer.activate();
-		// layer.startEdition();
-		// layer.setName(name);
-		// LayerType xml = layer.getXML();
-		// assertTrue(xml.isActive());
-		// assertTrue(xml.isEditing());
-		// assertEquals(name, xml.getName());
-		// assertEquals(0, xml.getLayers().size());
-		//
-		// name = "Another name";
-		// layer.deactivate();
-		// layer.stopEdition();
-		// layer.setName(name);
-		// xml = layer.getXML();
-		// assertFalse(xml.isActive());
-		// assertFalse(xml.isEditing());
-		// assertEquals(name, xml.getName());
-		// assertEquals(0, xml.getLayers().size());
+		layer = layerFactory.createLayer(mock(Source.class));
+		xml = layer.getXML();
+		assertFalse(xml.isActive());
+		assertFalse(xml.isEditing());
+		assertEquals(0, xml.getLayers().size());
 
-		// // Composite
-		// root.setName("Root");
-		//
-		// LayerType xml = root.getXML();
-		// assertFalse(xml.isActive());
-		// assertFalse(xml.isEditing());
-		// assertFalse(xml.isVectorial());
-		// assertEquals(0, xml.getLayers().size());
-		//
-		// root.addLayer(new VectorialLayer(mock(Source.class)));
-		// xml = root.getXML();
-		// assertFalse(xml.isActive());
-		// assertFalse(xml.isEditing());
-		// assertFalse(xml.isVectorial());
-		// assertEquals(1, xml.getLayers().size());
-		// assertTrue(xml.getLayers().get(0).isVectorial());
+		// Composite
+		layer = layerFactory.createLayer();
+		xml = layer.getXML();
+		assertFalse(xml.isActive());
+		assertFalse(xml.isEditing());
+		assertFalse(xml.isVectorial());
+		assertEquals(0, xml.getLayers().size());
+
+		layer.addLayer(layerFactory.createLayer(mock(Source.class)));
+		xml = layer.getXML();
+		assertFalse(xml.isActive());
+		assertFalse(xml.isEditing());
+		assertFalse(xml.isVectorial());
+		assertEquals(1, xml.getLayers().size());
+		assertTrue(xml.getLayers().get(0).isVectorial());
 	}
 
 	public void testSetXML() throws Exception {
-		fail();
-		// LayerType xml = new LayerType();
-		//
-		// VectorialLayer layer = new VectorialLayer(mock(Source.class));
-		// try {
-		// // Not vectorial
-		// xml.setVectorial(false);
-		// layer.setXML(xml);
-		// fail();
-		// } catch (IllegalArgumentException e) {
-		// }
-		//
-		// xml.setVectorial(true);
-		//
-		// try {
-		// // With children layers
-		// xml.getLayers()
-		// .add(new VectorialLayer(mock(Source.class)).getXML());
-		// layer.setXML(xml);
-		// fail();
-		// } catch (IllegalArgumentException e) {
-		// }
-		//
-		// xml.getLayers().clear();
-		// xml.setVectorial(true);
-		// xml.setActive(true);
-		// xml.setEditing(false);
-		// xml.setName("Name");
-		// layer.setXML(xml);
+		LayerType xml = new LayerType();
+
+		Layer layer = layerFactory.createLayer(mock(Source.class));
+		try {
+			// Not vectorial
+			xml.setVectorial(false);
+			layer.setXML(xml);
+			fail();
+		} catch (IllegalArgumentException e) {
+		}
+
+		xml.setVectorial(true);
+
+		try {
+			// With children layers
+			xml.getLayers().add(
+					layerFactory.createLayer(mock(Source.class)).getXML());
+			layer.setXML(xml);
+			fail();
+		} catch (IllegalArgumentException e) {
+		}
+
+		xml.getLayers().clear();
+		xml.setVectorial(true);
+		xml.setActive(true);
+		xml.setEditing(false);
+		layer.setXML(xml);
+
+		// Composite layer
+		layer = layerFactory.createLayer();
+		try {
+			// Vectorial
+			xml = new LayerType();
+			xml.setVectorial(true);
+			xml.setActive(false);
+			xml.setEditing(false);
+			layer.setXML(xml);
+			fail();
+		} catch (IllegalArgumentException e) {
+		}
+		try {
+			// Editing
+			xml = new LayerType();
+			xml.setVectorial(false);
+			xml.setActive(false);
+			xml.setEditing(true);
+			layer.setXML(xml);
+			fail();
+		} catch (IllegalArgumentException e) {
+		}
+		try {
+			// Active
+			xml = new LayerType();
+			xml.setVectorial(true);
+			xml.setActive(true);
+			xml.setEditing(false);
+			layer.setXML(xml);
+			fail();
+		} catch (IllegalArgumentException e) {
+		}
+
+		// With children layers
+		xml = new LayerType();
+		xml.setVectorial(false);
+		xml.setActive(false);
+		xml.setEditing(false);
+		xml.getLayers().add(
+				layerFactory.createLayer(mock(Source.class)).getXML());
+		layer.setXML(xml);
+
+		assertFalse(layer.isActive());
+		assertFalse(layer.isEditing());
+		assertFalse(layer.isVectorial());
+		assertEquals(2, layer.getAllLayers().length);
+		assertEquals(layer, layer.getAllLayers()[0]);
+		assertTrue(layer.getAllLayers()[1].isVectorial());
 	}
 }

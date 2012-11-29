@@ -1,9 +1,13 @@
 package org.gvsig.layer.impl;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.gvsig.layer.Source;
 import org.gvsig.layer.SourceFactory;
+import org.gvsig.persistence.generated.DataSourceType;
+import org.gvsig.persistence.generated.StringPropertyType;
 
 public class SourceFactoryImpl implements SourceFactory {
 
@@ -30,4 +34,18 @@ public class SourceFactoryImpl implements SourceFactory {
 		return new SourceImpl(typeName, properties);
 	}
 
+	@Override
+	public Source createSource(DataSourceType xml) {
+		Map<String, String> properties = new HashMap<String, String>();
+		if (xml != null) {
+			List<StringPropertyType> xmlProperties = xml.getProperties();
+			for (StringPropertyType xmlProperty : xmlProperties) {
+				properties.put(xmlProperty.getPropertyName(),
+						xmlProperty.getPropertyValue());
+			}
+			return createSource(properties);
+		} else {
+			return null;
+		}
+	}
 }
