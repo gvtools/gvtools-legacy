@@ -47,9 +47,11 @@ import java.awt.GridLayout;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.JColorChooser;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
@@ -63,7 +65,6 @@ import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiManager.SingletonWindow;
 import com.iver.andami.ui.mdiManager.WindowInfo;
 import com.iver.cit.gvsig.ProjectExtension;
-import com.iver.cit.gvsig.gui.JComboBoxUnits;
 import com.iver.cit.gvsig.gui.panels.CRSSelectPanel;
 import com.iver.cit.gvsig.project.Project;
 import com.iver.cit.gvsig.project.documents.ProjectDocument;
@@ -83,9 +84,9 @@ public class ViewProperties extends JPanel implements SingletonWindow {
 	private javax.swing.JLabel jLabel2 = null;
 	private javax.swing.JTextField txtOwner = null;
 	private javax.swing.JLabel jLabel4 = null;
-	private javax.swing.JComboBox<String> cmbMapUnits = null;
+	private JComboBox<Unit> cmbMapUnits = null;
 	private javax.swing.JLabel jLabel5 = null;
-	private javax.swing.JComboBox<String> cmbDistanceUnits = null;
+	private JComboBox<Unit> cmbDistanceUnits = null;
 	private javax.swing.JLabel jLabel6 = null;
 	private javax.swing.JTextArea txtComments = null;
 	private javax.swing.JLabel jLabel7 = null;
@@ -107,7 +108,7 @@ public class ViewProperties extends JPanel implements SingletonWindow {
 	private AcceptCancelPanel okCancelPanel = null;
 	private boolean isAcceppted = false;
 	private JLabel jLabel8 = null;
-	private JComboBox<String> cmbDistanceArea = null;
+	private JComboBox<Unit> cmbDistanceArea = null;
 
 	/**
 	 * This is the default constructor
@@ -157,11 +158,10 @@ public class ViewProperties extends JPanel implements SingletonWindow {
 		txtDate.setText(view.getCreationDate());
 		txtOwner.setText(view.getOwner());
 
-		cmbMapUnits.setSelectedItem(view.getMapContext().getMapUnits().name);
+		cmbMapUnits.setSelectedItem(view.getMapContext().getMapUnits());
 		cmbDistanceUnits.setSelectedItem(view.getMapContext()
-				.getDistanceUnits().name);
-		cmbDistanceArea
-				.setSelectedItem(view.getMapContext().getAreaUnits().name);
+				.getDistanceUnits());
+		cmbDistanceArea.setSelectedItem(view.getMapContext().getAreaUnits());
 		txtComments.setText(view.getComment());
 
 		lblColor.setBackground(view.getMapContext().getBackgroundColor());
@@ -281,40 +281,20 @@ public class ViewProperties extends JPanel implements SingletonWindow {
 	 * 
 	 * @return javax.swing.JComboBox
 	 */
-	private javax.swing.JComboBox<String> getCmbMapUnits() {
+	private JComboBox<Unit> getCmbMapUnits() {
 		if (cmbMapUnits == null) {
-			cmbMapUnits = new JComboBoxUnits(false);
-
-			// cmbMapUnits = new javax.swing.JComboBox(getUnitsNames());
+			cmbMapUnits = new JComboBox<Unit>(Unit.values());
+			cmbMapUnits.setRenderer(new UnitRenderer(false));
 			cmbMapUnits.setPreferredSize(new java.awt.Dimension(200, 20));
 			CoordinateReferenceSystem crs = view.getCrs();
 			if (!(crs instanceof ProjectedCRS)) {
-				// if (cmbMapUnits.getItemCount()==MapContext.NAMES.length) {
-				// cmbMapUnits.addItem(PluginServices.getText(this,
-				// Attributes.DEGREES));
-				// }
-				cmbMapUnits.setSelectedItem(PluginServices.getText(this,
-						"Grados")); // deegree
+				cmbMapUnits.setSelectedItem(Unit.DEGREES); // degree
 				cmbMapUnits.setEnabled(false);
 			} else {
-				if (!(cmbMapUnits.getItemCount() == Unit.getDistanceNames().length)) {
-					cmbMapUnits.removeItem(PluginServices.getText(this,
-							"Grados")); // deegree
-					view.getMapContext().setMapUnits(Unit.METERS);
-				}
 				cmbMapUnits
 						.setSelectedItem(view.getMapContext().getMapUnits().name);
 				cmbMapUnits.setEnabled(true);
 			}
-			// cmbMapUnits.setSelectedIndex(view.getMapContext().getViewPort().getMapUnits());
-
-			//
-			// cmbMapUnits.addActionListener(new java.awt.event.ActionListener()
-			// {
-			// public void actionPerformed(java.awt.event.ActionEvent e) {
-			// //view.getMapContext().getViewPort().setMapUnits(cmbMapUnits.getSelectedIndex());
-			// }
-			// });
 		}
 
 		return cmbMapUnits;
@@ -341,11 +321,12 @@ public class ViewProperties extends JPanel implements SingletonWindow {
 	 * 
 	 * @return javax.swing.JComboBox
 	 */
-	private javax.swing.JComboBox<String> getCmbDistanceUnits() {
+	private JComboBox<Unit> getCmbDistanceUnits() {
 		if (cmbDistanceUnits == null
 				|| Unit.getDistanceNames().length > cmbDistanceUnits
 						.getItemCount()) {
-			cmbDistanceUnits = new JComboBoxUnits(false);
+			cmbDistanceUnits = new JComboBox<Unit>(Unit.values());
+			cmbDistanceUnits.setRenderer(new UnitRenderer(false));
 			// cmbDistanceUnits = new javax.swing.JComboBox(getUnitsNames());
 			cmbDistanceUnits.setPreferredSize(new java.awt.Dimension(200, 20));
 			// cmbDistanceUnits.setEditable(false);
@@ -712,14 +693,11 @@ public class ViewProperties extends JPanel implements SingletonWindow {
 					view.setOwner(txtOwner.getText());
 					view.setComment(txtComments.getText());
 					view.getMapContext().setMapUnits(
-							Unit.fromName((String) cmbMapUnits
-									.getSelectedItem()));
+							(Unit) cmbMapUnits.getSelectedItem());
 					view.getMapContext().setDistanceUnits(
-							Unit.fromName((String) cmbDistanceUnits
-									.getSelectedItem()));
+							(Unit) cmbDistanceUnits.getSelectedItem());
 					view.getMapContext().setAreaUnits(
-							Unit.fromName((String) cmbDistanceArea
-									.getSelectedItem()));
+							(Unit) cmbDistanceArea.getSelectedItem());
 					view.setBackColor(backColor);
 					isAcceppted = true;
 					PluginServices.getMDIManager().closeWindow(
@@ -763,15 +741,12 @@ public class ViewProperties extends JPanel implements SingletonWindow {
 	 * 
 	 * @return javax.swing.JComboBox
 	 */
-	private JComboBox<String> getCmbDistanceArea() {
+	private JComboBox<Unit> getCmbDistanceArea() {
 		String[] names = Unit.getDistanceNames();
 		if (cmbDistanceArea == null
 				|| names.length > cmbDistanceArea.getItemCount()) {
-			for (int i = 0; i < names.length; i++) {
-				names[i] = PluginServices.getText(this, names[i])
-						+ Unit.fromName(names[i]).getSquareSuffix();
-			}
-			cmbDistanceArea = new javax.swing.JComboBox<String>(names);
+			cmbDistanceArea = new JComboBox<Unit>(Unit.values());
+			cmbDistanceArea.setRenderer(new UnitRenderer(true));
 			cmbDistanceArea.setPreferredSize(new java.awt.Dimension(200, 20));
 			cmbDistanceArea.setEditable(false);
 			cmbDistanceArea
@@ -786,4 +761,29 @@ public class ViewProperties extends JPanel implements SingletonWindow {
 		// TODO Auto-generated method stub
 		return WindowInfo.PROPERTIES_PROFILE;
 	}
+
+	private class UnitRenderer extends DefaultListCellRenderer {
+		private static final long serialVersionUID = 1L;
+		private boolean square;
+
+		public UnitRenderer(boolean square) {
+			this.square = square;
+		}
+
+		@Override
+		public Component getListCellRendererComponent(JList<?> list,
+				Object value, int index, boolean isSelected,
+				boolean cellHasFocus) {
+			Unit unit = (Unit) value;
+			String text = PluginServices.getText(this, unit.name);
+			if (square) {
+				text += unit.getSquareSuffix();
+			}
+
+			return super.getListCellRendererComponent(list, text, index,
+					isSelected, cellHasFocus);
+		}
+
+	}
+
 } // @jve:decl-index=0:visual-constraint="10,10"
