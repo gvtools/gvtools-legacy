@@ -80,12 +80,7 @@ public class SourceTest extends GVSIGTestCase {
 		}
 	}
 
-	public void testSourceManagerCleanFreesDataStore() throws Exception {
-		fail();
-	}
-
 	public void testThinkMoreTests() throws Exception {
 		fail();
 	}
-
 }
