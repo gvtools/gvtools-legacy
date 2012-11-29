@@ -42,12 +42,12 @@ public class MapContextImpl implements MapContext, RenderListener {
 			CoordinateReferenceSystem crs) {
 		this.eventBus = eventBus;
 		this.layerFactory = layerFactory;
-		this.mapUnits = mapUnits;
-		this.areaUnits = areaUnits;
-		this.distanceUnits = distanceUnits;
-		this.crs = crs;
 		this.backgroundColor = Color.white;
 		this.rootLayer = layerFactory.createLayer();
+		setMapUnits(mapUnits);
+		setDistanceUnits(distanceUnits);
+		setAreaUnits(areaUnits);
+		setCRS(crs);
 	}
 
 	@Override
@@ -62,6 +62,10 @@ public class MapContextImpl implements MapContext, RenderListener {
 
 	@Override
 	public void setCRS(CoordinateReferenceSystem crs) {
+		if (crs == null) {
+			throw new IllegalArgumentException("CRS cannot be null!");
+		}
+
 		this.crs = crs;
 	}
 
@@ -109,16 +113,25 @@ public class MapContextImpl implements MapContext, RenderListener {
 
 	@Override
 	public void setDistanceUnits(Unit unit) {
+		if (unit == null) {
+			throw new IllegalArgumentException("Distance units cannot be null!");
+		}
 		this.distanceUnits = unit;
 	}
 
 	@Override
 	public void setAreaUnits(Unit unit) {
+		if (unit == null) {
+			throw new IllegalArgumentException("Area units cannot be null!");
+		}
 		this.areaUnits = unit;
 	}
 
 	@Override
 	public void setMapUnits(Unit unit) {
+		if (unit == null) {
+			throw new IllegalArgumentException("Map units cannot be null!");
+		}
 		this.mapUnits = unit;
 	}
 
