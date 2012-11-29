@@ -998,7 +998,7 @@ public class Project implements Serializable, PropertyChangeListener {
 				}
 			}
 			if (defaultMapUnits == null) {
-				defaultMapUnits = Unit.M;
+				defaultMapUnits = Unit.METERS;
 			}
 		}
 		return defaultMapUnits;
@@ -1021,7 +1021,7 @@ public class Project implements Serializable, PropertyChangeListener {
 				}
 			}
 			if (defaultDistanceUnits == null) {
-				defaultDistanceUnits = Unit.M;
+				defaultDistanceUnits = Unit.METERS;
 			}
 		}
 		return defaultDistanceUnits;
@@ -1044,7 +1044,7 @@ public class Project implements Serializable, PropertyChangeListener {
 				}
 			}
 			if (defaultDistanceArea == null) {
-				defaultDistanceArea = Unit.M;
+				defaultDistanceArea = Unit.METERS;
 			}
 		}
 		return defaultDistanceArea;

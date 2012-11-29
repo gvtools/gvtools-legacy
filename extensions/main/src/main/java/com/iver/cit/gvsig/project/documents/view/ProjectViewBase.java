@@ -27,9 +27,9 @@ import com.iver.cit.gvsig.project.documents.view.toolListeners.LinkListener;
 
 public abstract class ProjectViewBase extends ProjectDocument implements
 		ErrorListener, IProjectView {
-	public static Unit DEFAULT_MAP_UNITS = Unit.M;
-	public static Unit DEFAULT_AREA_UNITS = Unit.M;
-	public static Unit DEFAULT_DISTANCE_UNITS = Unit.M;
+	public static Unit DEFAULT_MAP_UNITS = Unit.METERS;
+	public static Unit DEFAULT_AREA_UNITS = Unit.METERS;
+	public static Unit DEFAULT_DISTANCE_UNITS = Unit.METERS;
 	public static CoordinateReferenceSystem DEFAULT_CRS;
 
 	static {

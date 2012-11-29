@@ -387,7 +387,7 @@ public class StatusBarListener implements PointListener {
 				if (PluginServices.getText(this,
 						mapControl.getMapContext().getMapUnits().name).equals(
 						PluginServices.getText(this, "Grados"))) {
-					mapControl.getViewPort().setMapUnits(Unit.M);
+					mapControl.getViewPort().setMapUnits(Unit.METERS);
 				}
 
 				coords[0] = String.valueOf(nf.format((p.getX() / mapControl

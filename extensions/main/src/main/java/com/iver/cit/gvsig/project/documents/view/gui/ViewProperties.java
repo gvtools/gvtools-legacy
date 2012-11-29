@@ -300,7 +300,7 @@ public class ViewProperties extends JPanel implements SingletonWindow {
 				if (!(cmbMapUnits.getItemCount() == Unit.getDistanceNames().length)) {
 					cmbMapUnits.removeItem(PluginServices.getText(this,
 							"Grados")); // deegree
-					view.getMapContext().setMapUnits(Unit.M);
+					view.getMapContext().setMapUnits(Unit.METERS);
 				}
 				cmbMapUnits
 						.setSelectedItem(view.getMapContext().getMapUnits().name);

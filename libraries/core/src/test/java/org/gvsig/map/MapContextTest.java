@@ -17,7 +17,7 @@ import org.gvsig.units.Unit;
 import com.google.inject.Inject;
 
 public class MapContextTest extends GVSIGTestCase {
-	private static final Unit DEFAULT_UNIT = Unit.M;
+	private static final Unit DEFAULT_UNIT = Unit.METERS;
 
 	@Inject
 	private MapContextFactory factory;
@@ -36,25 +36,26 @@ public class MapContextTest extends GVSIGTestCase {
 
 	public void testNotNullInContructor() throws Exception {
 		try {
-			factory.createMapContext(null, Unit.M, Unit.M,
+			factory.createMapContext(null, Unit.METERS, Unit.METERS,
 					CRS.decode("EPSG:4326"));
 			fail();
 		} catch (IllegalArgumentException e) {
 		}
 		try {
-			factory.createMapContext(Unit.M, null, Unit.M,
+			factory.createMapContext(Unit.METERS, null, Unit.METERS,
 					CRS.decode("EPSG:4326"));
 			fail();
 		} catch (IllegalArgumentException e) {
 		}
 		try {
-			factory.createMapContext(Unit.M, Unit.M, null,
+			factory.createMapContext(Unit.METERS, Unit.METERS, null,
 					CRS.decode("EPSG:4326"));
 			fail();
 		} catch (IllegalArgumentException e) {
 		}
 		try {
-			factory.createMapContext(Unit.M, Unit.M, Unit.M, null);
+			factory.createMapContext(Unit.METERS, Unit.METERS, Unit.METERS,
+					null);
 			fail();
 		} catch (IllegalArgumentException e) {
 		}
@@ -84,24 +85,24 @@ public class MapContextTest extends GVSIGTestCase {
 	}
 
 	public void testMapUnits() throws Exception {
-		mapContext.setMapUnits(Unit.CM);
-		assertEquals(Unit.CM, mapContext.getMapUnits());
-		mapContext.setMapUnits(Unit.M);
-		assertEquals(Unit.M, mapContext.getMapUnits());
+		mapContext.setMapUnits(Unit.CENTIMETERS);
+		assertEquals(Unit.CENTIMETERS, mapContext.getMapUnits());
+		mapContext.setMapUnits(Unit.METERS);
+		assertEquals(Unit.METERS, mapContext.getMapUnits());
 	}
 
 	public void testAreaUnits() throws Exception {
-		mapContext.setAreaUnits(Unit.CM);
-		assertEquals(Unit.CM, mapContext.getAreaUnits());
-		mapContext.setAreaUnits(Unit.M);
-		assertEquals(Unit.M, mapContext.getAreaUnits());
+		mapContext.setAreaUnits(Unit.CENTIMETERS);
+		assertEquals(Unit.CENTIMETERS, mapContext.getAreaUnits());
+		mapContext.setAreaUnits(Unit.METERS);
+		assertEquals(Unit.METERS, mapContext.getAreaUnits());
 	}
 
 	public void testDistanceUnits() throws Exception {
-		mapContext.setDistanceUnits(Unit.CM);
-		assertEquals(Unit.CM, mapContext.getDistanceUnits());
-		mapContext.setDistanceUnits(Unit.M);
-		assertEquals(Unit.M, mapContext.getDistanceUnits());
+		mapContext.setDistanceUnits(Unit.CENTIMETERS);
+		assertEquals(Unit.CENTIMETERS, mapContext.getDistanceUnits());
+		mapContext.setDistanceUnits(Unit.METERS);
+		assertEquals(Unit.METERS, mapContext.getDistanceUnits());
 	}
 
 	public void testRootLayer() throws Exception {
@@ -149,9 +150,9 @@ public class MapContextTest extends GVSIGTestCase {
 
 	public void testSetXML() throws Exception {
 		MapType xml = new MapType();
-		xml.setMapUnits(Unit.KM.ordinal());
-		xml.setAreaUnits(Unit.KM.ordinal());
-		xml.setDistanceUnits(Unit.KM.ordinal());
+		xml.setMapUnits(Unit.KILOMETERS.ordinal());
+		xml.setAreaUnits(Unit.KILOMETERS.ordinal());
+		xml.setDistanceUnits(Unit.KILOMETERS.ordinal());
 		xml.setColor(Color.green.getRGB());
 		xml.setCrs("EPSG:23030");
 		LayerType xmlLayer = new LayerType();
@@ -167,9 +168,9 @@ public class MapContextTest extends GVSIGTestCase {
 
 		mapContext.setXML(xml);
 		Layer root = mapContext.getRootLayer();
-		assertEquals(Unit.KM, mapContext.getMapUnits());
-		assertEquals(Unit.KM, mapContext.getDistanceUnits());
-		assertEquals(Unit.KM, mapContext.getAreaUnits());
+		assertEquals(Unit.KILOMETERS, mapContext.getMapUnits());
+		assertEquals(Unit.KILOMETERS, mapContext.getDistanceUnits());
+		assertEquals(Unit.KILOMETERS, mapContext.getAreaUnits());
 		assertEquals(Color.green, mapContext.getBackgroundColor());
 		assertEquals(CRS.decode("EPSG:23030"), mapContext.getCRS());
 		assertFalse(root.isVectorial());
@@ -179,9 +180,9 @@ public class MapContextTest extends GVSIGTestCase {
 
 	public void testSetXMLInvalidCRS() throws Exception {
 		MapType xml = new MapType();
-		xml.setMapUnits(Unit.KM.ordinal());
-		xml.setAreaUnits(Unit.KM.ordinal());
-		xml.setDistanceUnits(Unit.KM.ordinal());
+		xml.setMapUnits(Unit.KILOMETERS.ordinal());
+		xml.setAreaUnits(Unit.KILOMETERS.ordinal());
+		xml.setDistanceUnits(Unit.KILOMETERS.ordinal());
 		xml.setColor(Color.green.getRGB());
 		xml.setCrs("invalid_crs_code");
 		LayerType xmlLayer = new LayerType();

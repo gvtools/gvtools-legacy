@@ -3,10 +3,10 @@ package org.gvsig.units;
 import java.util.ArrayList;
 
 public enum Unit {
-	KM("Kilometros", "Km", 1000), M("Metros", "m", 1), CM("Centimetros", "cm",
-			0.01), MM("Milimetros", "mm", 0.001), MI("Millas", "mi", 1609.344), YA(
-			"Yardas", "Ya", 0.9144), FT("Pies", "ft", 0.3048), INCHE(
-			"Pulgadas", "inche", 0.0254);
+	KILOMETERS("Kilometros", "Km", 1000), METERS("Metros", "m", 1), CENTIMETERS(
+			"Centimetros", "cm", 0.01), MILIMETERS("Milimetros", "mm", 0.001), MILES(
+			"Millas", "mi", 1609.344), YARDS("Yardas", "Ya", 0.9144), FEET(
+			"Pies", "ft", 0.3048), INCHES("Pulgadas", "inche", 0.0254);
 
 	public String name;
 	public String symbol;

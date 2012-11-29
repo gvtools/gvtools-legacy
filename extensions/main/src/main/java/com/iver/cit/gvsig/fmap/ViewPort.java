@@ -214,7 +214,7 @@ public class ViewPort {
 	 * @see #getDistanceUnits()
 	 * @see #setDistanceUnits(int)
 	 */
-	private Unit distanceUnits = Unit.M;
+	private Unit distanceUnits = Unit.METERS;
 	/**
 	 * <p>
 	 * Measurement unit used for measuring areas and displaying information.
@@ -223,7 +223,7 @@ public class ViewPort {
 	 * @see #getDistanceArea()
 	 * @see #setDistanceArea(int)
 	 */
-	private Unit distanceArea = Unit.M;
+	private Unit distanceArea = Unit.METERS;
 	/**
 	 * <p>
 	 * Measurement unit used by this view port for the map.
@@ -232,7 +232,7 @@ public class ViewPort {
 	 * @see #getMapUnits()
 	 * @see #setMapUnits(int)
 	 */
-	private Unit mapUnits = Unit.M;
+	private Unit mapUnits = Unit.METERS;
 
 	/**
 	 * <p>
