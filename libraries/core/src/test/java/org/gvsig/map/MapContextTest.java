@@ -177,6 +177,26 @@ public class MapContextTest extends GVSIGTestCase {
 		assertTrue(root.getAllLayers()[1].isVectorial());
 	}
 
+	public void testSetXMLInvalidCRS() throws Exception {
+		MapType xml = new MapType();
+		xml.setMapUnits(Unit.KM.ordinal());
+		xml.setAreaUnits(Unit.KM.ordinal());
+		xml.setDistanceUnits(Unit.KM.ordinal());
+		xml.setColor(Color.green.getRGB());
+		xml.setCrs("invalid_crs_code");
+		LayerType xmlLayer = new LayerType();
+		xmlLayer.setActive(false);
+		xmlLayer.setEditing(false);
+		xmlLayer.setVectorial(false);
+		xml.setRootLayer(xmlLayer);
+
+		try {
+			mapContext.setXML(xml);
+			fail();
+		} catch (IllegalArgumentException e) {
+		}
+	}
+
 	public void testPersistence() throws Exception {
 		mapContext.setBackgroundColor(Color.red);
 		String crs = "EPSG:23030";

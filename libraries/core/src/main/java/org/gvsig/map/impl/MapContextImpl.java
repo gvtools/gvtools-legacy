@@ -102,8 +102,8 @@ public class MapContextImpl implements MapContext, RenderListener {
 		try {
 			crs = CRS.decode(mainMap.getCrs());
 		} catch (FactoryException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new IllegalArgumentException("Cannot get CRS from code: "
+					+ mainMap.getCrs());
 		}
 
 		rootLayer = layerFactory.createLayer();
