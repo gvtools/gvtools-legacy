@@ -40,6 +40,8 @@
  */
 package com.iver.cit.gvsig.fmap;
 
+import geomatico.events.EventBus;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
@@ -52,16 +54,16 @@ import java.util.ArrayList;
 import java.util.prefs.Preferences;
 
 import org.geotools.geometry.jts.ReferencedEnvelope;
-import org.geotools.referencing.CRS;
 import org.geotools.referencing.GeodeticCalculator;
 import org.geotools.renderer.lite.RendererUtilities;
+import org.gvsig.main.events.ExtentChangeEvent;
+import org.gvsig.map.MapContext;
 import org.gvsig.units.Unit;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.crs.ProjectedCRS;
 import org.opengis.referencing.operation.TransformException;
 
-import com.iver.utiles.StringUtilities;
 import com.iver.utiles.XMLEntity;
 
 /**
@@ -281,16 +283,6 @@ public class ViewPort {
 
 	/**
 	 * <p>
-	 * Information about the map projection used in this view.
-	 * </p>
-	 * 
-	 * @see #getCrs()
-	 * @see #setCRS(IProjection)
-	 */
-	private CoordinateReferenceSystem crs;
-
-	/**
-	 * <p>
 	 * Represents the distance in <i>world coordinates</i> equivalent to 1 pixel
 	 * in the view with the current extent.
 	 * </p>
@@ -360,6 +352,10 @@ public class ViewPort {
 	 */
 	private boolean adjustableExtent = true;
 
+	private EventBus eventBus;
+
+	private MapContext mapContext;
+
 	/**
 	 * <p>
 	 * Creates a new view port with the information of the projection in
@@ -377,9 +373,10 @@ public class ViewPort {
 	 * @param proj
 	 *            information of the projection for this view port
 	 */
-	public ViewPort(CoordinateReferenceSystem crs) {
+	public ViewPort(EventBus eventBus, MapContext mapContext) {
 		// Por defecto
-		this.crs = crs;
+		this.eventBus = eventBus;
+		this.mapContext = mapContext;
 	}
 
 	/**
@@ -637,6 +634,7 @@ public class ViewPort {
 	 */
 	public double distanceWorld(Point2D pt1, Point2D pt2)
 			throws TransformException {
+		CoordinateReferenceSystem crs = mapContext.getCRS();
 		if (crs != null && !(crs instanceof ProjectedCRS)) {
 			GeodeticCalculator calculator = new GeodeticCalculator(crs);
 			calculator.setStartingGeographicPoint(pt1);
@@ -750,6 +748,7 @@ public class ViewPort {
 		calculateAffineTransform();
 
 		// Lanzamos los eventos de extent cambiado
+		eventBus.fireEvent(new ExtentChangeEvent(mapContext));
 		callExtentChanged(getAdjustedExtent());
 	}
 
@@ -1309,249 +1308,6 @@ public class ViewPort {
 
 	/**
 	 * <p>
-	 * Gets the projection used in this view port.
-	 * </p>
-	 * 
-	 * @return projection used in this view port
-	 * 
-	 * @see #setCRS(IProjection)
-	 */
-	public CoordinateReferenceSystem getCrs() {
-		return crs;
-	}
-
-	/**
-	 * <p>
-	 * Sets the projection to this view port.
-	 * </p>
-	 * 
-	 * @param crs
-	 *            the new projection
-	 * 
-	 * @see #getCrs()
-	 */
-	public void setCrs(CoordinateReferenceSystem crs) {
-		if (this.crs == null || !this.crs.getName().equals(crs.getName())) {
-			this.updateDrawVersion();
-			this.crs = crs;
-			callCRSChanged(crs);
-		}
-	}
-
-	/**
-	 * <p>
-	 * Returns an XML entity that represents this view port instance:<br>
-	 * <ul>
-	 * <li>Properties:
-	 * <ul>
-	 * <li><i>className</i>: name of this class.
-	 * <li>If defined, the adjusted extent:
-	 * <ul>
-	 * <li><i>adjustedExtentX</i>: X coordinate of the adjusted extent.
-	 * <li><i>adjustedExtentY</i>: Y coordinate of the adjusted extent.
-	 * <li><i>adjustedExtentW</i>: width of the adjusted extent.
-	 * <li><i>adjustedExtentH</i>: height of the adjusted extent.
-	 * </ul>
-	 * <li>If defined, the background color:
-	 * <ul>
-	 * <li><i>backColor</i>: background color.
-	 * </ul>
-	 * <li>If defined, the clip:
-	 * <ul>
-	 * <li><i>clipX</i>: X coordinate of the clip.
-	 * <li><i>clipY</i>: Y coordinate of clip.
-	 * <li><i>clipW</i>: width of the clip.
-	 * <li><i>clipH</i>: height of the clip.
-	 * </ul>
-	 * <li><i>dist1pixel</i>: the distance in world coordinates equivalent to 1
-	 * pixel in the view.
-	 * <li><i>dist3pixel</i>: the distance in world coordinates equivalent to 3
-	 * pixels in the view.
-	 * <li><i>distanceUnits</i>: the distance measurement unit.
-	 * <li>If defined, the extent:
-	 * <ul>
-	 * <li><i>extentX</i>: X coordinate of the extent.
-	 * <li><i>extentY</i>: Y coordinate of the extent.
-	 * <li><i>extentW</i>: width of the extent.
-	 * <li><i>extentH</i>: height of the extent.
-	 * </ul>
-	 * <li><i>mapUnits</i>: the map measurement unit.
-	 * <li><i>offsetX</i>: X coordinate of the offset.
-	 * <li><i>offsetY</i>: Y coordinate of the offset.
-	 * <li>If defined, the projection:
-	 * <ul>
-	 * <li>If its defined, the projection:
-	 * <ul>
-	 * <li><i>proj</i>: the projection.</li>
-	 * </ul>
-	 * </ul>
-	 * <li><i>scale</i>: ratio between the size of <code>imageSize</code> and
-	 * <code>extent</code>.
-	 * </ul>
-	 * <li>Child branches:
-	 * <ul>
-	 * <li>XML entity of the internal {@link ExtentHistory ExtentHistory} .
-	 * </ul>
-	 * </ul>
-	 * 
-	 * @return the XML entity
-	 * 
-	 * @see #createFromXML(XMLEntity)
-	 */
-	public XMLEntity getXMLEntity() {
-		XMLEntity xml = new XMLEntity();
-		xml.putProperty("className", this.getClass().getName());
-
-		if (adjustedExtent != null) {
-			xml.putProperty("adjustedExtentX", adjustedExtent.getX());
-			xml.putProperty("adjustedExtentY", adjustedExtent.getY());
-			xml.putProperty("adjustedExtentW", adjustedExtent.getWidth());
-			xml.putProperty("adjustedExtentH", adjustedExtent.getHeight());
-		}
-
-		if (backColor != null)
-			xml.putProperty("backColor",
-					StringUtilities.color2String(backColor));
-
-		if (clip != null) {
-			xml.putProperty("clipX", clip.getX());
-			xml.putProperty("clipY", clip.getY());
-			xml.putProperty("clipW", clip.getWidth());
-			xml.putProperty("clipH", clip.getHeight());
-		}
-
-		xml.putProperty("dist1pixel", dist1pixel);
-		xml.putProperty("dist3pixel", dist3pixel);
-		xml.putProperty("distanceUnits", distanceUnits);
-
-		if (extent != null) {
-			xml.putProperty("extentX", extent.getX());
-			xml.putProperty("extentY", extent.getY());
-			xml.putProperty("extentW", extent.getWidth());
-			xml.putProperty("extentH", extent.getHeight());
-		}
-
-		xml.addChild(extents.getXMLEntity());
-		xml.putProperty("mapUnits", mapUnits);
-		xml.putProperty("offsetX", offset.getX());
-		xml.putProperty("offsetY", offset.getY());
-
-		if (crs != null) {
-			xml.putProperty("proj", CRS.toSRS(crs));
-		}
-
-		xml.putProperty("scale", scale);
-		xml.putProperty("zoomFactor", getZoomFactor());
-
-		return xml;
-	}
-
-	/**
-	 * <p>
-	 * Creates a new <code>ViewPort</code> from an XML entity.
-	 * </p>
-	 * 
-	 * @param xml
-	 *            an XML entity
-	 * 
-	 * @return the new <code>ViewPort</code>
-	 * 
-	 * @see #getXMLEntity()
-	 * @see #createFromXML03(XMLEntity)
-	 */
-	public static ViewPort createFromXML(XMLEntity xml) {
-		ViewPort vp = new ViewPort(null);
-
-		if (xml.contains("adjustedExtentX")) {
-			vp.adjustedExtent = new Rectangle2D.Double(
-					xml.getDoubleProperty("adjustedExtentX"),
-					xml.getDoubleProperty("adjustedExtentY"),
-					xml.getDoubleProperty("adjustedExtentW"),
-					xml.getDoubleProperty("adjustedExtentH"));
-		}
-
-		if (xml.contains("backColor")) {
-			vp.setBackColor(StringUtilities.string2Color(xml
-					.getStringProperty("backColor")));
-		} else {
-			vp.setBackColor(Color.white);
-		}
-
-		if (xml.contains("clipX")) {
-			vp.clip = new Rectangle2D.Double(xml.getDoubleProperty("clipX"),
-					xml.getDoubleProperty("clipY"),
-					xml.getDoubleProperty("clipW"),
-					xml.getDoubleProperty("clipH"));
-		}
-
-		vp.setDist1pixel(xml.getDoubleProperty("dist1pixel"));
-		vp.setDist3pixel(xml.getDoubleProperty("dist3pixel"));
-		vp.setDistanceUnits(Unit.fromName(xml
-				.getStringProperty("distanceUnits")));
-		if (xml.contains("distanceArea")) {
-			vp.setDistanceArea(Unit.fromName(xml
-					.getStringProperty("distanceArea")));
-		} else {
-			vp.setDistanceArea(Unit.fromName(xml
-					.getStringProperty("distanceUnits")));
-		}
-		vp.extents = ExtentHistory.createFromXML(xml.getChild(0));
-
-		if (xml.contains("extentX")) {
-			vp.setExtent(new Rectangle2D.Double(xml
-					.getDoubleProperty("extentX"), xml
-					.getDoubleProperty("extentY"), xml
-					.getDoubleProperty("extentW"), xml
-					.getDoubleProperty("extentH")));
-
-			// Calcula la transformaci�n af�n
-			vp.calculateAffineTransform();
-
-			// Lanzamos los eventos de extent cambiado
-			// vp.callExtentListeners(vp.adjustedExtent);
-		}
-
-		vp.setMapUnits(Unit.fromName(xml.getStringProperty("mapUnits")));
-		vp.setOffset(new Point2D.Double(xml.getDoubleProperty("offsetX"), xml
-				.getDoubleProperty("offsetY")));
-
-		if (xml.contains("proj")) {
-			String code = xml.getStringProperty("proj");
-			assert false : "New persistence code should propagate the exception";
-			try {
-				vp.crs = CRS.decode(code);
-			} catch (FactoryException e) {
-			}
-		}
-
-		if (xml.contains("zoomFactor")) {
-			vp.setZoomFactor(xml.getDoubleProperty("zoomFactor"));
-		}
-
-		// vp.setScale(xml.getDoubleProperty("scale"));
-		vp.refreshExtent();
-		return vp;
-	}
-
-	/**
-	 * <p>
-	 * Fast clone implementation: creates and returns a clone of this view port
-	 * using XML entities.
-	 * </p>
-	 * <p>
-	 * Isn't a <i>deepclone</i> to avoid unnecessary memory consumption.
-	 * </p>
-	 * 
-	 * @return the new view port
-	 * 
-	 * @see #createFromXML(XMLEntity)
-	 */
-	public ViewPort cloneViewPort() {
-		return createFromXML(getXMLEntity());
-	}
-
-	/**
-	 * <p>
 	 * Returns a <code>String</code> representation of the main values of this
 	 * view port: <code>{@linkplain #extent}</code>,
 	 * <code>{@linkplain #adjustedExtent}</code>,
@@ -1642,12 +1398,13 @@ public class ViewPort {
 		}
 
 		double dpi = getScreenDPI();
+		CoordinateReferenceSystem crs = mapContext.getCRS();
 		if (crs == null) {
 			double widthCm = ((getImageSize().getWidth() / dpi) * 2.54);
 			return (long) (getAdjustedExtent().getWidth() / widthCm * getMapUnits()
 					.toMeter());
 		} else {
-			ReferencedEnvelope envelope = new ReferencedEnvelope(ext, getCrs());
+			ReferencedEnvelope envelope = new ReferencedEnvelope(ext, crs);
 			return (long) RendererUtilities.calculateScale(envelope,
 					size.width, size.height, dpi);
 		}

@@ -83,6 +83,8 @@ import org.gvsig.events.LayerSelectionChangeHandler;
 import org.gvsig.events.LayerVisibilityChangeEvent;
 import org.gvsig.events.LayerVisibilityChangeHandler;
 import org.gvsig.layer.Layer;
+import org.gvsig.main.events.ExtentChangeEvent;
+import org.gvsig.main.events.ExtentChangeHandler;
 import org.gvsig.map.MapContext;
 import org.gvsig.map.MapContextFactory;
 import org.gvsig.units.Unit;
@@ -90,7 +92,6 @@ import org.gvsig.util.EnvelopeUtils;
 import org.gvsig.util.ProcessContext;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
-import com.google.inject.Inject;
 import com.iver.cit.gvsig.fmap.tools.BehaviorException;
 import com.iver.cit.gvsig.fmap.tools.Behavior.Behavior;
 import com.iver.cit.gvsig.fmap.tools.Behavior.CompoundBehavior;
@@ -321,7 +322,6 @@ public class MapControl extends JComponent implements ComponentListener {
 	 */
 	private MapContext mapContext = null;
 
-	@Inject
 	private EventBus eventBus;
 
 	// private boolean drawerAlive = false;
@@ -558,6 +558,7 @@ public class MapControl extends JComponent implements ComponentListener {
 	public MapControl(EventBus eventBus, MapContextFactory factory,
 			Unit mapUnits, Unit areaUnits, Unit distanceUnits,
 			CoordinateReferenceSystem crs) {
+		this.eventBus = eventBus;
 		this.setName("MapControl");
 		setDoubleBuffered(false);
 		setOpaque(true);
@@ -596,6 +597,7 @@ public class MapControl extends JComponent implements ComponentListener {
 				mapContextListener);
 		eventBus.addHandler(LayerLegendChangeEvent.class, mapContextListener);
 		eventBus.addHandler(LayerSelectionChangeEvent.class, mapContextListener);
+		eventBus.addHandler(ExtentChangeEvent.class, mapContextListener);
 	}
 
 	/**
@@ -631,7 +633,7 @@ public class MapControl extends JComponent implements ComponentListener {
 	 */
 	public void setMapContext(MapContext model) {
 		mapContext = model;
-		viewPort = new ViewPort(mapContext.getCRS());
+		viewPort = new ViewPort(eventBus, mapContext);
 		status = DESACTUALIZADO;
 	}
 
@@ -1955,7 +1957,8 @@ public class MapControl extends JComponent implements ComponentListener {
 	public class MapContextListener implements EditionChangeHandler,
 			BackgroundColorChangeHandler, LayerActivationChangeHandler,
 			LayerAddedHandler, LayerRemovedHandler, LayerLegendChangeHandler,
-			LayerSelectionChangeHandler, LayerVisibilityChangeHandler {
+			LayerSelectionChangeHandler, LayerVisibilityChangeHandler,
+			ExtentChangeHandler {
 
 		@Override
 		public void layerAdded(Layer layer) {
@@ -1978,6 +1981,13 @@ public class MapControl extends JComponent implements ComponentListener {
 								"Cannot obtain the extent of the layer", e));
 					}
 				}
+			}
+		}
+
+		@Override
+		public void extentChanged(MapContext source) {
+			if (source == mapContext) {
+				MapControl.this.drawMap(false);
 			}
 		}
 	}

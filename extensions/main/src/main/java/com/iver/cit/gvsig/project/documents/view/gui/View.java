@@ -202,8 +202,9 @@ public class View extends BaseView {
 						} catch (Exception exc) {
 							logger.warn("Cannot get viewport scale", exc);
 						}
-						status.setMessage("projection", CRS
-								.toSRS(getMapControl().getViewPort().getCrs()));
+						status.setMessage("projection",
+								CRS.toSRS(getMapControl().getMapContext()
+										.getCRS()));
 					}
 				}
 
@@ -472,7 +473,7 @@ public class View extends BaseView {
 			logger.warn("Cannot get viewport scale", e);
 		}
 		status.setMessage("projection",
-				CRS.toSRS(getMapControl().getViewPort().getCrs()));
+				CRS.toSRS(getMapControl().getMapContext().getCRS()));
 	}
 
 	/**

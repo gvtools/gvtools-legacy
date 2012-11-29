@@ -207,7 +207,7 @@ public class StatusBarListener implements PointListener {
 			// mF.getStatusBar().setControlValue("scale",String.valueOf(mapControl.getMapContext().getScaleView()));
 			// Fin
 			mF.getStatusBar().setMessage("projection",
-					CRS.toSRS(mapControl.getViewPort().getCrs()));
+					CRS.toSRS(mapControl.getMapContext().getCRS()));
 
 			try {
 				String[] coords = getCoords(p);

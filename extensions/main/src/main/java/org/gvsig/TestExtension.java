@@ -31,7 +31,7 @@ public class TestExtension extends Extension {
 	@Override
 	public void execute(String actionCommand) {
 		Map<String, String> properties = new HashMap<String, String>();
-		properties.put("url", "file:///home/fergonco/carto/Co_ALKGebaeude.shp");
+		properties.put("url", "file:///home/fergonco/carto/ggl/paises.shp");
 		Source source = sourceFactory.createSource(properties);
 		Layer testLayer = layerFactory.createLayer(source);
 		InjectorSingleton.getInjector().injectMembers(testLayer);
