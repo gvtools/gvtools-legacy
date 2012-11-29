@@ -30,7 +30,6 @@ import com.vividsolutions.jts.geom.Envelope;
 
 public class MapContextImpl implements MapContext, RenderListener {
 	private Unit mapUnits, areaUnits, distanceUnits;
-
 	private Layer rootLayer;
 	private Color backgroundColor;
 	private CoordinateReferenceSystem crs;
@@ -87,7 +86,7 @@ public class MapContextImpl implements MapContext, RenderListener {
 		type.setDistanceUnits(distanceUnits.ordinal());
 		type.setColor(backgroundColor.getRGB());
 		type.setCrs(CRS.toSRS(crs));
-		// type.setRootLayer(rootLayer.getXML());
+		type.setRootLayer(rootLayer.getXML());
 		return type;
 	}
 
