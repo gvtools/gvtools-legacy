@@ -6,7 +6,8 @@ public enum Unit {
 	KILOMETERS("Kilometros", "Km", 1000), METERS("Metros", "m", 1), CENTIMETERS(
 			"Centimetros", "cm", 0.01), MILIMETERS("Milimetros", "mm", 0.001), MILES(
 			"Millas", "mi", 1609.344), YARDS("Yardas", "Ya", 0.9144), FEET(
-			"Pies", "ft", 0.3048), INCHES("Pulgadas", "inche", 0.0254);
+			"Pies", "ft", 0.3048), INCHES("Pulgadas", "inche", 0.0254), DEGREES(
+			"Grados", "º", 1 / 8.983152841195214E-6);
 
 	public String name;
 	public String symbol;
