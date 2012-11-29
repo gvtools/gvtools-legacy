@@ -54,21 +54,20 @@ import javax.swing.JSplitPane;
 
 import org.apache.log4j.Logger;
 import org.geotools.referencing.CRS;
+import org.gvsig.events.CRSChangeEvent;
+import org.gvsig.events.CRSChangeHandler;
 import org.gvsig.inject.InjectorSingleton;
 import org.gvsig.layer.Layer;
 import org.gvsig.layer.filter.LayerFilter;
+import org.gvsig.main.events.ExtentChangeEvent;
+import org.gvsig.main.events.ExtentChangeHandler;
 import org.gvsig.map.MapContext;
 import org.gvsig.map.MapContextFactory;
 
 import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiFrame.NewStatusBar;
 import com.iver.andami.ui.mdiManager.WindowInfo;
-import com.iver.cit.gvsig.fmap.ColorEvent;
-import com.iver.cit.gvsig.fmap.ExtentEvent;
 import com.iver.cit.gvsig.fmap.MapControl;
-import com.iver.cit.gvsig.fmap.ProjectionEvent;
-import com.iver.cit.gvsig.fmap.ViewPort;
-import com.iver.cit.gvsig.fmap.ViewPortListener;
 import com.iver.cit.gvsig.fmap.tools.ZoomOutRightButtonListener;
 import com.iver.cit.gvsig.fmap.tools.Behavior.Behavior;
 import com.iver.cit.gvsig.fmap.tools.Behavior.MouseMovementBehavior;
@@ -128,7 +127,8 @@ public class View extends BaseView {
 	private JDockPanel dockConsole = null;
 	protected ResponseAdapter consoleResponseAdapter = new ResponseAdapter();
 	protected boolean isShowConsole = false;
-	private ViewPortListener viewPortListener;
+
+	private EventBus eventBus;
 
 	/**
 	 * Creates a new View object. Before being used, the object must be
@@ -138,6 +138,8 @@ public class View extends BaseView {
 	 */
 	public View() {
 		super();
+		this.eventBus = InjectorSingleton.getInjector().getInstance(
+				EventBus.class);
 		this.setName("View");
 	}
 
@@ -188,35 +190,34 @@ public class View extends BaseView {
 				}
 			}
 		});
-		if (m_MapControl.getViewPort() != null) {
-			viewPortListener = new ViewPortListener() {
-				public void extentChanged(ExtentEvent e) {
-					if (PluginServices.getMainFrame() != null) {
-						NewStatusBar status = PluginServices.getMainFrame()
-								.getStatusBar();
-						try {
-							long scale = m_MapControl.getViewPort()
-									.getScaleView();
-							status.setControlValue("scale",
-									String.valueOf(scale));
-						} catch (Exception exc) {
-							logger.warn("Cannot get viewport scale", exc);
-						}
-						status.setMessage("projection",
-								CRS.toSRS(getMapControl().getMapContext()
-										.getCRS()));
+		eventBus.addHandler(ExtentChangeEvent.class, new ExtentChangeHandler() {
+
+			@Override
+			public void extentChanged(MapContext source) {
+				if (PluginServices.getMainFrame() != null) {
+					NewStatusBar status = PluginServices.getMainFrame()
+							.getStatusBar();
+					try {
+						long scale = m_MapControl.getViewPort().getScaleView();
+						status.setControlValue("scale", String.valueOf(scale));
+					} catch (Exception exc) {
+						logger.warn("Cannot get viewport scale", exc);
 					}
+					status.setMessage("projection",
+							CRS.toSRS(getMapControl().getMapContext().getCRS()));
 				}
+			}
+		});
+		eventBus.addHandler(CRSChangeEvent.class, new CRSChangeHandler() {
 
-				public void backColorChanged(ColorEvent e) {
+			@Override
+			public void crsChanged(MapContext source) {
+				if (source == getModel().getMapContext()) {
+					m_MapLoc.setCrs(source.getCRS());
 				}
+			}
+		});
 
-				public void projectionChanged(ProjectionEvent e) {
-					m_MapLoc.setCrs(e.getNewCrs());
-				}
-			};
-			m_MapControl.getViewPort().addViewPortListener(viewPortListener);
-		}
 	}
 
 	public JConsole getConsolePanel() {
@@ -371,8 +372,6 @@ public class View extends BaseView {
 	 * DOCUMENT ME!
 	 */
 	protected void initComponents() { // GEN-BEGIN:initComponents
-		EventBus eventBus = InjectorSingleton.getInjector().getInstance(
-				EventBus.class);
 		MapContextFactory factory = InjectorSingleton.getInjector()
 				.getInstance(MapContextFactory.class);
 		m_MapControl = new MapControl(eventBus, factory,
@@ -474,21 +473,6 @@ public class View extends BaseView {
 		}
 		status.setMessage("projection",
 				CRS.toSRS(getMapControl().getMapContext().getCRS()));
-	}
-
-	/**
-	 * @see com.iver.andami.ui.mdiManager.IWindowListener#windowClosed()
-	 */
-	public void windowClosed() {
-		super.windowClosed();
-		ViewPort viewport = getMapControl().getViewPort();
-		if (viewPortListener != null) {
-			viewport.removeViewPortListener(viewPortListener);
-		}
-		if (getMapControl() != null) {
-			viewport.removeViewPortListener(getMapOverview());
-		}
-
 	}
 
 	public void toPalette() {

@@ -42,7 +42,6 @@ package com.iver.cit.gvsig.fmap;
 
 import geomatico.events.EventBus;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Toolkit;
@@ -50,7 +49,6 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
-import java.util.ArrayList;
 import java.util.prefs.Preferences;
 
 import org.geotools.geometry.jts.ReferencedEnvelope;
@@ -238,17 +236,6 @@ public class ViewPort {
 
 	/**
 	 * <p>
-	 * Array with the {@link ViewPortListener ViewPortListener}s registered to
-	 * this view port.
-	 * </p>
-	 * 
-	 * @see #addViewPortListener(ViewPortListener)
-	 * @see #removeViewPortListener(ViewPortListener)
-	 */
-	private ArrayList<ViewPortListener> listeners = new ArrayList<ViewPortListener>();
-
-	/**
-	 * <p>
 	 * The offset is the position where start drawing the map.
 	 * </p>
 	 * <p>
@@ -390,42 +377,6 @@ public class ViewPort {
 		}
 		adjustableExtent = adjustable;
 		this.updateDrawVersion();
-	}
-
-	/**
-	 * <p>
-	 * Appends the specified {@link ViewPortListener ViewPortListener} listener
-	 * if weren't.
-	 * </p>
-	 * 
-	 * @param listener
-	 *            the listener to add
-	 * 
-	 * @return <code>true</code> if has been added successfully
-	 * 
-	 * @see #removeViewPortListener(ViewPortListener)
-	 */
-	public boolean addViewPortListener(ViewPortListener listener) {
-		if (!listeners.contains(listener))
-			return listeners.add(listener);
-		return false;
-	}
-
-	/**
-	 * <p>
-	 * Removes the specified {@link ViewPortListener ViewPortListener} listener,
-	 * if existed.
-	 * </p>
-	 * 
-	 * @param arg0
-	 *            the listener to remove
-	 * 
-	 * @return <code>true</code> if the contained the specified listener.
-	 * 
-	 * @see #addViewPortListener(ViewPortListener)
-	 */
-	public boolean removeViewPortListener(ViewPortListener arg0) {
-		return listeners.remove(arg0);
 	}
 
 	/**
@@ -738,7 +689,6 @@ public class ViewPort {
 		calculateAffineTransform();
 
 		// Lanzamos los eventos de extent cambiado
-		eventBus.fireEvent(new ExtentChangeEvent(mapContext));
 		callExtentChanged(getAdjustedExtent());
 	}
 
@@ -835,51 +785,7 @@ public class ViewPort {
 	 * @see ViewPortListener
 	 */
 	protected void callExtentChanged(Rectangle2D newRect) {
-		ExtentEvent ev = ExtentEvent.createExtentEvent(newRect);
-		for (ViewPortListener listener : listeners) {
-			listener.extentChanged(ev);
-		}
-	}
-
-	/**
-	 * <p>
-	 * Notifies to all view port listeners registered, that the background color
-	 * of this view port has changed.
-	 * </p>
-	 * 
-	 * @param c
-	 *            the new background color
-	 * 
-	 * @see #setBackColor(Color)
-	 * @see ColorEvent
-	 * @see ViewPortListener
-	 */
-	private void callColorChanged(Color c) {
-		ColorEvent ce = ColorEvent.createColorEvent(c);
-
-		for (ViewPortListener listener : listeners) {
-			listener.backColorChanged(ce);
-		}
-	}
-
-	/**
-	 * <p>
-	 * Notifies to all view port listeners registered, that the projection of
-	 * this view port has changed.
-	 * </p>
-	 * 
-	 * @param crs
-	 *            the new projection
-	 * 
-	 * @see #setCRS(IProjection)
-	 * @see ProjectionEvent
-	 * @see ViewPortListener
-	 */
-	private void callCRSChanged(CoordinateReferenceSystem crs) {
-		ProjectionEvent ev = ProjectionEvent.createCrsEvent(crs);
-		for (ViewPortListener listener : listeners) {
-			listener.projectionChanged(ev);
-		}
+		eventBus.fireEvent(new ExtentChangeEvent(mapContext));
 	}
 
 	/**
