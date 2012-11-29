@@ -8,7 +8,6 @@ import java.util.Collections;
 import org.geotools.data.simple.SimpleFeatureSource;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.map.FeatureLayer;
-import org.geotools.renderer.RenderListener;
 import org.geotools.styling.Style;
 import org.gvsig.layer.FeatureSourceCache;
 import org.gvsig.layer.Layer;
@@ -17,9 +16,8 @@ import org.gvsig.layer.SourceFactory;
 import org.gvsig.layer.SymbolFactoryFacade;
 import org.gvsig.layer.filter.LayerFilter;
 import org.gvsig.persistence.generated.LayerType;
-import org.opengis.feature.simple.SimpleFeature;
 
-public class VectorialLayer implements Layer, RenderListener {
+public class VectorialLayer implements Layer {
 	private boolean editing, active;
 	private Source source;
 	private Style style;
@@ -83,18 +81,6 @@ public class VectorialLayer implements Layer, RenderListener {
 		}
 
 		return style;
-	}
-
-	@Override
-	public void errorOccurred(Exception e) {
-		// TODO Auto-generated method stub
-		assert false;
-	}
-
-	@Override
-	public void featureRenderer(SimpleFeature feature) {
-		// TODO Auto-generated method stub
-		assert false;
 	}
 
 	@Override
