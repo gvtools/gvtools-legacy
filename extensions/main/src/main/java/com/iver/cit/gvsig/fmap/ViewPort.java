@@ -273,16 +273,6 @@ public class ViewPort {
 
 	/**
 	 * <p>
-	 * Background color of this view.
-	 * </p>
-	 * 
-	 * @see #getBackColor()
-	 * @see #setBackColor(Color)
-	 */
-	private Color backColor = null; // Color.WHITE;
-
-	/**
-	 * <p>
 	 * Represents the distance in <i>world coordinates</i> equivalent to 1 pixel
 	 * in the view with the current extent.
 	 * </p>
@@ -1034,37 +1024,6 @@ public class ViewPort {
 	 */
 	public Point2D getOffset() {
 		return offset;
-	}
-
-	/**
-	 * <p>
-	 * Sets the background color.
-	 * </p>
-	 * 
-	 * @param c
-	 *            the new background color
-	 * 
-	 * @see #getBackColor()
-	 */
-	public void setBackColor(Color c) {
-		if (!c.equals(this.backColor)) {
-			this.updateDrawVersion();
-			backColor = c;
-			callColorChanged(backColor);
-		}
-	}
-
-	/**
-	 * <p>
-	 * Gets the background color.
-	 * </p>
-	 * 
-	 * @return the background color of the view
-	 * 
-	 * @see #setBackColor(Color)
-	 */
-	public Color getBackColor() {
-		return backColor;
 	}
 
 	/**

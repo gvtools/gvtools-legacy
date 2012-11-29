@@ -951,7 +951,7 @@ public class MapControl extends JComponent implements ComponentListener {
 			viewPort.refreshExtent();
 
 			Graphics gTemp = image.createGraphics();
-			Color theBackColor = viewPort.getBackColor();
+			Color theBackColor = mapContext.getBackgroundColor();
 			if (theBackColor == null)
 				gTemp.setColor(Color.WHITE);
 			else
@@ -1108,7 +1108,7 @@ public class MapControl extends JComponent implements ComponentListener {
 			// image = null; // Se usa para el PAN
 			if (image != null) {
 				Graphics2D g = image.createGraphics();
-				Color theBackColor = viewPort.getBackColor();
+				Color theBackColor = mapContext.getBackgroundColor();
 				if (theBackColor == null)
 					g.setColor(Color.WHITE);
 				else
@@ -1297,7 +1297,7 @@ public class MapControl extends JComponent implements ComponentListener {
 
 				if (status == DESACTUALIZADO) {
 					Graphics2D gTemp = image.createGraphics();
-					Color theBackColor = viewPort.getBackColor();
+					Color theBackColor = mapContext.getBackgroundColor();
 					if (theBackColor == null)
 						gTemp.setColor(Color.WHITE);
 					else
@@ -1644,7 +1644,7 @@ public class MapControl extends JComponent implements ComponentListener {
 				Graphics2D g = image.createGraphics();
 
 				if (status == DESACTUALIZADO) {
-					Color theBackColor = viewPort.getBackColor();
+					Color theBackColor = mapContext.getBackgroundColor();
 					if (theBackColor == null)
 						g.setColor(Color.WHITE);
 					else

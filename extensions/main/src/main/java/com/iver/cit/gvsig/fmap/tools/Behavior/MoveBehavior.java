@@ -100,12 +100,13 @@ public class MoveBehavior extends Behavior {
 	 * .Graphics)
 	 */
 	public void paintComponent(Graphics g) {
-		Color theBackColor = getMapControl().getViewPort().getBackColor();
+		Color theBackColor = getMapControl().getMapContext()
+				.getBackgroundColor();
 		if (theBackColor == null)
 			g.setColor(Color.WHITE);
 		else
 			g.setColor(theBackColor);
-		g.setColor(getMapControl().getViewPort().getBackColor());
+		g.setColor(getMapControl().getMapContext().getBackgroundColor());
 		g.fillRect(0, 0, getMapControl().getWidth(), getMapControl()
 				.getHeight());
 
