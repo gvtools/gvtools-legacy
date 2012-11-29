@@ -23,13 +23,13 @@ public class VectorialLayer implements Layer {
 	private Style style;
 
 	private SourceFactory sourceFactory;
-	private FeatureSourceCache sourceManager;
+	private FeatureSourceCache featureSourceCache;
 	private SymbolFactoryFacade symbolFactoryFacade;
 
 	public VectorialLayer(FeatureSourceCache featureSourceCache,
 			SymbolFactoryFacade symbolFactoryFacade,
 			SourceFactory sourceFactory, Source source) {
-		this.sourceManager = featureSourceCache;
+		this.featureSourceCache = featureSourceCache;
 		this.symbolFactoryFacade = symbolFactoryFacade;
 		this.sourceFactory = sourceFactory;
 		this.source = source;
@@ -90,7 +90,7 @@ public class VectorialLayer implements Layer {
 	}
 
 	private org.geotools.map.Layer getGTLayer() throws IOException {
-		SimpleFeatureSource featureSource = sourceManager
+		SimpleFeatureSource featureSource = featureSourceCache
 				.getFeatureSource(source);
 		org.geotools.map.Layer layer = new FeatureLayer(featureSource,
 				getStyle());
@@ -109,9 +109,7 @@ public class VectorialLayer implements Layer {
 
 	@Override
 	public boolean removeLayer(Layer layer) {
-		// TODO Auto-generated method stub
-		assert false : "TODO";
-		return false;
+		throw new UnsupportedOperationException();
 	}
 
 	@Override

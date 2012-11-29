@@ -263,4 +263,29 @@ public class LayerTest extends GVSIGTestCase {
 		assertEquals(layer, layer.getAllLayers()[0]);
 		assertTrue(layer.getAllLayers()[1].isVectorial());
 	}
+
+	public void testRemoveLayer() throws Exception {
+		// Vectorial
+		Layer layer = layerFactory.createLayer(mock(Source.class));
+		try {
+			layer.removeLayer(mock(Layer.class));
+			fail();
+		} catch (UnsupportedOperationException e) {
+		}
+
+		// Composite
+		Layer l1 = layerFactory.createLayer(mock(Source.class));
+		Layer l2 = layerFactory.createLayer(mock(Source.class));
+		layer = layerFactory.createLayer(l1, l2);
+		assertFalse(layer.removeLayer(mock(Layer.class)));
+		assertTrue(layer.removeLayer(l1));
+		Layer[] layers = layer.getAllLayers();
+		assertEquals(2, layers.length);
+		assertEquals(layer, layers[0]);
+		assertEquals(l2, layers[1]);
+	}
+
+	public void testGetBounds() throws Exception {
+		fail();
+	}
 }
