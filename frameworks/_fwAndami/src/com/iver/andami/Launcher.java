@@ -56,7 +56,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
@@ -64,7 +63,6 @@ import java.net.Authenticator;
 import java.net.MalformedURLException;
 import java.net.PasswordAuthentication;
 import java.net.URL;
-import java.net.URLConnection;
 import java.nio.channels.FileChannel;
 import java.security.AllPermission;
 import java.security.CodeSource;
@@ -73,18 +71,13 @@ import java.security.Permissions;
 import java.security.Policy;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Locale;
-import java.util.Properties;
 import java.util.TreeMap;
 import java.util.prefs.Preferences;
 
-import javax.jnlp.BasicService;
-import javax.jnlp.ServiceManager;
-import javax.jnlp.UnavailableServiceException;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -318,11 +311,6 @@ public class Launcher {
 			splashWindow.process(10, PluginServices.getText(Launcher.class,
 					"SplashWindow.configuring_proxy"));
 			configureProxy();
-
-			// 2. TODO Buscar actualizaciones de los plugins
-			splashWindow.process(20, PluginServices.getText(Launcher.class,
-					"SplashWindow.looking_for_updates"));
-			downloadExtensions(andamiConfig.getPluginsDirectory());
 
 			// 3. Se leen los config.xml de los plugins -----++++
 			splashWindow.process(30, PluginServices.getText(Launcher.class,
@@ -1693,147 +1681,6 @@ public class Launcher {
 
 	static HashMap<Class<?>, ExtensionDecorator> getClassesExtensions() {
 		return classesExtensions;
-	}
-
-	private static void downloadExtensions(String extDir) {
-		java.util.Date fechaActual = null;
-
-		try {
-			if (System.getProperty("javawebstart.version") != null) {
-				// Obtenemos la URL del servidor
-				BasicService bs = (BasicService) ServiceManager
-						.lookup("javax.jnlp.BasicService");
-				URL baseURL = bs.getCodeBase();
-
-				// Se descargan las extensiones
-				splashWindow.process(5, "Descargando las extensiones desde "
-						+ baseURL + " a " + extDir);
-
-				URL url = new URL(baseURL + "extensiones.zip");
-				URLConnection connection = url.openConnection();
-
-				System.out.println(url.toExternalForm() + ":");
-				System.out.println("  Content Type: "
-						+ connection.getContentType());
-				System.out.println("  Content Length: "
-						+ connection.getContentLength());
-				System.out.println("  Last Modified: "
-						+ new Date(connection.getLastModified()));
-				System.out.println("  Expiration: "
-						+ connection.getExpiration());
-				System.out.println("  Content Encoding: "
-						+ connection.getContentEncoding());
-
-				// Guardamos la fecha del fichero de extensiones que nos hemos
-				// bajado, y
-				// comprobamos el �ltimo que se ha bajado. Si no son
-				// iguales, nos bajamos el nuevo. Si son iguales, no
-				// nos bajamos nada.
-				Long miliSecondsInWeb = new Long(connection.getLastModified());
-
-				File destDir = new File(extDir);
-
-				if (!destDir.exists()) {
-					// Creamos gvSIG
-					destDir.getParentFile().mkdir();
-
-					if (!destDir.mkdir()) {
-						System.err.println("Imposible crear el directorio "
-								+ destDir.getAbsolutePath());
-					}
-				}
-
-				File timeFile = new File(destDir.getParent() + File.separator
-						+ "timeStamp.properties");
-
-				if (!timeFile.exists()) {
-					timeFile.createNewFile();
-				}
-
-				FileInputStream inAux = new FileInputStream(timeFile);
-				Properties prop = new Properties();
-				prop.load(inAux);
-				inAux.close();
-
-				if (prop.getProperty("timestamp") != null) {
-					Long lastMiliSeconds = new Long(
-							prop.getProperty("timestamp"));
-
-					if (lastMiliSeconds.longValue() == miliSecondsInWeb
-							.longValue()) {
-						System.out.println("No hay nueva actualizaci�n");
-						logger.debug("No hay nueva actualizaci�n -> Return");
-						logger.debug("timeStampWeb= " + miliSecondsInWeb);
-						logger.debug("timeStampLocal= " + lastMiliSeconds);
-
-						return;
-					}
-
-					System.out.println("timeStampWeb= " + miliSecondsInWeb);
-					System.out.println("timeStampLocal= " + lastMiliSeconds);
-				} else {
-					System.out.println("El timeStamp no est� escrito en "
-							+ timeFile.getAbsolutePath());
-				}
-
-				InputStream stream = url.openStream();
-				File temp = File.createTempFile("gvsig", ".zip");
-
-				logger.debug(temp.getAbsolutePath());
-
-				temp.deleteOnExit();
-				FileOutputStream file = new FileOutputStream(temp);
-
-				byte[] lt_read = new byte[1];
-
-				while (stream.read(lt_read) > 0)
-					file.write(lt_read);
-
-				stream.close();
-				stream = null;
-				file.close();
-				file = null;
-
-				System.gc();
-
-				logger.debug("Ha creado el fichero ZIP");
-				// Se extrae el zip
-				splashWindow.process(5, "Extensiones descargadas.");
-
-				System.out.println("Extrayendo a " + destDir.getAbsolutePath());
-
-				Date fechaDir = new Date(destDir.lastModified());
-				System.out.println("Fecha del directorio " + extDir + " = "
-						+ fechaDir.toString());
-				Utilities.extractTo(temp, new File(extDir), splashWindow);
-
-				// Si todo ha ido bien, guardamos el timestamp.
-				// / App.instance.getPc().addProperties("timestamp",
-				// miliSecondsInWeb);
-				// XMLEntity xml=ps.getPersistentXML();
-				fechaActual = new java.util.Date();
-
-				FileOutputStream outAux = new FileOutputStream(timeFile);
-				prop.setProperty("timestamp", miliSecondsInWeb.toString());
-				prop.store(outAux, "last download");
-				outAux.close();
-				System.out.println("Fecha actual guardada: "
-						+ fechaActual.toGMTString());
-
-				/*
-				 * xml.putProperty("timestamp",fechaActual.toGMTString());
-				 * ps.setPresistentXML(xml);
-				 */
-			}
-		} catch (IOException e) {
-			NotificationManager.addError("", e);
-		} catch (UnavailableServiceException e) {
-			NotificationManager.addError("", e);
-		} catch (SecurityException e) {
-			System.err.println("No se puede escribir el timeStamp "
-					+ fechaActual.toGMTString());
-			NotificationManager.addError("", e);
-		}
 	}
 
 	private static Extensions[] getExtensions() {
