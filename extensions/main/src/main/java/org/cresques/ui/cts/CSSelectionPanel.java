@@ -23,12 +23,36 @@
  */
 package org.cresques.ui.cts;
 
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import java.awt.BorderLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.util.ArrayList;
+import java.util.Set;
 
+import javax.swing.AbstractListModel;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
+import org.apache.log4j.Logger;
 import org.cresques.Messages;
-import org.cresques.ui.LoadableComboBox;
+import org.geotools.referencing.ReferencingFactoryFinder;
+import org.opengis.referencing.FactoryException;
+import org.opengis.referencing.NoSuchAuthorityCodeException;
+import org.opengis.referencing.crs.CRSAuthorityFactory;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
+
+import com.iver.andami.PluginServices;
+import com.iver.andami.ui.mdiManager.IWindow;
+import com.iver.andami.ui.mdiManager.WindowInfo;
 
 //import es.gva.cit.geoexplorer.ui.LoadableComboBox;
 
@@ -37,33 +61,36 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
  * 
  * @author "Luis W. Sevilla" <sevilla_lui@gva.es>
  */
-public class CSSelectionPanel extends JPanel {
+public class CSSelectionPanel extends JPanel implements IWindow {
 	final private static long serialVersionUID = -3370601314380922368L;
-	private LoadableComboBox datumComboBox = null;
-	private LoadableComboBox projComboBox = null;
-	private LoadableComboBox huseComboBox = null;
-	private JLabel jLabel = null;
-	private JLabel jLabel1 = null;
-	private JLabel jLabel2 = null;
-	private CSSelectionModel model;
+	private static final Logger logger = Logger
+			.getLogger(CSSelectionPanel.class);
+	private JList<CRSInfo> lstCodes = null;
+	private JTextField txtFilter;
+	private FilterModel filterModel;
+	private JPanel pnlButtons;
+	private JButton btnCancel;
+	private JButton btnOk;
+	private JPanel pnlFilter;
+	private boolean okPressed = false;
+	private JPanel pnlCenter;
 
 	/**
 	 * Constructor de la clase.
 	 */
-	public CSSelectionPanel(String tit) {
+	public CSSelectionPanel(String title) {
 		super();
 
-		if (tit == null) {
+		if (title == null) {
 			// tit = "Sistema de referencia";
 			// TODO: add com.iver.andami.PluginServices to this project
 			// change all the labels from fix text got from the
 			// internationalitation
-			tit = Messages.getText("reference_system");
-			if (tit == null)
-				tit = "Reference System";
+			title = Messages.getText("reference_system");
+			if (title == null)
+				title = "Reference System";
 		}
 
-		setModel(new CSSelectionModel());
 		initialize();
 	}
 
@@ -73,172 +100,273 @@ public class CSSelectionPanel extends JPanel {
 	 * @return javax.swing.JPanel
 	 */
 	private void initialize() {
-		setPreferredSize(new java.awt.Dimension(295, 170));
-		setLayout(null);
-
-		/*
-		 * javax.swing.border.Border border =
-		 * javax.swing.BorderFactory.createCompoundBorder( javax.swing.
-		 * BorderFactory.createTitledBorder("Sistema de coordenadas"),
-		 * javax.swing.BorderFactory.createEmptyBorder(5,5,5,5));
-		 */
-		setBorder(javax.swing.BorderFactory.createCompoundBorder(null,
-				javax.swing.BorderFactory.createTitledBorder(null,
-						Messages.getText("reference_system"),
-						javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-						javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
-						null)));
-
-		jLabel = new JLabel();
-		jLabel.setBounds(15, 15, 77, 23);
-		jLabel.setText(Messages.getText("datum") + ":");
-		add(jLabel, null);
-		add(getDatumComboBox(), null);
-
-		jLabel1 = new JLabel();
-		jLabel1.setBounds(15, 60, 77, 23);
-		jLabel1.setText(Messages.getText("projection") + ":");
-		add(jLabel1, null);
-		add(getProjComboBox(), null);
-
-		jLabel2 = new JLabel();
-		jLabel2.setBounds(15, 105, 77, 23);
-		jLabel2.setText(Messages.getText("zone") + ":");
-		add(jLabel2, null);
-		add(getHuseComboBox(), null);
-
-		setHuseComboBoxEnabled(false);
+		setLayout(new BorderLayout());
+		add(getCenterPanel(), BorderLayout.CENTER);
+		add(getButtonPanel(), BorderLayout.SOUTH);
 	}
 
-	public void setModel(CSSelectionModel model) {
-		this.model = model;
-
-		getHuseComboBox().loadData(model.getZoneList());
-		getDatumComboBox().loadData(model.getDatumList());
-		getProjComboBox().loadData(model.getProjectionList());
-	}
-
-	private void setHuseComboBoxEnabled(boolean enabled) {
-		if (jLabel2 != null) {
-			jLabel2.setEnabled(enabled);
+	private JPanel getCenterPanel() {
+		if (pnlCenter == null) {
+			pnlCenter = new JPanel();
+			pnlCenter.setLayout(new BorderLayout());
+			pnlCenter.add(new JScrollPane(getLstCodes()), BorderLayout.CENTER);
+			pnlCenter.add(getPnlFilter(), BorderLayout.SOUTH);
 		}
 
-		getHuseComboBox().setEnabled(enabled);
+		return pnlCenter;
 	}
 
-	private void setDatumComboBoxEnabled(boolean enabled) {
-		if (jLabel != null) {
-			jLabel.setEnabled(enabled);
+	private JPanel getButtonPanel() {
+		if (pnlButtons == null) {
+			pnlButtons = new JPanel();
+			pnlButtons.setLayout(new GridBagLayout());
+			GridBagConstraints c = new GridBagConstraints();
+			c.gridx = 0;
+			c.gridy = 0;
+			pnlButtons.add(getAcceptButton(), c);
+			c.gridx = 1;
+			pnlButtons.add(getCancelButton(), c);
 		}
 
-		getDatumComboBox().setEnabled(enabled);
+		return pnlButtons;
+	}
+
+	public JButton getAcceptButton() {
+		if (btnOk == null) {
+			btnOk = new JButton("Aceptar");
+			btnOk.setText(Messages.getText("Aceptar"));
+			btnOk.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					PluginServices.getMDIManager().closeWindow(
+							CSSelectionPanel.this);
+					okPressed = true;
+				}
+			});
+		}
+
+		return btnOk;
+	}
+
+	public JButton getCancelButton() {
+		if (btnCancel == null) {
+			btnCancel = new JButton("Cancelar");
+			btnCancel.setText(Messages.getText("Cancelar"));
+			btnCancel.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					PluginServices.getMDIManager().closeWindow(
+							CSSelectionPanel.this);
+					okPressed = false;
+				}
+			});
+		}
+
+		return btnCancel;
+	}
+
+	private JPanel getPnlFilter() {
+		if (pnlFilter == null) {
+			pnlFilter = new JPanel();
+			pnlFilter.add(new JLabel("Filter:"));
+			pnlFilter.add(getTxtFilter());
+		}
+
+		return pnlFilter;
+	}
+
+	private JTextField getTxtFilter() {
+		if (txtFilter == null) {
+			txtFilter = new JTextField(30);
+			txtFilter.getDocument().addDocumentListener(new DocumentListener() {
+
+				@Override
+				public void removeUpdate(DocumentEvent documentEvent) {
+					changedUpdate(documentEvent);
+				}
+
+				@Override
+				public void insertUpdate(DocumentEvent documentEvent) {
+					changedUpdate(documentEvent);
+				}
+
+				@Override
+				public void changedUpdate(DocumentEvent documentEvent) {
+					filterModel.refilter(txtFilter.getText());
+				}
+			});
+
+		}
+
+		return txtFilter;
 	}
 
 	public void setCrs(CoordinateReferenceSystem crs) {
-		model.setCrs(crs);
-
-		setDatumComboBoxEnabled(true);
-		getDatumComboBox().setSelectedIndex(model.getSelectedDatum());
-
-		getProjComboBox().removeAllItems();
-		getProjComboBox().loadData(model.getProjectionList());
-
-		model.setCrs(crs);
-		getProjComboBox().setSelectedIndex(model.getSelectedProj());
-		model.setCrs(crs);
-
-		if (model.getSelectedZone() >= 0) {
-			setHuseComboBoxEnabled(true);
-			getHuseComboBox().removeAllItems();
-			getHuseComboBox().loadData(model.getZoneList());
-
-			model.setCrs(crs);
-			getHuseComboBox().setSelectedIndex(model.getSelectedZone());
-		} else {
-			setHuseComboBoxEnabled(false);
-			getHuseComboBox().setSelectedIndex(0);
-		}
+		getLstCodes().setSelectedValue(crs, true);
 	}
 
-	/**
-	 * Inicializa datumComboBox
-	 * 
-	 * @return javax.swing.JComboBox
-	 */
-	private LoadableComboBox getDatumComboBox() {
-		if (datumComboBox == null) {
-			datumComboBox = new LoadableComboBox();
-			datumComboBox.setBounds(14, 35, 250, 23);
+	private JList<CRSInfo> getLstCodes() {
+		if (lstCodes == null) {
+			lstCodes = new JList<CRSInfo>();
+			filterModel = new FilterModel();
+			lstCodes.setModel(filterModel);
+			lstCodes.getSelectionModel().addListSelectionListener(
+					new ListSelectionListener() {
 
-			// ((LoadableComboBox)
-			// datumComboBox).loadData(model.getDatumList());
-			datumComboBox.addItemListener(new java.awt.event.ItemListener() {
-				public void itemStateChanged(java.awt.event.ItemEvent e) {
-					model.setSelectedDatum(e.getItem());
-					getProjComboBox().removeAllItems();
-					getProjComboBox().loadData(model.getProjectionList());
-				}
-			});
+						private CRSInfo previous;
+
+						private void setPrevious() {
+							if (previous != null) {
+								lstCodes.setSelectedValue(previous, false);
+								previous = null;
+							}
+						}
+
+						@Override
+						public void valueChanged(ListSelectionEvent event) {
+							if (!event.getValueIsAdjusting()) {
+								try {
+									CRSInfo selectedValue = lstCodes
+											.getSelectedValue();
+									CoordinateReferenceSystem crs = selectedValue
+											.getCRS();
+									System.out.println(crs);
+									previous = selectedValue;
+								} catch (NoSuchAuthorityCodeException e) {
+									setPrevious();
+								} catch (FactoryException e) {
+									setPrevious();
+								}
+
+							}
+						}
+					});
 		}
 
-		return datumComboBox;
-	}
-
-	/**
-	 * Inicializa projComboBox
-	 * 
-	 * @return javax.swing.JComboBox
-	 */
-	private LoadableComboBox getProjComboBox() {
-		if (projComboBox == null) {
-			projComboBox = new LoadableComboBox();
-			projComboBox.setBounds(14, 80, 250, 23);
-			projComboBox.addItemListener(new java.awt.event.ItemListener() {
-				public void itemStateChanged(java.awt.event.ItemEvent e) {
-					model.setSelectedProj(e.getItem());
-
-					if (model.getSelectedProjType() == CSSelectionModel.TRANSVERSAL) {
-						setHuseComboBoxEnabled(true);
-						getHuseComboBox().removeAllItems();
-						getHuseComboBox().loadData(model.getZoneList());
-
-					} else {
-						setHuseComboBoxEnabled(false);
-					}
-
-					// if (model.getSelectedProjType() == CSSelectionModel.NONE)
-					// {
-					// setDatumComboBoxEnabled(false);
-					// } else {
-					// setDatumComboBoxEnabled(true);
-					// }
-				}
-			});
-		}
-
-		return projComboBox;
-	}
-
-	/**
-	 * Inicializa usoComboBox
-	 * 
-	 * @return javax.swing.JComboBox
-	 */
-	private LoadableComboBox getHuseComboBox() {
-		if (huseComboBox == null) {
-			huseComboBox = new LoadableComboBox();
-			huseComboBox.setBounds(14, 125, 250, 23);
-			huseComboBox.addItemListener(new java.awt.event.ItemListener() {
-				public void itemStateChanged(java.awt.event.ItemEvent e) {
-					model.setSelectedZone(e.getItem());
-				}
-			});
-		}
-
-		return huseComboBox;
+		return lstCodes;
 	}
 
 	public CoordinateReferenceSystem getCrs() {
-		return model.getCrs();
+		try {
+			return lstCodes.getSelectedValue().getCRS();
+		} catch (NoSuchAuthorityCodeException e) {
+			// Should never fail since the CRS is created when selected
+			throw new RuntimeException("bug", e);
+		} catch (FactoryException e) {
+			// Should never fail since the CRS is created when selected
+			throw new RuntimeException("bug", e);
+		}
+	}
+
+	public static void main(String[] args) {
+		JFrame frm = new JFrame();
+		frm.add(new CSSelectionPanel("tits everywhere"));
+		frm.setLocationRelativeTo(null);
+		frm.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frm.pack();
+		frm.setVisible(true);
+	}
+
+	@Override
+	public WindowInfo getWindowInfo() {
+		WindowInfo m_viewinfo = new WindowInfo(WindowInfo.MODALDIALOG
+				| WindowInfo.RESIZABLE);
+		m_viewinfo.setTitle(PluginServices.getText(this,
+				"selecciona_sistema_de_referencia"));
+		m_viewinfo.setWidth(500);
+		m_viewinfo.setHeight(300);
+		return m_viewinfo;
+	}
+
+	@Override
+	public Object getWindowProfile() {
+		return WindowInfo.DIALOG_PROFILE;
+	}
+
+	public boolean isOkPressed() {
+		return okPressed;
+	}
+
+	private class FilterModel extends AbstractListModel<CRSInfo> {
+		private static final long serialVersionUID = 1L;
+		private ArrayList<CRSInfo> items = new ArrayList<CRSInfo>();
+		private ArrayList<CRSInfo> filterItems = new ArrayList<CRSInfo>();
+
+		public FilterModel() {
+			for (CRSAuthorityFactory factory : ReferencingFactoryFinder
+					.getCRSAuthorityFactories(null)) {
+				try {
+					Set<String> codes = factory
+							.getAuthorityCodes(CoordinateReferenceSystem.class);
+					for (String code : codes) {
+						items.add(new CRSInfo(factory.getDescriptionText(code)
+								.toString(), code, factory));
+					}
+				} catch (FactoryException e) {
+					logger.debug("Cannot instantiate CRS factory", e);
+				}
+			}
+
+			refilter("");
+		}
+
+		public CRSInfo getElementAt(int index) {
+			if (index < filterItems.size()) {
+				return filterItems.get(index);
+			} else {
+				return null;
+			}
+		}
+
+		public int getSize() {
+			return filterItems.size();
+		}
+
+		private void refilter(String text) {
+			String[] texts = text.split("\\s");
+			for (int i = 0; i < texts.length; i++) {
+				texts[i] = texts[i].trim().toLowerCase();
+			}
+			filterItems.clear();
+			for (CRSInfo filterItem : items) {
+				boolean matches = true;
+				for (String match : texts) {
+					if (filterItem.getSearchString().toLowerCase()
+							.indexOf(match) == -1) {
+						matches = false;
+						break;
+					}
+				}
+				if (matches) {
+					filterItems.add(filterItem);
+				}
+			}
+			fireContentsChanged(this, 0, getSize());
+		}
+	}
+
+	private class CRSInfo {
+		private String description;
+		private String code;
+		private CRSAuthorityFactory factory;
+
+		public CRSInfo(String description, String code,
+				CRSAuthorityFactory factory) {
+			this.description = description;
+			this.code = code;
+			this.factory = factory;
+		}
+
+		public CoordinateReferenceSystem getCRS()
+				throws NoSuchAuthorityCodeException, FactoryException {
+			return factory.createCoordinateReferenceSystem(code);
+		}
+
+		private String getSearchString() {
+			return code + " " + description;
+		}
+
+		@Override
+		public String toString() {
+			return description;
+		}
 	}
 }

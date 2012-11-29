@@ -7,12 +7,13 @@ import java.awt.FlowLayout;
 
 import javax.swing.JLabel;
 
+import org.cresques.Messages;
+import org.cresques.ui.cts.CSSelectionPanel;
 import org.geotools.referencing.CRS;
 import org.gvsig.gui.beans.swing.JButton;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.iver.andami.PluginServices;
-import com.iver.cit.gvsig.gui.panels.crs.ISelectCrsPanel;
 
 /**
  * @author Luis W. Sevilla (sevilla_lui@gva.es)
@@ -54,8 +55,9 @@ public class ProjChooserPanel extends CRSSelectPanel {
 					public void actionPerformed(java.awt.event.ActionEvent e) {
 						okPressed = false;
 
-						ISelectCrsPanel csSelect = getUIFactory()
-								.getSelectCrsPanel(currentCrs, true);
+						CSSelectionPanel csSelect = new CSSelectionPanel(
+								Messages.getText("reference_system"));
+						csSelect.setCrs(currentCrs);
 
 						PluginServices.getMDIManager().addWindow(csSelect);
 

@@ -143,7 +143,6 @@ public abstract class ProjectViewBase extends ProjectDocument implements
 
 	public void setCrs(CoordinateReferenceSystem crs) {
 		mapContext.setCRS(crs);
-		mapOverViewContext.setCRS(crs);
 	}
 
 	/**
