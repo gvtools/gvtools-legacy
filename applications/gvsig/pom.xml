@@ -22,14 +22,14 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.gvsig</groupId>
+			<groupId>org.gvsig.extensions</groupId>
 			<artifactId>corePlugin</artifactId>
 			<version>${project.version}</version>
 			<classifier>extension</classifier>
 			<type>zip</type>
 		</dependency>
 		<dependency>
-			<groupId>org.gvsig.extension</groupId>
+			<groupId>org.gvsig.extensions</groupId>
 			<artifactId>main</artifactId>
 			<version>${project.version}</version>
 			<classifier>extension</classifier>
