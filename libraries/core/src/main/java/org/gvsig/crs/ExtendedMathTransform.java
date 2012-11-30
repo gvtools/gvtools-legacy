@@ -9,6 +9,10 @@ import org.opengis.referencing.operation.Matrix;
 import org.opengis.referencing.operation.NoninvertibleTransformException;
 import org.opengis.referencing.operation.TransformException;
 
+/**
+ * Wrapper for MathTransform that provides some convenience methods
+ * 
+ */
 public class ExtendedMathTransform implements MathTransform {
 	private MathTransform mathTransform;
 

@@ -15,6 +15,9 @@ import org.gvsig.map.impl.MapContextFactoryImpl;
 
 import com.google.inject.AbstractModule;
 
+/**
+ * Guice module to configure the injection of implementations
+ */
 public class LibModule extends AbstractModule {
 
 	@Override

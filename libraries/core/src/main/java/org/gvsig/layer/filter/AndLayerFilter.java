@@ -2,10 +2,13 @@ package org.gvsig.layer.filter;
 
 import org.gvsig.layer.Layer;
 
-public class CompositeLayerFilter implements LayerFilter {
+/**
+ * Filters the layers that matches all the referenced filters
+ */
+public class AndLayerFilter implements LayerFilter {
 	private LayerFilter[] filters;
 
-	public CompositeLayerFilter(LayerFilter... filters) {
+	public AndLayerFilter(LayerFilter... filters) {
 		this.filters = filters;
 	}
 

@@ -3,7 +3,7 @@ package org.gvsig.layer.filter;
 import org.gvsig.layer.Layer;
 
 /**
- * Filters the vectorial layers that are in edition
+ * Filters the feature layers that are in edition
  * 
  * @author Fernando González Cortés
  * @author Víctor González Cortés
