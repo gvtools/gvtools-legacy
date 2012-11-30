@@ -25,11 +25,12 @@ public interface Layer {
 	boolean contains(Layer layer);
 
 	/**
-	 * Returns this layer along with all the children layers, if any
+	 * Returns this layers along with all the descendant layers, if any, as an
+	 * array
 	 * 
 	 * @return
 	 */
-	Layer[] getAllLayers();
+	Layer[] getAllLayersInTree();
 
 	/**
 	 * Obtains an array of all layers that all match the filter condition. This
@@ -116,6 +117,4 @@ public interface Layer {
 	ReferencedEnvelope getBounds() throws IOException;
 
 	LayerType getXML();
-
-	void setXML(LayerType type);
 }

@@ -13,6 +13,7 @@ import org.geotools.referencing.CRS;
 import org.gvsig.events.DrawingErrorEvent;
 import org.gvsig.events.DrawingErrorHandler;
 import org.gvsig.layer.Layer;
+import org.gvsig.layer.filter.EditingFilter;
 import org.gvsig.map.ErrorListener;
 import org.gvsig.map.MapContext;
 import org.gvsig.map.MapContextFactory;
@@ -231,13 +232,9 @@ public abstract class ProjectViewBase extends ProjectDocument implements
 	public boolean isLocked() {
 		if (super.isLocked())
 			return true;
-		Layer[] layers = getMapContext().getRootLayer().getAllLayers();
-		for (Layer layer : layers) {
-			if (layer.isEditing()) {
-				return true;
-			}
-		}
-		return false;
+		Layer[] layers = getMapContext().getRootLayer().filter(
+				new EditingFilter());
+		return layers.length > 0;
 	}
 
 }

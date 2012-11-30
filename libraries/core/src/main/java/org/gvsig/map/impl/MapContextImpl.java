@@ -19,6 +19,7 @@ import org.gvsig.events.DrawingErrorEvent;
 import org.gvsig.layer.Layer;
 import org.gvsig.layer.LayerFactory;
 import org.gvsig.map.MapContext;
+import org.gvsig.persistence.PersistenceException;
 import org.gvsig.persistence.generated.MapType;
 import org.gvsig.units.Unit;
 import org.gvsig.util.ProcessContext;
@@ -36,17 +37,11 @@ public class MapContextImpl implements MapContext, RenderListener {
 	private EventBus eventBus;
 	private LayerFactory layerFactory;
 
-	public MapContextImpl(EventBus eventBus, LayerFactory layerFactory,
-			Unit mapUnits, Unit distanceUnits, Unit areaUnits,
-			CoordinateReferenceSystem crs) {
+	MapContextImpl(EventBus eventBus, LayerFactory layerFactory) {
 		this.eventBus = eventBus;
 		this.layerFactory = layerFactory;
 		this.backgroundColor = Color.white;
 		this.rootLayer = layerFactory.createLayer();
-		setMapUnits(mapUnits);
-		setDistanceUnits(distanceUnits);
-		setAreaUnits(areaUnits);
-		setCRS(crs);
 	}
 
 	@Override
@@ -91,7 +86,7 @@ public class MapContextImpl implements MapContext, RenderListener {
 	}
 
 	@Override
-	public void setXML(MapType mainMap) {
+	public void setXML(MapType mainMap) throws PersistenceException {
 		Unit[] units = Unit.values();
 		mapUnits = units[mainMap.getMapUnits()];
 		areaUnits = units[mainMap.getAreaUnits()];
@@ -102,12 +97,11 @@ public class MapContextImpl implements MapContext, RenderListener {
 		try {
 			crs = CRS.decode(mainMap.getCrs());
 		} catch (FactoryException e) {
-			throw new IllegalArgumentException("Cannot get CRS from code: "
-					+ mainMap.getCrs());
+			throw new PersistenceException("Cannot get CRS from code: "
+					+ mainMap.getCrs(), e);
 		}
 
-		rootLayer = layerFactory.createLayer();
-		rootLayer.setXML(mainMap.getRootLayer());
+		rootLayer = layerFactory.createLayer(mainMap.getRootLayer());
 	}
 
 	@Override

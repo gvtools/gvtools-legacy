@@ -5,6 +5,7 @@ import geomatico.events.EventBus;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import org.geotools.geometry.jts.ReferencedEnvelope;
@@ -13,6 +14,7 @@ import org.gvsig.events.LayerAddedEvent;
 import org.gvsig.layer.Layer;
 import org.gvsig.layer.LayerFactory;
 import org.gvsig.layer.filter.LayerFilter;
+import org.gvsig.persistence.generated.CompositeLayerType;
 import org.gvsig.persistence.generated.LayerType;
 
 public class CompositeLayer implements Layer {
@@ -40,13 +42,13 @@ public class CompositeLayer implements Layer {
 	}
 
 	@Override
-	public Layer[] getAllLayers() {
-		Layer[] ret = new Layer[layers.size() + 1];
-		ret[0] = this;
-		for (int i = 1; i < ret.length; i++) {
-			ret[i] = layers.get(i - 1);
+	public Layer[] getAllLayersInTree() {
+		ArrayList<Layer> ret = new ArrayList<Layer>();
+		ret.add(this);
+		for (Layer layer : this.layers) {
+			Collections.addAll(ret, layer.getAllLayersInTree());
 		}
-		return ret;
+		return ret.toArray(new Layer[ret.size()]);
 	}
 
 	@Override
@@ -130,10 +132,7 @@ public class CompositeLayer implements Layer {
 
 	@Override
 	public LayerType getXML() {
-		LayerType xml = new LayerType();
-		xml.setActive(isActive());
-		xml.setEditing(isEditing());
-		xml.setVectorial(isVectorial());
+		CompositeLayerType xml = new CompositeLayerType();
 
 		List<LayerType> xmlLayers = xml.getLayers();
 		xmlLayers.clear();
@@ -143,14 +142,11 @@ public class CompositeLayer implements Layer {
 		return xml;
 	}
 
-	@Override
-	public void setXML(LayerType type) {
-		if (type.isActive() || type.isEditing() || type.isVectorial()) {
-			throw new IllegalArgumentException(
-					"Composite layer cannot be active, editing or vectorial");
-		}
+	void setXML(LayerType type) {
+		assert type instanceof CompositeLayerType;
 
-		List<LayerType> xmlLayers = type.getLayers();
+		CompositeLayerType compositeLayerType = (CompositeLayerType) type;
+		List<LayerType> xmlLayers = compositeLayerType.getLayers();
 		for (LayerType layer : xmlLayers) {
 			layers.add(layerFactory.createLayer(layer));
 		}

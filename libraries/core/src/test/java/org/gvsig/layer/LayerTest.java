@@ -2,7 +2,6 @@ package org.gvsig.layer;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
 import org.gvsig.GVSIGTestCase;
@@ -44,21 +43,21 @@ public class LayerTest extends GVSIGTestCase {
 	public void testGetAllLayers() throws Exception {
 		// Vectorial
 		Layer layer = layerFactory.createLayer(mock(Source.class));
-		Layer[] layers = layer.getAllLayers();
+		Layer[] layers = layer.getAllLayersInTree();
 		assertEquals(1, layers.length);
 		assertEquals(layer, layers[0]);
 
 		// Empty composite
 		layer = layerFactory.createLayer();
-		layers = layer.getAllLayers();
+		layers = layer.getAllLayersInTree();
 		assertEquals(1, layers.length);
 		assertEquals(layer, layers[0]);
 
 		// Non-empty composite
-		Layer l1 = mock(Layer.class);
-		Layer l2 = mock(Layer.class);
+		Layer l1 = layerFactory.createLayer(mock(Source.class));
+		Layer l2 = layerFactory.createLayer(mock(Source.class));
 		layer = layerFactory.createLayer(l1, l2);
-		layers = layer.getAllLayers();
+		layers = layer.getAllLayersInTree();
 		assertEquals(3, layers.length);
 		assertEquals(layer, layers[0]);
 		assertEquals(l1, layers[1]);
@@ -67,7 +66,7 @@ public class LayerTest extends GVSIGTestCase {
 
 	public void testAddLayer() throws Exception {
 		// Vectorial
-		Layer child = mock(Layer.class);
+		Layer child = layerFactory.createLayer(mock(Source.class));
 		try {
 			layerFactory.createLayer(mock(Source.class)).addLayer(child);
 			fail();
@@ -84,7 +83,7 @@ public class LayerTest extends GVSIGTestCase {
 
 		layer.addLayer(child);
 
-		Layer[] layers = layer.getAllLayers();
+		Layer[] layers = layer.getAllLayersInTree();
 		assertEquals(2, layers.length);
 		assertEquals(child, layers[1]);
 	}
@@ -134,7 +133,9 @@ public class LayerTest extends GVSIGTestCase {
 
 	public void testSymbology() throws Exception {
 		fail("Check default symbology for point layers, "
-				+ "multipoint layers, line layers, etc. and heterogeneous layers");
+				+ "multipoint layers, line layers, etc. "
+				+ "and heterogeneous layers. We'd better wait till"
+				+ "symbology panels are migrated");
 	}
 
 	public void testIsVectorial() throws Exception {
@@ -152,116 +153,24 @@ public class LayerTest extends GVSIGTestCase {
 		assertFalse(layerFactory.createLayer().isEditing());
 	}
 
-	public void testGetXML() throws Exception {
-		// Vectorial
-		Layer layer = spy(layerFactory.createLayer(mock(Source.class)));
-		when(layer.isActive()).thenReturn(true);
-		when(layer.isEditing()).thenReturn(true);
+	public void testDataLayerXML() throws Exception {
+		Layer layer = layerFactory.createLayer(mock(Source.class));
 		LayerType xml = layer.getXML();
-		assertTrue(xml.isActive());
-		assertTrue(xml.isEditing());
-		assertEquals(0, xml.getLayers().size());
+		Layer copy = layerFactory.createLayer(xml);
 
-		layer = layerFactory.createLayer(mock(Source.class));
-		xml = layer.getXML();
-		assertFalse(xml.isActive());
-		assertFalse(xml.isEditing());
-		assertEquals(0, xml.getLayers().size());
-
-		// Composite
-		layer = layerFactory.createLayer();
-		xml = layer.getXML();
-		assertFalse(xml.isActive());
-		assertFalse(xml.isEditing());
-		assertFalse(xml.isVectorial());
-		assertEquals(0, xml.getLayers().size());
-
-		layer.addLayer(layerFactory.createLayer(mock(Source.class)));
-		xml = layer.getXML();
-		assertFalse(xml.isActive());
-		assertFalse(xml.isEditing());
-		assertFalse(xml.isVectorial());
-		assertEquals(1, xml.getLayers().size());
-		assertTrue(xml.getLayers().get(0).isVectorial());
+		fail("Should compare layer == copy when there are some getters");
 	}
 
-	public void testSetXML() throws Exception {
-		LayerType xml = new LayerType();
+	public void testCompositeLayerXML() throws Exception {
+		Layer root = layerFactory.createLayer();
+		Layer folder = layerFactory.createLayer();
+		Layer leaf = layerFactory.createLayer(mock(Source.class));
+		folder.addLayer(leaf);
+		root.addLayer(folder);
+		LayerType xml = root.getXML();
+		Layer copy = layerFactory.createLayer(xml);
 
-		Layer layer = layerFactory.createLayer(mock(Source.class));
-		try {
-			// Not vectorial
-			xml.setVectorial(false);
-			layer.setXML(xml);
-			fail();
-		} catch (IllegalArgumentException e) {
-		}
-
-		xml.setVectorial(true);
-
-		try {
-			// With children layers
-			xml.getLayers().add(
-					layerFactory.createLayer(mock(Source.class)).getXML());
-			layer.setXML(xml);
-			fail();
-		} catch (IllegalArgumentException e) {
-		}
-
-		xml.getLayers().clear();
-		xml.setVectorial(true);
-		xml.setActive(true);
-		xml.setEditing(false);
-		layer.setXML(xml);
-
-		// Composite layer
-		layer = layerFactory.createLayer();
-		try {
-			// Vectorial
-			xml = new LayerType();
-			xml.setVectorial(true);
-			xml.setActive(false);
-			xml.setEditing(false);
-			layer.setXML(xml);
-			fail();
-		} catch (IllegalArgumentException e) {
-		}
-		try {
-			// Editing
-			xml = new LayerType();
-			xml.setVectorial(false);
-			xml.setActive(false);
-			xml.setEditing(true);
-			layer.setXML(xml);
-			fail();
-		} catch (IllegalArgumentException e) {
-		}
-		try {
-			// Active
-			xml = new LayerType();
-			xml.setVectorial(true);
-			xml.setActive(true);
-			xml.setEditing(false);
-			layer.setXML(xml);
-			fail();
-		} catch (IllegalArgumentException e) {
-		}
-
-		// With children layers
-		xml = new LayerType();
-		xml.setVectorial(false);
-		xml.setActive(false);
-		xml.setEditing(false);
-		xml.getLayers().add(
-				layerFactory.createLayer(mock(Source.class)).getXML());
-		layer.setXML(xml);
-
-		assertFalse(layer.isActive());
-		assertFalse(layer.isEditing());
-		assertFalse(layer.isVectorial());
-		assertEquals(2, layer.getAllLayers().length);
-		assertEquals(layer, layer.getAllLayers()[0]);
-		assertTrue(layer.getAllLayers()[1].isVectorial());
+		assertTrue(copy.getAllLayersInTree().length == 3);
 	}
 
 	public void testRemoveLayer() throws Exception {
@@ -279,7 +188,7 @@ public class LayerTest extends GVSIGTestCase {
 		layer = layerFactory.createLayer(l1, l2);
 		assertFalse(layer.removeLayer(mock(Layer.class)));
 		assertTrue(layer.removeLayer(l1));
-		Layer[] layers = layer.getAllLayers();
+		Layer[] layers = layer.getAllLayersInTree();
 		assertEquals(2, layers.length);
 		assertEquals(layer, layers[0]);
 		assertEquals(l2, layers[1]);

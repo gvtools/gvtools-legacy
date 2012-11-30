@@ -15,6 +15,7 @@ import org.gvsig.layer.Source;
 import org.gvsig.layer.SourceFactory;
 import org.gvsig.layer.SymbolFactoryFacade;
 import org.gvsig.layer.filter.LayerFilter;
+import org.gvsig.persistence.generated.DataLayerType;
 import org.gvsig.persistence.generated.LayerType;
 
 public class VectorialLayer implements Layer {
@@ -26,12 +27,14 @@ public class VectorialLayer implements Layer {
 	private FeatureSourceCache featureSourceCache;
 	private SymbolFactoryFacade symbolFactoryFacade;
 
-	public VectorialLayer(FeatureSourceCache featureSourceCache,
-			SymbolFactoryFacade symbolFactoryFacade,
-			SourceFactory sourceFactory, Source source) {
+	VectorialLayer(FeatureSourceCache featureSourceCache,
+			SymbolFactoryFacade symbolFactoryFacade, SourceFactory sourceFactory) {
 		this.featureSourceCache = featureSourceCache;
 		this.symbolFactoryFacade = symbolFactoryFacade;
 		this.sourceFactory = sourceFactory;
+	}
+
+	void setSource(Source source) {
 		this.source = source;
 	}
 
@@ -41,7 +44,7 @@ public class VectorialLayer implements Layer {
 	}
 
 	@Override
-	public Layer[] getAllLayers() {
+	public Layer[] getAllLayersInTree() {
 		return new Layer[] { this };
 	}
 
@@ -114,26 +117,16 @@ public class VectorialLayer implements Layer {
 
 	@Override
 	public LayerType getXML() {
-		LayerType xml = new LayerType();
-		xml.setActive(isActive());
-		xml.setEditing(isEditing());
-		xml.setVectorial(isVectorial());
+		DataLayerType xml = new DataLayerType();
 		xml.setSource(source.getXML());
 		return xml;
 	}
 
-	@Override
-	public void setXML(LayerType layer) {
-		if (!layer.isVectorial()) {
-			throw new IllegalArgumentException("Attempting to assign a "
-					+ "non-vectorial layer to a vectorial layer");
-		} else if (layer.getLayers().size() > 0) {
-			throw new IllegalArgumentException("Attempting to assign a "
-					+ "layer with children to a vectorial layer");
-		}
+	void setXML(LayerType layer) {
+		assert layer instanceof DataLayerType;
 
-		active = layer.isActive();
-		editing = layer.isEditing();
-		source = sourceFactory.createSource(layer.getSource());
+		DataLayerType dataLayerType = (DataLayerType) layer;
+		source = sourceFactory.createSource(dataLayerType.getSource());
 	}
+
 }

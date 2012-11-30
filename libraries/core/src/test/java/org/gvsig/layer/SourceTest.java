@@ -27,8 +27,6 @@ public class SourceTest extends GVSIGTestCase {
 		SimpleFeatureSource featureSource = source.createFeatureSource();
 
 		assertTrue(featureSource != null);
-
-		fail("Should create a project with data to test");
 	}
 
 	public void testGetXML() throws Exception {
@@ -78,9 +76,5 @@ public class SourceTest extends GVSIGTestCase {
 			assertTrue(props2.containsKey(key));
 			assertEquals(props1.get(key), props2.get(key));
 		}
-	}
-
-	public void testThinkMoreTests() throws Exception {
-		fail();
 	}
 }

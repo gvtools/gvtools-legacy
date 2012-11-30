@@ -47,7 +47,8 @@
 
 	<xs:complexType name="DataSourceType">
 		<xs:sequence>
-			<xs:element name="properties" type="StringPropertyType" maxOccurs="unbounded" />
+			<xs:element name="properties" type="StringPropertyType"
+				maxOccurs="unbounded" />
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="PropertyType" abstract="true">
@@ -82,8 +83,8 @@
 
 	<xs:complexType name="MapType">
 		<xs:sequence>
-			<xs:element name="rootLayer" type="LayerType" maxOccurs="1"
-				minOccurs="1" />
+			<xs:element name="rootLayer" type="LayerType"
+				maxOccurs="1" minOccurs="1" />
 		</xs:sequence>
 		<xs:attribute name="mapUnits" type="xs:int" />
 		<xs:attribute name="areaUnits" type="xs:int" />
@@ -92,15 +93,26 @@
 		<xs:attribute name="crs" type="xs:string" />
 	</xs:complexType>
 
-	<xs:complexType name="LayerType">
-		<xs:sequence>
-			<xs:element name="source" type="DataSourceType" maxOccurs="1"
-				minOccurs="1" />
-			<xs:element name="layers" type="LayerType" maxOccurs="unbounded"
-				minOccurs="0" />
-		</xs:sequence>
-		<xs:attribute name="active" type="xs:boolean" />
-		<xs:attribute name="editing" type="xs:boolean" />
-		<xs:attribute name="vectorial" type="xs:boolean" />
+	<xs:complexType name="LayerType" abstract="true">
+	</xs:complexType>
+	<xs:complexType name="CompositeLayerType">
+		<xs:complexContent>
+			<xs:extension base="LayerType">
+				<xs:sequence>
+					<xs:element name="layers" type="LayerType" maxOccurs="unbounded"
+						minOccurs="0" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="DataLayerType">
+		<xs:complexContent>
+			<xs:extension base="LayerType">
+				<xs:sequence>
+					<xs:element name="source" type="DataSourceType"
+						maxOccurs="1" minOccurs="1" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
 	</xs:complexType>
 </xs:schema>

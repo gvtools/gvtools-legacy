@@ -5,7 +5,7 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
 import org.gvsig.GVSIGTestCase;
-import org.gvsig.layer.filter.CompositeLayerFilter;
+import org.gvsig.layer.filter.AndLayerFilter;
 import org.gvsig.layer.filter.LayerFilter;
 
 import com.google.inject.Inject;
@@ -43,7 +43,7 @@ public class FilterTest extends GVSIGTestCase {
 
 	public void testComposite() throws Exception {
 		// Active and vectorial filter
-		CompositeLayerFilter filter = new CompositeLayerFilter(
+		AndLayerFilter filter = new AndLayerFilter(
 				LayerFilter.ACTIVE, LayerFilter.VECTORIAL);
 
 		// Vectorial and active

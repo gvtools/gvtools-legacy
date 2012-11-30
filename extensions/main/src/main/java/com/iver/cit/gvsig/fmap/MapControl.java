@@ -1968,10 +1968,10 @@ public class MapControl extends JComponent implements ComponentListener {
 
 				/*
 				 * Set extent to the layer if there is no extent or the map was
-				 * empty (only had the root layer)
+				 * empty (only had the root layer, and now has two layers)
 				 */
 				if (viewPort.getExtent() == null
-						|| rootLayer.getAllLayers().length == 2) {
+						|| rootLayer.getAllLayersInTree().length == 2) {
 					// First layer, set extent
 					try {
 						viewPort.setExtent(EnvelopeUtils.toRectangle2D(layer

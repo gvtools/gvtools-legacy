@@ -7,6 +7,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 import org.gvsig.layer.Layer;
+import org.gvsig.persistence.PersistenceException;
 import org.gvsig.persistence.generated.MapType;
 import org.gvsig.units.Unit;
 import org.gvsig.util.ProcessContext;
@@ -40,7 +41,7 @@ public interface MapContext {
 
 	MapType getXML();
 
-	void setXML(MapType mainMap);
+	void setXML(MapType mainMap) throws PersistenceException;
 
 	void setDistanceUnits(Unit unit);
 
