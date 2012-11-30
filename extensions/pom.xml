@@ -47,5 +47,6 @@
 		<module>extWFS2</module>
 		<module>extWMS</module>-->
 		<module>main</module>
+		<module>corePlugin</module>
 	</modules>
 </project>

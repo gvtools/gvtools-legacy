@@ -23,7 +23,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.gvsig</groupId>
-			<artifactId>libCorePlugin</artifactId>
+			<artifactId>corePlugin</artifactId>
 			<version>${project.version}</version>
 			<classifier>extension</classifier>
 			<type>zip</type>
