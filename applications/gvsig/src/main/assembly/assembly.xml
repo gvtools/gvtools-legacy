@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<assembly>
+	<id>gvsigce</id>
+	<formats>
+		<format>dir</format>
+	</formats>
+	<baseDirectory>.</baseDirectory>
+
+	<fileSets>
+		<fileSet>
+			<directory>${basedir}/src/main/config</directory>
+			<outputDirectory>/</outputDirectory>
+		</fileSet>
+		<fileSet>
+			<directory>${basedir}/src/main/theme</directory>
+			<outputDirectory>/theme</outputDirectory>
+		</fileSet>
+		<fileSet>
+			<directory>${basedir}/src/main/defaults</directory>
+			<outputDirectory>/defaults</outputDirectory>
+		</fileSet>
+	</fileSets>
+
+	<dependencySets>
+		<dependencySet>
+			<outputDirectory>extensions</outputDirectory>
+			<includes>
+				<include>*gvsig*:*:*:extension:*</include>
+			</includes>
+			<unpack>true</unpack>
+		</dependencySet>
+		<dependencySet>
+			<outputDirectory>lib</outputDirectory>
+			<excludes>
+				<exclude>*gvsig*:*:*:extension:*</exclude>
+			</excludes>
+			<useTransitiveFiltering>true</useTransitiveFiltering>
+		</dependencySet>
+	</dependencySets>
+</assembly>

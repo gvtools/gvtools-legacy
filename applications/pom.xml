@@ -13,7 +13,8 @@
 		<version>2.0-SNAPSHOT</version>
 	</parent>
 	<modules>
-		<module>appgvSIG</module>
-		<module>appCatalogAndGazetteerClient</module>
+		<module>gvsig</module>
+<!--		<module>appgvSIG</module>
+		<module>appCatalogAndGazetteerClient</module>-->
 	</modules>
 </project>

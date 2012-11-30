@@ -2,9 +2,9 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.gvsig</groupId>
-	<artifactId>_fwAndami</artifactId>
+	<artifactId>andami</artifactId>
 	<packaging>jar</packaging>
-	<name>_fwAndami</name>
+	<name>andami</name>
 	<parent>
 		<groupId>org.gvsig</groupId>
 		<artifactId>gvSIGCE-frameworks</artifactId>
@@ -33,30 +33,4 @@
 			<version>1.3</version>
 		</dependency>
 	</dependencies>
-	<build>
-		<sourceDirectory>src</sourceDirectory>
-		<testSourceDirectory>src-test</testSourceDirectory>
-		<outputDirectory>bin</outputDirectory>
-		<testOutputDirectory>bin-test</testOutputDirectory>
-		<resources>
-			<resource>
-				<directory>src</directory>
-				<includes>
-					<include>**/*.gif</include>
-					<include>**/*.png</include>
-					<include>**/*.PNG</include>
-					<include> **/*.bmp</include>
-					<include> **/*.jpg</include>
-					<include> **/*.jpeg</include>
-				</includes>
-			</resource>
-			<resource>
-				<directory>config</directory>
-				<includes>
-					<include>**/*.properties</include>
-				</includes>
-				<targetPath>com/iver/andami</targetPath>
-			</resource>
-		</resources>
-	</build>
 </project>
